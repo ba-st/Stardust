@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"testUTCTimeVariants" : "JulianMaestri 1/30/2018 02:23",
+		"testDateVariants" : "JulianMaestri 1/30/2018 02:27",
+		"testUTCTimeWithMillisecondsVariants" : "JulianMaestri 1/30/2018 02:23",
+		"testUTCOffsetVariants" : "JulianMaestri 1/30/2018 02:23",
+		"testNonUTCOffsetVariants" : "JulianMaestri 1/30/2018 02:23",
+		"testUTCDateVariants" : "JulianMaestri 1/30/2018 02:23",
+		"testTimeVariants" : "JulianMaestri 1/30/2018 02:23"
+	},
+	"class" : { }
+}

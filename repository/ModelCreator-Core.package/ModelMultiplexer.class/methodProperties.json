@@ -1,0 +1,17 @@
+{
+	"instance" : {
+		"canCreate:" : "JulianMaestri 1/11/2018 23:24",
+		"initializeMultiplexing:selectingFrom:" : "JulianMaestri 1/11/2018 23:25",
+		"name" : "JulianMaestri 1/11/2018 23:31",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:25",
+		"supervisorToUseIn:" : "JulianMaestri 1/11/2018 23:31",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:31",
+		"validSupervisorsFor:" : "JulianMaestri 1/11/2018 23:31",
+		"modelIn:" : "JulianMaestri 1/11/2018 23:31",
+		"changeModelTo:in:" : "JulianMaestri 1/12/2018 18:07",
+		"changeSelectionModelIn:using:" : "JulianMaestri 1/11/2018 23:25"
+	},
+	"class" : {
+		"multiplexing:selectingFrom:" : "JulianMaestri 1/11/2018 23:30"
+	}
+}

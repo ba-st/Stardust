@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"modelFor:" : "JulianMaestri 1/11/2018 13:46",
+		"testChangingModelToInvalidOptionRaisesError" : "JulianMaestri 1/12/2018 18:16",
+		"testCanCreate" : "JulianMaestri 1/11/2018 13:51",
+		"testChangingModelToValidOption" : "JulianMaestri 1/11/2018 13:52",
+		"setUp" : "JulianMaestri 1/11/2018 13:46",
+		"testModelChangesWhenViewSelectionChanges" : "JulianMaestri 1/11/2018 13:52",
+		"singleModelPicker" : "JulianMaestri 1/11/2018 13:51"
+	},
+	"class" : { }
+}

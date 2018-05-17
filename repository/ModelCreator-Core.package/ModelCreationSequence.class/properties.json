@@ -1,0 +1,16 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"visitedCreators",
+		"creationGraph",
+		"orderedCreators",
+		"errorDisplayStrategy"
+	],
+	"name" : "ModelCreationSequence",
+	"type" : "normal"
+}

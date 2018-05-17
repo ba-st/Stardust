@@ -1,0 +1,18 @@
+{
+	"instance" : {
+		"assertWellFormed:" : "JulianMaestri 1/30/2018 05:15",
+		"checkDecimalPart:using:" : "JulianMaestri 1/30/2018 04:49",
+		"initializeWithDecimalsSeparatedBy:thousandsSeparatedAcordingTo:" : "JulianMaestri 1/30/2018 04:07",
+		"checkIntegerPart:using:" : "JulianMaestri 1/30/2018 05:04",
+		"is:separatedByThousandsWith:" : "JulianMaestri 1/30/2018 05:07",
+		"parseSignFrom:" : "JulianMaestri 1/30/2018 04:13",
+		"parse:" : "JulianMaestri 1/30/2018 04:12",
+		"checkSignOf:using:" : "JulianMaestri 1/30/2018 05:15"
+	},
+	"class" : {
+		"decimalsSeparatedBy:thousandsSeparatedAcordingTo:" : "JulianMaestri 1/30/2018 04:07",
+		"new" : "JulianMaestri 1/30/2018 04:08",
+		"decimalsSeparatedBy:thousandsSeparatedBy:" : "JulianMaestri 1/30/2018 04:09",
+		"decimalsSeparatedBy:" : "JulianMaestri 1/30/2018 04:08"
+	}
+}

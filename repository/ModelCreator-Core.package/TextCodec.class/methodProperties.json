@@ -1,0 +1,15 @@
+{
+	"instance" : {
+		"initializeWorkingWith:parsingWith:formattingWith:" : "JulianMaestri 1/11/2018 23:34",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:34",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:34",
+		"printOn:" : "JulianMaestri 1/11/2018 23:34",
+		"modelIn:" : "JulianMaestri 1/23/2018 12:15",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 23:34",
+		"canCreate:" : "JulianMaestri 1/30/2018 16:30",
+		"name" : "JulianMaestri 1/11/2018 23:34"
+	},
+	"class" : {
+		"workingWith:parsingWith:formattingWith:" : "JulianMaestri 1/17/2018 12:22"
+	}
+}

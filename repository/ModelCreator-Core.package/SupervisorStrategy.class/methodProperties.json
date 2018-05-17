@@ -1,0 +1,11 @@
+{
+	"instance" : {
+		"initializeHandlingErrorsWith:" : "JulianMaestri 1/12/2018 18:35",
+		"handle:originatedIn:storingFailuresOn:" : "JulianMaestri 1/12/2018 18:35"
+	},
+	"class" : {
+		"displayingMultipleErrors" : "JulianMaestri 1/17/2018 12:24",
+		"displayingSingleError" : "JulianMaestri 1/17/2018 12:24",
+		"handlingErrorsWith:" : "JulianMaestri 1/17/2018 12:24"
+	}
+}

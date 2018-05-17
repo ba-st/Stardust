@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"creator",
+		"adaptingBlock"
+	],
+	"name" : "PluggableModelCreatorAdapter",
+	"type" : "normal"
+}

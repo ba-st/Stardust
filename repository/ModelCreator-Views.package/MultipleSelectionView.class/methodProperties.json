@@ -1,0 +1,15 @@
+{
+	"instance" : {
+		"currentSelection" : "JulianMaestri 1/11/2018 14:04",
+		"disallowAll" : "JulianMaestri 1/11/2018 14:04",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 14:04",
+		"allowAnySatisfying:" : "JulianMaestri 1/11/2018 14:04",
+		"chooseAll" : "JulianMaestri 1/11/2018 14:04",
+		"choose:matchedUsing:ifUnable:" : "JulianMaestri 1/11/2018 14:04",
+		"allowAnyOf:" : "JulianMaestri 1/11/2018 14:04"
+	},
+	"class" : {
+		"description" : "JulianMaestri 1/12/2018 18:03",
+		"parentsDo:" : "JulianMaestri 1/11/2018 14:31"
+	}
+}

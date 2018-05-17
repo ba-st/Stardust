@@ -1,0 +1,20 @@
+{
+	"instance" : {
+		"currentSelectionIfNone:" : "JulianMaestri 1/11/2018 12:57",
+		"notifyInterested" : "JulianMaestri 1/11/2018 14:06",
+		"chosenIndex" : "JulianMaestri 1/12/2018 18:05",
+		"disallowAll" : "JulianMaestri 1/11/2018 14:06",
+		"chooseElementAt:" : "JulianMaestri 1/11/2018 12:56",
+		"initialize" : "JulianMaestri 1/11/2018 14:06",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 14:06",
+		"allowAnyOf:" : "JulianMaestri 1/11/2018 12:42",
+		"invalidateSelection" : "JulianMaestri 1/11/2018 14:06",
+		"chooseAnySatisfying:ifNone:" : "JulianMaestri 1/12/2018 18:05",
+		"invalidSelection" : "JulianMaestri 1/11/2018 12:39",
+		"setChosenElementTo:" : "JulianMaestri 1/11/2018 14:06"
+	},
+	"class" : {
+		"new" : "JulianMaestri 1/11/2018 14:32",
+		"implementedInterfacesDo:" : "JulianMaestri 1/11/2018 14:32"
+	}
+}

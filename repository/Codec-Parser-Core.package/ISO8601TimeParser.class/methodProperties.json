@@ -1,0 +1,9 @@
+{
+	"instance" : {
+		"assertIsValidTime:withHour:minute:second:nanoSecond:" : "JulianMaestri 1/30/2018 01:20",
+		"basicParse:" : "JulianMaestri 1/30/2018 02:16"
+	},
+	"class" : {
+		"acceptedFormats" : "JulianMaestri 1/30/2018 02:25"
+	}
+}

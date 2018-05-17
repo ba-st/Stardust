@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"assertWellFormed:" : "JulianMaestri 1/30/2018 03:56",
+		"parseSignFrom:" : "JulianMaestri 1/30/2018 03:47",
+		"is:separatedByThousandsWith:" : "JulianMaestri 1/30/2018 03:45",
+		"initializeWithThousandsSeparatedAcordingTo:" : "JulianMaestri 1/30/2018 04:07",
+		"parse:" : "JulianMaestri 1/30/2018 03:47"
+	},
+	"class" : {
+		"new" : "JulianMaestri 1/30/2018 04:03",
+		"withThousandsSeparator:" : "JulianMaestri 1/30/2018 04:03",
+		"thousandsSeparatedAcordingTo:" : "JulianMaestri 1/30/2018 04:07"
+	}
+}

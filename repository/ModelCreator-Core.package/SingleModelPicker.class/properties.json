@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"view",
+		"name",
+		"pickingPolicy"
+	],
+	"name" : "SingleModelPicker",
+	"type" : "normal"
+}
