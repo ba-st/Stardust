@@ -1,36 +1,51 @@
 tests
 testMultipleFailuresInformedWhenDifferentLevelLeafCreatorsFail
 
-	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker thirdDiscountView thirdDiscountPicker discountArrayCreator productCreator supervisor |
+	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker thirdDiscountView thirdDiscountPicker discountArrayCreator productCreator supervisor operandsCreator |
 
-	firstDiscountView := SingleSelectionViewExample new.
+	firstDiscountView := self singleSelectionView
+		allowAnyOf: self selectableDiscounts;
+		yourself.
 	firstDiscountPicker := SingleModelPicker
 		named: 'first discount'
 		obtainingSelectionFrom: firstDiscountView.
-	secondDiscountView := SingleSelectionViewExample new.
+
+	secondDiscountView := self singleSelectionView
+		allowAnyOf: self selectableDiscounts;
+		chooseElementAt: 1;
+		yourself.
 	secondDiscountPicker := SingleModelPicker
 		named: 'second discount'
 		obtainingSelectionFrom: secondDiscountView.
-	thirdDiscountView := SingleSelectionViewExample new.
+
+	thirdDiscountView := self singleSelectionView
+		allowAnyOf: self selectableDiscounts;
+		yourself.
 	thirdDiscountPicker := SingleModelPicker
 		named: 'third discount'
 		obtainingSelectionFrom: thirdDiscountView.
+
 	discountArrayCreator := ModelCollector
 		named: 'discount array'
 		containing: (Array with: secondDiscountPicker with: thirdDiscountPicker).
-	productCreator := (GenericModelCreatorBuilder
-		named: 'product'
-		building: nil
-		accessedUsing: #(leftOperand rightOperand))
-		of: firstDiscountPicker
-		andAll: discountArrayCreator.
+
+	operandsCreator := ModelCollector
+		named: 'sum-operands'
+		containing:
+			(Array
+				with: firstDiscountPicker
+				with: secondDiscountPicker
+				with: thirdDiscountPicker).
+
+	productCreator := GenericModelCreatorBuilder
+		named: 'sum'
+		adaptingModelOf: operandsCreator
+		using: [ :operands | operands sum ].
+
 	supervisor := ModelCreationSupervisor
 		supervising: productCreator
 		showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
-	firstDiscountView allowAnyOf: self selectableDiscounts.
-	secondDiscountView allowAnyOf: self selectableDiscounts.
-	thirdDiscountView allowAnyOf: self selectableDiscounts.
-	secondDiscountView chooseElementAt: 1.
+
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed

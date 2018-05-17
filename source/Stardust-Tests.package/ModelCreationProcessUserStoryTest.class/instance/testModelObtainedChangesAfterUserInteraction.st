@@ -5,7 +5,10 @@ testModelObtainedChangesAfterUserInteraction
 
 	discountView := TextInputViewExample new.
 	discountCodec := self numberCodecFor: discountView.
-	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: discountCodec.
+	discountCreator := (GenericModelCreatorBuilder
+		named: 'percentage'
+		building: Percentage
+		accessedUsing: #(number)) of: discountCodec.
 	supervisor := ModelCreationSupervisor supervising: discountCreator.
 	discountView changeContentsTo: '15'.
 	self assert: supervisor model equals: (Percentage of: 15).

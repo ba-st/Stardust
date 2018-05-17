@@ -4,7 +4,10 @@ testCanCreate
 	| creator |
 
 	creator := ModelMultiplexer
-		multiplexing: (Array with: (FixedModelCreator creating: 1) with: (FixedModelCreator creating: 2))
+		multiplexing:
+			(Array
+				with: (FixedModelCreator creating: 1)
+				with: (FixedModelCreator creating: 2))
 		selectingFrom: self singleModelPicker.
 
 	self

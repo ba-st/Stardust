@@ -1,0 +1,4 @@
+tests
+singleSelectionView
+
+	^ SingleSelectionViewExample new
