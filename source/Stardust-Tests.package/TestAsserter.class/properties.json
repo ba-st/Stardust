@@ -1,0 +1,13 @@
+{
+	"classtraitcomposition" : "TAssertable classTrait",
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "TestAsserter",
+	"commentStamp" : "<historical>",
+	"super" : "Object",
+	"traitcomposition" : "TAssertable - {#executeShould:inScopeOf:withDescriptionContaining:. #skipUnless:}",
+	"type" : "normal",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"category" : "Stardust-Tests-ModelCreator"
+}

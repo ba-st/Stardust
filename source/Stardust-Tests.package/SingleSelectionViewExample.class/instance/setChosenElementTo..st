@@ -1,4 +1,4 @@
-private - accessing
+initialization
 setChosenElementTo: anElement
 
 	chosenElement := anElement.

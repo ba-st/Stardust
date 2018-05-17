@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "Interface",
+	"category" : "Stardust-Views",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ContainerView",
+	"type" : "normal"
+}

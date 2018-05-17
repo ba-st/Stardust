@@ -1,4 +1,4 @@
-private - accessing
+private-accessing
 invalidSelection
 
-	^ Optional unusedBecause: 'There''s no selected element'
+	^ Optional unusedBecause: 'No element selected'

@@ -1,4 +1,4 @@
-private - accessing
+selection protocol
 invalidateSelection
 
 	self setChosenElementTo: self invalidSelection

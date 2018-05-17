@@ -1,0 +1,4 @@
+as yet unclassified
+allowAnyOf: anElementCollection
+
+	self interfaceImplementorResponsibility

@@ -1,4 +1,4 @@
-user interaction simulation
+private-accessing
 chosenIndex
 
-	^ availableElements indexOf: (chosenElement withContentDo: [:element | element ] ifUnused: [ self halt ])
+	^ chosenElement withContentDo: [ :selection | availableElements indexOf: selection ] ifUnused: [ 0	"Same behavior as SequentiableCollection" ]

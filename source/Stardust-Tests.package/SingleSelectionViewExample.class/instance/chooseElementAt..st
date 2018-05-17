@@ -1,4 +1,4 @@
-user interaction simulation
+accessing
 chooseElementAt: anIndex
 
 	self setChosenElementTo: (Optional containing: (availableElements at: anIndex))

@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "ISO8601Parser",
+	"category" : "Stardust-Parser",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [
+		"AcceptedFormats"
+	],
+	"instvars" : [ ],
+	"name" : "ISO8601DateParser",
+	"type" : "normal"
+}

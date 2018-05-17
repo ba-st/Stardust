@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Stardust-Tests-ViewExamples",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"interested"
+	],
+	"name" : "ToggleViewExample",
+	"type" : "normal"
+}

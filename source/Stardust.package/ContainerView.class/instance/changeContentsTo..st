@@ -1,0 +1,4 @@
+accessing
+changeContentsTo: aText
+
+	self interfaceImplementorResponsibility

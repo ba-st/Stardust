@@ -1,11 +1,7 @@
-accessing
+selection protocol
 allowAnyOf: anElementCollection
 
 	availableElements := anElementCollection.
-
-	self
-		chooseAnySatisfying: [ :element | 
-			chosenElement
-				withContentDo: [ :theElement | theElement = element ]
-				ifUnused: [ false ] ]
-		ifNone: [ self invalidateSelection ]
+	chosenElement
+		withContentDo: [ :selection | self chooseAnySatisfying: [ :element | selection = element ] ifNone: [ self invalidateSelection ] ]
+		ifUnused: [ self invalidateSelection ]

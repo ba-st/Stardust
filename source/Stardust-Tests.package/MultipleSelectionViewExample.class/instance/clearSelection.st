@@ -1,0 +1,4 @@
+api
+clearSelection
+
+	self setChosenElementsTo: #()
