@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Stardust",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"name",
+		"view",
+		"pickingPolicy"
+	],
+	"name" : "SingleModelPicker",
+	"type" : "normal"
+}

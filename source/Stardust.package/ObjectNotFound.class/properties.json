@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "Exception",
+	"category" : "Stardust",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ObjectNotFound",
+	"type" : "normal"
+}
