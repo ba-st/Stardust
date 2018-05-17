@@ -1,0 +1,18 @@
+{
+	"instance" : {
+		"name" : "JulianMaestri 1/11/2018 23:33",
+		"initializeNamed:obtainingSelectionFrom:accordingTo:" : "JulianMaestri 1/11/2018 23:33",
+		"disallowAll" : "JulianMaestri 1/11/2018 23:33",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:33",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:33",
+		"modelIn:" : "JulianMaestri 1/11/2018 20:58",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 13:00",
+		"canCreate:" : "JulianMaestri 1/11/2018 23:33",
+		"allowAnyOf:" : "JulianMaestri 1/11/2018 23:33"
+	},
+	"class" : {
+		"named:obtainingSelectionFrom:" : "JulianMaestri 1/17/2018 12:22",
+		"named:pickingFrom:" : "JulianMaestri 1/17/2018 12:22",
+		"named:obtainingSelectionFrom:accordingTo:" : "JulianMaestri 1/17/2018 12:22"
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "FormatterBehavior",
+	"category" : "Codec-Formatter-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ISO8601DateFormatter",
+	"type" : "normal"
+}

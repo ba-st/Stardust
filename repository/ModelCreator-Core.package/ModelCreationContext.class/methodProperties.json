@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"initialize" : "JulianMaestri 1/11/2018 14:10",
+		"modelInSequenceFor:" : "JulianMaestri 1/30/2018 18:29",
+		"changeModelFor:to:" : "JulianMaestri 1/11/2018 14:10",
+		"invalidateModelFor:" : "JulianMaestri 1/11/2018 14:10",
+		"modelFor:" : "JulianMaestri 1/11/2018 14:11"
+	},
+	"class" : {
+		"new" : "JulianMaestri 1/11/2018 22:25"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"model"
+	],
+	"name" : "FixedModelCreator",
+	"type" : "normal"
+}

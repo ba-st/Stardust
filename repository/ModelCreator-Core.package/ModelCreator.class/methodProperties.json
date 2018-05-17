@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"updateModelInViewsConsidering:" : "JulianMaestri 1/11/2018 14:29",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 14:29",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 14:28",
+		"printOn:" : "JulianMaestri 1/11/2018 14:28",
+		"modelIn:" : "JulianMaestri 1/11/2018 14:28",
+		"name" : "JulianMaestri 1/11/2018 14:28",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 14:28"
+	},
+	"class" : {
+		"assertNotEmpty:" : "JulianMaestri 1/17/2018 12:20"
+	}
+}

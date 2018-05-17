@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "InstanceCreationFailed",
+	"category" : "ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "MultiplexedInstanceCreationFailed",
+	"type" : "normal"
+}

@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "UISelectionState",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "UINullSelection",
+	"type" : "normal"
+}

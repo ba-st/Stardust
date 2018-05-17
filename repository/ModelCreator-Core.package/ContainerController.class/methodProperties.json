@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:18",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:18",
+		"initializeNamed:controlling:" : "JulianMaestri 1/30/2018 18:27",
+		"modelIn:" : "JulianMaestri 1/30/2018 18:29",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 23:18",
+		"canCreate:" : "JulianMaestri 1/11/2018 23:18",
+		"name" : "JulianMaestri 1/11/2018 23:18"
+	},
+	"class" : {
+		"named:controlling:" : "JulianMaestri 1/17/2018 12:10"
+	}
+}

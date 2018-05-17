@@ -1,0 +1,19 @@
+{
+	"instance" : {
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:22",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:21",
+		"initializeNamed:creatingInstancesOf:sending:with:accessingModelOnlyWith:" : "JulianMaestri 1/30/2018 17:30",
+		"modelClass" : "JulianMaestri 1/11/2018 23:21",
+		"modelCreators" : "JulianMaestri 1/11/2018 23:22",
+		"modelIn:" : "JulianMaestri 1/11/2018 23:22",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 23:22",
+		"canCreate:" : "JulianMaestri 1/11/2018 23:23",
+		"name" : "JulianMaestri 1/11/2018 23:22"
+	},
+	"class" : {
+		"named:creatingInstancesOf:sending:with:accessingModelWith:" : "JulianMaestri 1/17/2018 12:12",
+		"assertSizeOf:equalsSizeOf:" : "JulianMaestri 1/17/2018 12:18",
+		"assertSizeOf:equalsArgumentCountOf:" : "JulianMaestri 1/17/2018 12:19",
+		"named:creatingInstancesOf:sending:with:accessingModelOnlyWith:" : "JulianMaestri 1/17/2018 12:11"
+	}
+}

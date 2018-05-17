@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"parseOffsetFrom:" : "JulianMaestri 1/30/2018 01:25",
+		"basicParse:" : "JulianMaestri 1/30/2018 01:21",
+		"extractTimeFrom:" : "JulianMaestri 1/30/2018 01:34",
+		"parseDurationFrom:" : "JulianMaestri 1/30/2018 01:36",
+		"assertIsValidTime:withHour:minute:" : "JulianMaestri 1/30/2018 01:55"
+	},
+	"class" : {
+		"acceptedFormats" : "JulianMaestri 1/29/2018 23:24"
+	}
+}

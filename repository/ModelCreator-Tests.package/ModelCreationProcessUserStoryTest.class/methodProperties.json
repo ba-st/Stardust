@@ -1,0 +1,30 @@
+{
+	"instance" : {
+		"rectangleCreatorFrom:to:" : "JulianMaestri 1/30/2018 19:50",
+		"sumCreatorBetween:and:" : "JulianMaestri 1/30/2018 17:34",
+		"testFirstFailureInformedWhenSeveralCreatorsWouldFail" : "JulianMaestri 1/30/2018 18:34",
+		"productCreatorBetween:and:" : "JulianMaestri 1/30/2018 19:30",
+		"testModelForMultipleSelectionCreatorDependsOnView" : "JulianMaestri 1/11/2018 13:55",
+		"format:" : "JulianMaestri 1/11/2018 13:46",
+		"testModelObtainedChangesAfterUserInteraction" : "JulianMaestri 1/11/2018 13:55",
+		"testMultipleFailuresInformedWhenSameLevelLeafCreatorsFail" : "JulianMaestri 1/11/2018 11:58",
+		"selectablePoints" : "JulianMaestri 1/30/2018 19:44",
+		"numberCodecFor:" : "JulianMaestri 1/30/2018 17:30",
+		"testSupervisorModelIfUnable" : "JulianMaestri 1/11/2018 13:56",
+		"testInstanceCreationFailsWhenModelCanNotBeObtained" : "JulianMaestri 1/11/2018 13:53",
+		"testChangingModelThroughCreatorWithLoopsChangesViewContents" : "JulianMaestri 1/30/2018 19:51",
+		"testModelUnnafectedByUserInteractionDoesNotChange" : "JulianMaestri 1/11/2018 13:56",
+		"testMultipleFailuresInformedWhenLeafCreatorAndCompositeCreatorOnDifferentLevelsFail" : "JulianMaestri 1/11/2018 11:58",
+		"testModelForCompositeCreatorDependsOnViews" : "JulianMaestri 1/11/2018 13:53",
+		"testMultipleFailuresInformedWhenDifferentLevelLeafCreatorsFail" : "JulianMaestri 1/11/2018 11:58",
+		"testModelObtainedThroughDifferentBranchesIsIdentical" : "JulianMaestri 1/11/2018 13:56",
+		"testMultipleFailuresInformedWhenLeafCreatorAndCompositeCreatorOnSameLevelFail" : "JulianMaestri 1/11/2018 11:58",
+		"testSupervisorWithModelDoIfUnable" : "JulianMaestri 1/11/2018 13:57",
+		"testChangingModelThroughCreatorChangesViewContents" : "JulianMaestri 1/30/2018 19:52",
+		"pointCreatorFrom:and:" : "JulianMaestri 1/30/2018 19:50",
+		"selectableDiscounts" : "JulianMaestri 1/11/2018 20:28",
+		"testModelForCompositeCreatorWithLoopsDependsOnViews" : "JulianMaestri 1/11/2018 13:53",
+		"testModelForCreatorDependsOnView" : "JulianMaestri 1/11/2018 13:53"
+	},
+	"class" : { }
+}

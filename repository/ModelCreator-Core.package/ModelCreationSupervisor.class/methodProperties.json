@@ -1,0 +1,19 @@
+{
+	"instance" : {
+		"canCreate:" : "JulianMaestri 1/11/2018 14:26",
+		"modelIfUnable:" : "JulianMaestri 1/11/2018 14:27",
+		"initializeSupervising:showingErrorsAccordingTo:" : "JulianMaestri 1/11/2018 14:27",
+		"model" : "JulianMaestri 1/11/2018 14:27",
+		"creatorRelatedTo:" : "JulianMaestri 1/11/2018 14:26",
+		"assert:canBeRelatedTo:" : "JulianMaestri 1/11/2018 14:26",
+		"changeNotifiedBy:" : "JulianMaestri 1/11/2018 14:26",
+		"relateChangesIn:withModelFor:" : "JulianMaestri 1/11/2018 14:27",
+		"changeModelTo:" : "JulianMaestri 1/11/2018 14:26",
+		"withModelDo:ifUnable:" : "JulianMaestri 1/11/2018 14:27"
+	},
+	"class" : {
+		"supervising:" : "JulianMaestri 1/11/2018 22:23",
+		"supervising:showingErrorsAccordingTo:" : "JulianMaestri 1/11/2018 22:26",
+		"defaultErrorDisplay" : "JulianMaestri 1/11/2018 22:23"
+	}
+}

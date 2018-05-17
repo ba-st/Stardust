@@ -1,0 +1,17 @@
+{
+	"instance" : {
+		"respondsTo:" : "JulianMaestri 1/23/2018 12:11",
+		"printOn:" : "JulianMaestri 1/11/2018 14:09",
+		"creatorInstanceUsing:" : "JulianMaestri 1/11/2018 14:08",
+		"doesNotUnderstand:" : "JulianMaestri 1/11/2018 21:45",
+		"initializeNamed:building:accessedUsing:creatingInstanceOfCreatorWith:" : "JulianMaestri 1/11/2018 14:09",
+		"printString" : "JulianMaestri 1/11/2018 14:09"
+	},
+	"class" : {
+		"named:adaptingModelOf:using:" : "JulianMaestri 1/11/2018 22:24",
+		"named:using:" : "JulianMaestri 1/11/2018 22:25",
+		"named:building:accessedUsing:" : "JulianMaestri 1/11/2018 22:25",
+		"named:building:accessedOnlyUsing:" : "JulianMaestri 1/11/2018 22:24",
+		"named:building:accessedUsing:creatingInstanceOfCreatorWith:" : "JulianMaestri 1/11/2018 22:25"
+	}
+}

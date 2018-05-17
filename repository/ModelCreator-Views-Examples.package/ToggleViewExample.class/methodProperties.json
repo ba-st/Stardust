@@ -1,0 +1,12 @@
+{
+	"instance" : {
+		"initialize" : "JulianMaestri 1/11/2018 14:07",
+		"notifyInterested" : "JulianMaestri 1/11/2018 14:07",
+		"toggleCurrentSelection" : "JulianMaestri 1/11/2018 14:07",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 14:07"
+	},
+	"class" : {
+		"new" : "JulianMaestri 1/11/2018 14:32",
+		"implementedInterfacesDo:" : "JulianMaestri 1/11/2018 14:46"
+	}
+}

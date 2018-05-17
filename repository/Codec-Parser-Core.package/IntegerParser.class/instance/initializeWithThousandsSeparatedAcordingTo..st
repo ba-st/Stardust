@@ -1,0 +1,4 @@
+initialization
+initializeWithThousandsSeparatedAcordingTo: aThousandsOptional
+
+	thousandsSeparator := aThousandsOptional

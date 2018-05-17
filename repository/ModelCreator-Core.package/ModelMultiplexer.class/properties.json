@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"supervisorsByName",
+		"selectionModelCreator"
+	],
+	"name" : "ModelMultiplexer",
+	"type" : "normal"
+}

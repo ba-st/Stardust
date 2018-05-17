@@ -1,0 +1,10 @@
+{
+	"instance" : {
+		"initializeParsing:explainedByAll:" : "JulianMaestri 1/30/2018 03:35",
+		"failures" : "JulianMaestri 1/30/2018 03:36"
+	},
+	"class" : {
+		"signalAll:parsing:" : "JulianMaestri 1/30/2018 03:34",
+		"signal:parsing:" : "JulianMaestri 1/30/2018 03:35"
+	}
+}

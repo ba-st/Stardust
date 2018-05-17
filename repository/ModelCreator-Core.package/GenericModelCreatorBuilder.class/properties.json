@@ -1,0 +1,16 @@
+{
+	"commentStamp" : "",
+	"super" : "ProtoObject",
+	"category" : "ModelCreator-Core-ModelCreator-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"modelClass",
+		"accessors",
+		"name",
+		"creatorInstantiator"
+	],
+	"name" : "GenericModelCreatorBuilder",
+	"type" : "normal"
+}

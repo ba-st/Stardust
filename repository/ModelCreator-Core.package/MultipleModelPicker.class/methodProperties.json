@@ -1,0 +1,16 @@
+{
+	"instance" : {
+		"name" : "JulianMaestri 1/11/2018 23:32",
+		"initializeNamed:obtainingSelectionFrom:" : "JulianMaestri 1/11/2018 23:32",
+		"disallowAll" : "JulianMaestri 1/11/2018 23:31",
+		"dependenciesDo:" : "JulianMaestri 1/11/2018 23:31",
+		"notifyChangesTo:" : "JulianMaestri 1/11/2018 23:32",
+		"modelIn:" : "JulianMaestri 1/11/2018 23:32",
+		"changeModelTo:in:" : "JulianMaestri 1/11/2018 13:22",
+		"canCreate:" : "JulianMaestri 1/11/2018 23:31",
+		"allowAnyOf:" : "JulianMaestri 1/11/2018 23:31"
+	},
+	"class" : {
+		"named:obtainingSelectionFrom:" : "JulianMaestri 1/17/2018 12:20"
+	}
+}

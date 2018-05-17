@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ModelCreator-Views-Examples",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"availableElements",
+		"chosenElement",
+		"interested"
+	],
+	"name" : "SingleSelectionViewExample",
+	"type" : "normal"
+}

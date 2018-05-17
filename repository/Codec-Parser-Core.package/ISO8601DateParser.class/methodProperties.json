@@ -1,0 +1,9 @@
+{
+	"instance" : {
+		"assertIsValidDate:withYear:month:day:" : "JulianMaestri 1/30/2018 01:27",
+		"basicParse:" : "JulianMaestri 1/30/2018 01:27"
+	},
+	"class" : {
+		"acceptedFormats" : "JulianMaestri 1/30/2018 02:28"
+	}
+}

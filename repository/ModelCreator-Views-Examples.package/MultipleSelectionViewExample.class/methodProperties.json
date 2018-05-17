@@ -1,0 +1,19 @@
+{
+	"instance" : {
+		"choose:matchedUsing:ifUnable:" : "JulianMaestri 1/12/2018 18:22",
+		"currentSelection" : "JulianMaestri 1/17/2018 13:10",
+		"disallowAll" : "JulianMaestri 1/17/2018 13:10",
+		"chosenIndexes" : "JulianMaestri 1/17/2018 13:10",
+		"clearSelection" : "JulianMaestri 1/17/2018 13:10",
+		"initialize" : "JulianMaestri 1/17/2018 13:10",
+		"chooseElementsAtAll:" : "JulianMaestri 1/12/2018 18:22",
+		"chooseAll" : "JulianMaestri 1/12/2018 18:22",
+		"notifyChangesTo:" : "JulianMaestri 1/17/2018 13:10",
+		"allowAnyOf:" : "JulianMaestri 1/12/2018 18:22",
+		"setChosenElementsTo:" : "JulianMaestri 1/17/2018 13:11"
+	},
+	"class" : {
+		"new" : "JulianMaestri 1/12/2018 18:30",
+		"implementedInterfacesDo:" : "JulianMaestri 1/12/2018 18:30"
+	}
+}

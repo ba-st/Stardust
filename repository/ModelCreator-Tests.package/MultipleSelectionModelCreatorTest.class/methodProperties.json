@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaffected" : "JulianMaestri 1/11/2018 13:58",
+		"testEmptyCollectionIsObtainedWhenThereIsNoSelection" : "JulianMaestri 1/11/2018 13:58",
+		"testAfterChangeOfSelectionModelObtainedRepresentsNewSelection" : "JulianMaestri 1/11/2018 13:58",
+		"selectableModelFor:" : "JulianMaestri 1/11/2018 13:58",
+		"testSelectionIsLostIfNotCompletelyIncludedInNewOptions" : "JulianMaestri 1/11/2018 13:59",
+		"testSelectionIsLostIfOptionsAreCleared" : "JulianMaestri 1/11/2018 13:59",
+		"testModelIsTheSameAsViewSelection" : "JulianMaestri 1/11/2018 13:58",
+		"testChangeOfSelectionIsNotAllowedIfSelectionIncludesAnUnavailableOption" : "JulianMaestri 1/11/2018 13:58",
+		"testSelectionIsKeptIfCompletelyIncludedInNewOptions" : "JulianMaestri 1/11/2018 13:59"
+	},
+	"class" : { }
+}

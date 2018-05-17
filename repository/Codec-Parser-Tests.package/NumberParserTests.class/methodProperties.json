@@ -1,0 +1,14 @@
+{
+	"instance" : {
+		"testParseNaturalNumberFailsWhenNotANumber" : "JulianMaestri 1/30/2018 03:59",
+		"testParseIntegerWithThousandSeparators" : "JulianMaestri 1/30/2018 04:03",
+		"testParseIntegerFailsWhenNotANumber" : "JulianMaestri 1/30/2018 03:58",
+		"testParseNaturalNumberWithThousandSeparators" : "JulianMaestri 1/30/2018 04:03",
+		"testParseScaledDecimal" : "JulianMaestri 1/30/2018 04:38",
+		"testParseInteger" : "JulianMaestri 1/28/2018 16:37",
+		"testParseNaturalNumber" : "JulianMaestri 1/28/2018 16:23",
+		"testParseScaledDecimalWithThousandSeparators" : "JulianMaestri 1/30/2018 04:38",
+		"testParseScaledDecimalWithThousandSeparatorsFailWhenNotANumber" : "JulianMaestri 1/30/2018 04:52"
+	},
+	"class" : { }
+}
