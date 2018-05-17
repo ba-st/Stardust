@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"name",
+		"view"
+	],
+	"name" : "BinaryChoiceModelPicker",
+	"type" : "normal"
+}

@@ -8,7 +8,7 @@ baseline: spec
 			self setUpDependencies: spec.
 			
 			spec
-				package: 'Stardust' with: [ spec requires: 'Buoy' ];
+				package: 'Stardust' with: [ spec requires: #('Buoy' 'Mole') ];
 				package: 'Stardust-Tests' with: [ spec requires: 'Stardust' ].
 			
 			spec

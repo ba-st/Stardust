@@ -1,0 +1,4 @@
+accessing
+name
+
+	^ selectionModelCreator name

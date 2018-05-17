@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"userAwareDescription"
+	],
+	"name" : "MultiplexedInstanceCreationSignalFossil",
+	"type" : "normal"
+}

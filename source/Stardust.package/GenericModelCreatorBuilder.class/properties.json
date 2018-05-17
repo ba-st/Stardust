@@ -1,0 +1,16 @@
+{
+	"commentStamp" : "",
+	"super" : "ProtoObject",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"modelClass",
+		"accessors",
+		"name",
+		"creatorInstantiator"
+	],
+	"name" : "GenericModelCreatorBuilder",
+	"type" : "normal"
+}

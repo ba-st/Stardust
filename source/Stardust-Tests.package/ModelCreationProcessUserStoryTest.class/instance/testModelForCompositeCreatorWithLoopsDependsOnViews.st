@@ -4,7 +4,7 @@ testModelForCompositeCreatorWithLoopsDependsOnViews
 	| discountView discountPicker someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator totalGift supervisor |
 
 	discountView := SingleSelectionViewExample new.
-	discountPicker := SingleModelPicker2 named: 'selection' obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: discountView.
 	someItemPriceView := TextInputViewExample new.
 	someItemGiftCreator := self productCreatorBetween: discountPicker and: someItemPriceView.
 	anotherItemPriceView := TextInputViewExample new.

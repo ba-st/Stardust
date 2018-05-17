@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"supervisorsByName",
+		"selectionModelCreator"
+	],
+	"name" : "ModelMultiplexer",
+	"type" : "normal"
+}

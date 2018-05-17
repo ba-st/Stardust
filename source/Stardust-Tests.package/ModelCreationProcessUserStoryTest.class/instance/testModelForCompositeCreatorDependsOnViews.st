@@ -4,10 +4,16 @@ testModelForCompositeCreatorDependsOnViews
 	| discountView discountPicker priceToDiscountView giftCreator costCreator supervisor |
 
 	discountView := SingleSelectionViewExample new.
-	discountPicker := SingleModelPicker2 named: 'selection' obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker
+		named: 'selection'
+		obtainingSelectionFrom: discountView.
 	priceToDiscountView := TextInputViewExample new.
-	giftCreator := self productCreatorBetween: discountPicker and: priceToDiscountView.
-	costCreator := PluggableModelCreatorAdapter adapting: giftCreator with: [ :gift | 1100 - gift ].
+	giftCreator := self
+		productCreatorBetween: discountPicker
+		and: priceToDiscountView.
+	costCreator := PluggableModelCreatorAdapter
+		adapting: giftCreator
+		with: [ :gift | 1100 - gift ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 	discountView allowAnyOf: self selectableDiscounts.
 	discountView chooseElementAt: 2.

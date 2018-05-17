@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "UISelectionState",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"selection"
+	],
+	"name" : "UISelection",
+	"type" : "normal"
+}

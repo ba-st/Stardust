@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"creator",
+		"adaptingBlock"
+	],
+	"name" : "PluggableModelCreatorAdapter",
+	"type" : "normal"
+}

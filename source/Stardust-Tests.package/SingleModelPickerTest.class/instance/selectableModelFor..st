@@ -1,4 +1,4 @@
 private - accessing
 selectableModelFor: aModel
 
-	^ UISelectableModel2 representing: aModel with: aModel asString
+	^ UISelectableModel representing: aModel with: aModel asString

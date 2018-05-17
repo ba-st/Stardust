@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelPickingPolicy",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "PickModelPolicy",
+	"type" : "normal"
+}

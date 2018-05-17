@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "ModelCreator",
+	"category" : "Stardust-ModelCreator",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"creator",
+		"parser",
+		"formatter"
+	],
+	"name" : "TextCodec",
+	"type" : "normal"
+}

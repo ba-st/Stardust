@@ -3,9 +3,9 @@ testSelectableModelHashDependsOnDescriptionHash
 
 	| originalModel equivalentModel differentModel |
 
-	originalModel := UISelectableModel2 representing: 4 with: 'Un número'.
-	equivalentModel := UISelectableModel2 representing: 5 with: 'Un número'.
-	differentModel := UISelectableModel2 representing: 7 with: 'Does Not Matter'.
+	originalModel := UISelectableModel representing: 4 with: 'Un número'.
+	equivalentModel := UISelectableModel representing: 5 with: 'Un número'.
+	differentModel := UISelectableModel representing: 7 with: 'Does Not Matter'.
 	self
 		assert: originalModel equals: originalModel;
 		assert: equivalentModel equals: equivalentModel;

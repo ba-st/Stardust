@@ -4,8 +4,14 @@ testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaffected
 	| view previousModel creator |
 
 	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker2 named: 'selection' obtainingSelectionFrom: view.
-	creator allowAnyOf: (Array with: (self selectableModelFor: 3) with: (self selectableModelFor: 7)).
+	creator := SingleModelPicker
+		named: 'selection'
+		obtainingSelectionFrom: view.
+	creator
+		allowAnyOf:
+			(Array
+				with: (self selectableModelFor: 3)
+				with: (self selectableModelFor: 7)).
 	view chooseElementAt: 1.
 	previousModel := creator modelIn: self.
 	view chooseElementAt: 2.
