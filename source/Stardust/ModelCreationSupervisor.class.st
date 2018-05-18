@@ -70,7 +70,8 @@ ModelCreationSupervisor >> creatorRelatedTo: aView [
 
 	^ creatorsByView
 		at: aView
-		ifAbsent: [ ProgrammingError signal: #'Un Model Creation Supervisor recibiÛ notificaciÛn de cambio de una View que no conoce' ]
+		ifAbsent: [ ObjectNotFound
+				signal: #'A model creation supervisor recieved a change notification from a unknow view' ]
 ]
 
 { #category : #initialization }
