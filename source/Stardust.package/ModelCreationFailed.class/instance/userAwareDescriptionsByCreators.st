@@ -1,4 +1,0 @@
-accessing
-userAwareDescriptionsByCreators
-
-	^ self tag

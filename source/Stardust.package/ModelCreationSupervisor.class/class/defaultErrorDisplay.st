@@ -1,4 +1,0 @@
-defaults
-defaultErrorDisplay
-
-	^ SupervisorStrategy displayingSingleError

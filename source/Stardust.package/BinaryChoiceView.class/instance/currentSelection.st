@@ -1,4 +1,0 @@
-accessing
-currentSelection
-
-	self interfaceImplementorResponsibility

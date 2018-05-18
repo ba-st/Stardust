@@ -1,4 +1,0 @@
-instance creation
-startingAt: aCreator notifyingChangesTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy
-
-	^ self new initializeStartingAt: aCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy

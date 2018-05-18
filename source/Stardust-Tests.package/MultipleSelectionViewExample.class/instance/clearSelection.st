@@ -1,4 +1,0 @@
-api
-clearSelection
-
-	self setChosenElementsTo: #()

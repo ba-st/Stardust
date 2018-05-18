@@ -1,4 +1,0 @@
-selection protocol
-toggleCurrentSelection
-
-	self interfaceImplementorResponsibility

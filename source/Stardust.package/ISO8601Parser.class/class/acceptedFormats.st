@@ -1,4 +1,0 @@
-parsing
-acceptedFormats
-
-	self subclassResponsibility

@@ -1,4 +1,0 @@
-accessing
-modelClass
-
-	^ modelClassReference value

@@ -1,4 +1,0 @@
-signaling
-interfaceImplementorResponsibility
-
-	self shouldBeImplemented

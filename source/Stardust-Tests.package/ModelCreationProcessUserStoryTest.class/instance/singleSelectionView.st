@@ -1,4 +1,0 @@
-tests
-singleSelectionView
-
-	^ SingleSelectionViewExample new

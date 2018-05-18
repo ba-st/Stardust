@@ -1,4 +1,0 @@
-testing
-canCreate: aModel
-
-	^ true

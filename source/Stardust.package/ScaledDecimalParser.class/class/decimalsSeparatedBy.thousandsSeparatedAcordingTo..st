@@ -1,4 +1,0 @@
-private-instance creation
-decimalsSeparatedBy: aDecimalSeparator thousandsSeparatedAcordingTo: aThousandsOptional
-
-	^ super new initializeWithDecimalsSeparatedBy: aDecimalSeparator thousandsSeparatedAcordingTo: aThousandsOptional

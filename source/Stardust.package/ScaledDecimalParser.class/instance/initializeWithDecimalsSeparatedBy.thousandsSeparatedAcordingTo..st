@@ -1,5 +1,0 @@
-initialization
-initializeWithDecimalsSeparatedBy: aDecimalSeparator thousandsSeparatedAcordingTo: aThousandsOptional
-
-	decimalSeparator := aDecimalSeparator.
-	thousandsSeparator := aThousandsOptional

@@ -1,4 +1,0 @@
-as yet unclassified
-allowAnySatisfying: aMatchBlock
-
-	self interfaceImplementorResponsibility

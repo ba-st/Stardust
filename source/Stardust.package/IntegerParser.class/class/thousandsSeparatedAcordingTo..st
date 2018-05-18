@@ -1,4 +1,0 @@
-private-instance creation
-thousandsSeparatedAcordingTo: aThousandsOptional
-
-	^ super new initializeWithThousandsSeparatedAcordingTo: aThousandsOptional

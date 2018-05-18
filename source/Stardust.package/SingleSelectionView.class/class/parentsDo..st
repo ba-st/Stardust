@@ -1,4 +1,0 @@
-enumerating
-parentsDo: aMonadycBlock
-
-	

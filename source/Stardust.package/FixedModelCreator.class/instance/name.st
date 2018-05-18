@@ -1,4 +1,0 @@
-accessing
-name
-
-	^ model asString
