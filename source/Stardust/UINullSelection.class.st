@@ -1,7 +1,7 @@
 Class {
 	#name : #UINullSelection,
 	#superclass : #UISelectionState,
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #comparing }

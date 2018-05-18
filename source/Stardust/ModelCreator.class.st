@@ -1,7 +1,7 @@
 Class {
 	#name : #ModelCreator,
 	#superclass : #Object,
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #preconditions }

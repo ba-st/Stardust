@@ -8,7 +8,7 @@ Class {
 		'modelCreators',
 		'name'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #asserting }

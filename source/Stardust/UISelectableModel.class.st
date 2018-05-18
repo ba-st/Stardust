@@ -5,7 +5,7 @@ Class {
 		'representedObject',
 		'description'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }

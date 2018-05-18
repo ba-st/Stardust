@@ -1,7 +1,7 @@
 Class {
 	#name : #NullParser,
 	#superclass : #Object,
-	#category : 'Stardust-Parser'
+	#category : #'Stardust-Parser'
 }
 
 { #category : #parsing }

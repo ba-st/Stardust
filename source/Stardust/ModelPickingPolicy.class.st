@@ -1,7 +1,7 @@
 Class {
 	#name : #ModelPickingPolicy,
 	#superclass : #Object,
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #testing }

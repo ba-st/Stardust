@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'handler'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }
@@ -13,7 +13,7 @@ SupervisorStrategy class >> displayingMultipleErrors [
 	| handler |
 
 	handler := [ :signal :creator :failuresByCreator | 
-	failuresByCreator at: creator put: ('<1s>: <2s>' expandMacrosWith: creator name with: signal userAwareDescription).
+	failuresByCreator at: creator put: ('<1s>: <2s>' expandMacrosWith: creator name with: signal messageText).
 	signal return ].
 
 	^ self handlingErrorsWith: handler

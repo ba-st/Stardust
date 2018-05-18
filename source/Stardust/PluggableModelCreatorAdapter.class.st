@@ -5,7 +5,7 @@ Class {
 		'creator',
 		'adaptingBlock'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }

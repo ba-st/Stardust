@@ -37,7 +37,10 @@ TextCodecTest >> testForDateParserCanCreateDate [
 	| creator codec |
 
 	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	codec := TextCodec workingWith: creator parsingWith: ISO8601DateParser new formattingWith: ISO8601DateFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: ISO8601DateParser new
+		formattingWith: ISO8601DateFormatter new.
 
 	self assert: (codec canCreate: Date today)
 ]
@@ -48,7 +51,10 @@ TextCodecTest >> testForNumberParserCanCreateNumber [
 	| creator codec |
 
 	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	codec := TextCodec workingWith: creator parsingWith: NaturalNumberParser new formattingWith: NullFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: NaturalNumberParser new
+		formattingWith: NullFormatter new.
 
 	self
 		assert: (codec canCreate: 4);
@@ -62,7 +68,10 @@ TextCodecTest >> testForStringParserCanCreateString [
 	| creator codec |
 
 	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	codec := TextCodec workingWith: creator parsingWith: NullParser new formattingWith: NullFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: NullParser new
+		formattingWith: NullFormatter new.
 
 	self
 		assert: (codec canCreate: 'a text');
@@ -76,8 +85,12 @@ TextCodecTest >> testFormatterIsUsedToSetViewContents [
 	| creator codec |
 
 	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	codec := TextCodec workingWith: creator parsingWith: NumberParser new formattingWith: NullFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: NumberParser new
+		formattingWith: NullFormatter new.
 	codec changeModelTo: 45.1234 in: self.
+	
 	self assert: (creator modelIn: self) equals: '45.1234'
 ]
 
@@ -88,9 +101,13 @@ TextCodecTest >> testInvalidParsingExceptionIsRaisedWhenViewContentsIsNotValid [
 
 	view := TextInputViewExample new.
 	creator := ContainerController named: 'text' controlling: view.
-	codec := TextCodec workingWith: creator parsingWith: NaturalNumberParser new formattingWith: NullFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: NaturalNumberParser new
+		formattingWith: NullFormatter new.
 	view changeContentsTo: '1.234.5678'.
-	self should: [ codec modelIn: self ] raise: ParsingFailed
+	
+	self should: [ codec modelIn: self ] raise: ModelCreationFailed 
 ]
 
 { #category : #tests }
@@ -100,7 +117,11 @@ TextCodecTest >> testParserIsUsedToObtainViewContents [
 
 	view := TextInputViewExample new.
 	creator := ContainerController named: 'text' controlling: view.
-	codec := TextCodec workingWith: creator parsingWith: ScaledDecimalParser new formattingWith: NullFormatter new.
+	codec := TextCodec
+		workingWith: creator
+		parsingWith: ScaledDecimalParser new
+		formattingWith: NullFormatter new.
 	view changeContentsTo: '1234.5678'.
+	
 	self assert: (codec modelIn: self) equals: 1234.5678
 ]

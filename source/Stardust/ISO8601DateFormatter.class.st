@@ -1,7 +1,7 @@
 Class {
 	#name : #ISO8601DateFormatter,
 	#superclass : #FormatterBehavior,
-	#category : 'Stardust-Formatter'
+	#category : #'Stardust-Formatter'
 }
 
 { #category : #formatting }

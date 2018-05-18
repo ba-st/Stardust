@@ -1,7 +1,7 @@
 Class {
 	#name : #UISelectionState,
 	#superclass : #Object,
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #testing }

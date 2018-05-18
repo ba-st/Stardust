@@ -5,7 +5,7 @@ Class {
 		'thousandsSeparator',
 		'decimalSeparator'
 	],
-	#category : 'Stardust-Parser'
+	#category : #'Stardust-Parser'
 }
 
 { #category : #'instance creation' }

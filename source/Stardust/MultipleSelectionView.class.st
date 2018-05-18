@@ -1,7 +1,7 @@
 Class {
 	#name : #MultipleSelectionView,
 	#superclass : #Interface,
-	#category : 'Stardust-Views'
+	#category : #'Stardust-Views'
 }
 
 { #category : #accessing }

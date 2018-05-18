@@ -6,7 +6,7 @@ Class {
 		'parser',
 		'formatter'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }
@@ -46,7 +46,9 @@ TextCodec >> initializeWorkingWith: aCreator parsingWith: aParser formattingWith
 { #category : #accessing }
 TextCodec >> modelIn: aContext [
 
-	^ parser parse: (aContext modelFor: creator)
+	^ [ parser parse: (aContext modelFor: creator) ]
+		on: ParsingFailed
+		do: [ :signal | ModelCreationFailed signal: signal messageText ]
 ]
 
 { #category : #accessing }

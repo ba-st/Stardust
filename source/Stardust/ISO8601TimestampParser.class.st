@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'AcceptedFormats'
 	],
-	#category : 'Stardust-Parser'
+	#category : #'Stardust-Parser'
 }
 
 { #category : #parsing }

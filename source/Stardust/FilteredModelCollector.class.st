@@ -5,7 +5,7 @@ Class {
 		'name',
 		'optionalModelCreators'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }
@@ -18,7 +18,9 @@ FilteredModelCollector class >> named: aName containing: anCollectionOfModelCrea
 { #category : #accessing }
 FilteredModelCollector >> changeModelTo: aModelCollection in: aContext [
 
-	optionalModelCreators do: [ :modelCreator | aContext changeModelFor: modelCreator to: UINullSelection new ].
+	optionalModelCreators
+		do:
+			[ :modelCreator | aContext changeModelFor: modelCreator to: UINullSelection new ].
 
 	aModelCollection
 		do: [ :aModel | 
@@ -49,7 +51,9 @@ FilteredModelCollector >> modelIn: aContext [
 	| models |
 
 	models := OrderedCollection new.
-	optionalModelCreators do: [ :modelCreator | (aContext modelFor: modelCreator) withSelectionDo: [ :model | models add: model ] ].
+	optionalModelCreators
+		do:
+			[ :modelCreator | (aContext modelFor: modelCreator) withSelectionDo: [ :model | models add: model ] ].
 	^ models
 ]
 

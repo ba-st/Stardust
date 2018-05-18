@@ -6,7 +6,7 @@ Class {
 		'creatorsByView',
 		'creationSequence'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #defaults }

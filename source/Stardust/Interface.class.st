@@ -1,7 +1,7 @@
 Class {
 	#name : #Interface,
 	#superclass : #Object,
-	#category : 'Stardust-Views'
+	#category : #'Stardust-Views'
 }
 
 { #category : #accessing }

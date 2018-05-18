@@ -7,7 +7,7 @@ Class {
 		'orderedCreators',
 		'errorDisplayStrategy'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }
@@ -74,7 +74,7 @@ ModelCreationSequence >> modelIn: aContext [
 	orderedCreators
 		do: [ :creator | 
 			[ [ aContext modelInSequenceFor: creator ]
-				on: InstanceCreationFailed
+				on: ModelCreationFailed
 				do: [ :signal | 
 					errorDisplayStrategy
 						handle: signal

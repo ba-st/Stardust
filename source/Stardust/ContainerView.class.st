@@ -1,7 +1,7 @@
 Class {
 	#name : #ContainerView,
 	#superclass : #Interface,
-	#category : 'Stardust-Views'
+	#category : #'Stardust-Views'
 }
 
 { #category : #accessing }

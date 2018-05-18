@@ -5,7 +5,7 @@ Class {
 		'view',
 		'name'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }
@@ -33,7 +33,7 @@ MultipleModelPicker >> changeModelTo: aCollection in: aContext [
 	view
 		choose: aCollection
 		matchedUsing: [ :model :selectableElement | model = selectableElement representedObject ]
-		ifUnable: [ ProgrammingError signal: 'Selected elements are not valid' ]
+		ifUnable: [ ObjectNotFound signal: 'Selected elements are not valid' ]
 ]
 
 { #category : #enumerating }

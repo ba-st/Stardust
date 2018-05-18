@@ -1,7 +1,7 @@
 Class {
 	#name : #FormatterBehavior,
 	#superclass : #Object,
-	#category : 'Stardust-Formatter'
+	#category : #'Stardust-Formatter'
 }
 
 { #category : #formatting }

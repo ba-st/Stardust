@@ -13,7 +13,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable - {#executeShould:inScopeOf:withDescriptionContaining:. #skipUnless:}',
 	#classTraits : 'TAssertable classTrait',
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreator'
 }
 
 { #category : #asserting }

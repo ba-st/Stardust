@@ -1,7 +1,7 @@
 Class {
 	#name : #ISO8601Parser,
 	#superclass : #Object,
-	#category : 'Stardust-Parser'
+	#category : #'Stardust-Parser'
 }
 
 { #category : #parsing }

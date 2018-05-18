@@ -1,5 +1,5 @@
 Class {
 	#name : #ProgrammingError,
 	#superclass : #InstanceCreationFailed,
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }

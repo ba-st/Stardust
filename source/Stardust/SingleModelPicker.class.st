@@ -6,7 +6,7 @@ Class {
 		'name',
 		'pickingPolicy'
 	],
-	#category : 'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreator'
 }
 
 { #category : #'instance creation' }

@@ -469,8 +469,8 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenDifferentLe
 			(self
 				format:
 					(SortedCollection
-						with: #'first discount: Se debe seleccionar un elemento v·lido'
-						with: #'third discount: Se debe seleccionar un elemento v·lido'))
+						with: 'first discount: A valid element must be selected'
+						with: 'third discount: A valid element must be selected'))
 ]
 
 { #category : #tests }
@@ -481,7 +481,7 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	inputView := TextInputViewExample new.
 	numberCodec := TextCodec
 		workingWith: (ContainerController named: 'number' controlling: inputView)
-		parsingWith: NumberParser new
+		parsingWith: IntegerParser new
 		formattingWith: NullFormatter new.
 	firstDiscountView := SingleSelectionViewExample new.
 	firstDiscountPicker := SingleModelPicker
@@ -514,8 +514,8 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 			(self
 				format:
 					(SortedCollection
-						with: #'number: ABC no representa un n˙mero'
-						with: #'first discount: Se debe seleccionar un elemento v·lido'))
+						with: 'number: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
+						with: 'first discount: A valid element must be selected'))
 ]
 
 { #category : #tests }
@@ -526,7 +526,7 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	inputView := TextInputViewExample new.
 	numberCodec := TextCodec
 		workingWith: (ContainerController named: 'text' controlling: inputView)
-		parsingWith: NumberParser new
+		parsingWith: IntegerParser new
 		formattingWith: NullFormatter new.
 	discountView := SingleSelectionViewExample new.
 	discountPicker := SingleModelPicker
@@ -550,8 +550,8 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 			(self
 				format:
 					(SortedCollection
-						with: #'text: ABC no representa un n˙mero'
-						with: #'selection: Se debe seleccionar un elemento v·lido'))
+						with: #'text: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
+						with: #'selection: A valid element must be selected'))
 ]
 
 { #category : #tests }
@@ -585,8 +585,8 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLe
 			(self
 				format:
 					(SortedCollection
-						with: #'first discount: Se debe seleccionar un elemento v·lido'
-						with: #'second discount: Se debe seleccionar un elemento v·lido'))
+						with: 'first discount: A valid element must be selected'
+						with: 'second discount: A valid element must be selected'))
 ]
 
 { #category : #tests }
