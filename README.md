@@ -4,3 +4,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/ba-st/Stardust/badge.svg?branch=master)](https://coveralls.io/github/ba-st/Stardust?branch=master)
 
 Stardust is a framework that aims to describe how to create models and build them; collecting every error found in the way.
+
+## Installation
+
+Open a Playground and evaluate:
+
+``` smalltalk
+Metacello new
+  baseline: 'Stardust';
+  repository: 'github://ba-st/Stardust:master/source';
+  load
+```
