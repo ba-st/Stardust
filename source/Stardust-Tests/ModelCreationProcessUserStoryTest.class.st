@@ -157,37 +157,26 @@ ModelCreationProcessUserStoryTest >> testFirstFailureInformedWhenSeveralCreators
 
 	firstDiscountView := self singleSelectionView.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
-	firstDiscountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: firstDiscountView.
 
 	secondDiscountView := DummySingleSelectionView new.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
-	secondDiscountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: secondDiscountView.
+	secondDiscountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: secondDiscountView.
 
-	discountArrayCreator := ModelCollector
-		named: 'collection'
-		containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
+	discountArrayCreator := ModelCollector named: 'collection' containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
 
-	productCreator := (GenericModelCreatorBuilder
-		named: 'product'
-		building: Array
-		accessedUsing: #(first allButFirst))
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: Array accessedUsing: #(first allButFirst))
 		with: numberCodec
 		withAll: discountArrayCreator.
 
-	supervisor := ModelCreationSupervisor
-		supervising: productCreator
-		showingErrorsAccordingTo: SupervisorStrategy displayingSingleError.
+	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingSingleError.
 
 	inputView changeContentsTo: 'ABC'.
 
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withDescription: 'A valid element must be selected'
+		withExceptionDo: [ :error | self assert: (error messageText endsWith: 'A valid element must be selected') ]
 ]
 
 { #category : #tests }
@@ -422,55 +411,32 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenDifferentLe
 	firstDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		yourself.
-	firstDiscountPicker := SingleModelPicker
-		named: 'first discount'
-		obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
 
 	secondDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		chooseElementAt: 1;
 		yourself.
-	secondDiscountPicker := SingleModelPicker
-		named: 'second discount'
-		obtainingSelectionFrom: secondDiscountView.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
 
 	thirdDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		yourself.
-	thirdDiscountPicker := SingleModelPicker
-		named: 'third discount'
-		obtainingSelectionFrom: thirdDiscountView.
+	thirdDiscountPicker := SingleModelPicker named: 'third discount' obtainingSelectionFrom: thirdDiscountView.
 
-	discountArrayCreator := ModelCollector
-		named: 'discount array'
-		containing: (Array with: secondDiscountPicker with: thirdDiscountPicker).
+	discountArrayCreator := ModelCollector named: 'discount array' containing: (Array with: secondDiscountPicker with: thirdDiscountPicker).
 
-	operandsCreator := ModelCollector
-		named: 'sum-operands'
-		containing:
-			(Array
-				with: firstDiscountPicker
-				with: secondDiscountPicker
-				with: thirdDiscountPicker).
+	operandsCreator := ModelCollector named: 'sum-operands' containing: (Array with: firstDiscountPicker with: secondDiscountPicker with: thirdDiscountPicker).
 
-	productCreator := GenericModelCreatorBuilder
-		named: 'sum'
-		adaptingModelOf: operandsCreator
-		using: [ :operands | operands sum ].
+	productCreator := GenericModelCreatorBuilder named: 'sum' adaptingModelOf: operandsCreator using: [ :operands | operands sum ].
 
-	supervisor := ModelCreationSupervisor
-		supervising: productCreator
-		showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
+	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withDescription:
-			(self
-				format:
-					(SortedCollection
-						with: 'first discount: A valid element must be selected'
-						with: 'third discount: A valid element must be selected'))
+		withExceptionDo:
+			[ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'third discount: A valid element must be selected')) ]
 ]
 
 { #category : #tests }
@@ -479,30 +445,14 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	| inputView numberCodec firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker discountArrayCreator productCreator supervisor |
 
 	inputView := DummyTextInput new.
-	numberCodec := TextCodec
-		workingWith: (ContainerController named: 'number' controlling: inputView)
-		parsingWith: IntegerParser new
-		formattingWith: NullFormatter new.
+	numberCodec := TextCodec workingWith: (ContainerController named: 'number' controlling: inputView) parsingWith: IntegerParser new formattingWith: NullFormatter new.
 	firstDiscountView := DummySingleSelectionView new.
-	firstDiscountPicker := SingleModelPicker
-		named: 'first discount'
-		obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
 	secondDiscountView := DummySingleSelectionView new.
-	secondDiscountPicker := SingleModelPicker
-		named: 'second discount'
-		obtainingSelectionFrom: secondDiscountView.
-	discountArrayCreator := ModelCollector
-		named: 'discount array'
-		containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
-	productCreator := (GenericModelCreatorBuilder
-		named: 'product'
-		building: nil
-		accessedUsing: #(leftOperand rightOperand))
-		of: numberCodec
-		andAll: discountArrayCreator.
-	supervisor := ModelCreationSupervisor
-		supervising: productCreator
-		showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
+	discountArrayCreator := ModelCollector named: 'discount array' containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: numberCodec andAll: discountArrayCreator.
+	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
 	inputView changeContentsTo: 'ABC'.
@@ -510,12 +460,15 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withDescription:
-			(self
-				format:
-					(SortedCollection
-						with: 'number: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
-						with: 'first discount: A valid element must be selected'))
+		withExceptionDo: [ :error | 
+			self
+				assert: error messageText
+				equals:
+					(self
+						format:
+							(SortedCollection
+								with: 'number: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
+								with: 'first discount: A valid element must be selected')) ]
 ]
 
 { #category : #tests }
@@ -524,34 +477,25 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	| inputView numberCodec discountView discountPicker productCreator supervisor |
 
 	inputView := DummyTextInput new.
-	numberCodec := TextCodec
-		workingWith: (ContainerController named: 'text' controlling: inputView)
-		parsingWith: IntegerParser new
-		formattingWith: NullFormatter new.
+	numberCodec := TextCodec workingWith: (ContainerController named: 'text' controlling: inputView) parsingWith: IntegerParser new formattingWith: NullFormatter new.
 	discountView := DummySingleSelectionView new.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
-	productCreator := (GenericModelCreatorBuilder
-		named: 'product'
-		building: nil
-		accessedUsing: #(leftOperand rightOperand))
-		of: numberCodec
-		and: discountPicker.
-	supervisor := ModelCreationSupervisor
-		supervising: productCreator
-		showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
+	discountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: discountView.
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: numberCodec and: discountPicker.
+	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	discountView allowAnyOf: self selectableDiscounts.
 	inputView changeContentsTo: 'ABC'.
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withDescription:
-			(self
-				format:
-					(SortedCollection
-						with: #'text: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
-						with: #'selection: A valid element must be selected'))
+		withExceptionDo: [ :error | 
+			self
+				assert: error messageText
+				equals:
+					(self
+						format:
+							(SortedCollection
+								with: #'text: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
+								with: #'selection: A valid element must be selected')) ]
 ]
 
 { #category : #tests }
@@ -560,33 +504,18 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLe
 	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker productCreator supervisor |
 
 	firstDiscountView := DummySingleSelectionView new.
-	firstDiscountPicker := SingleModelPicker
-		named: 'first discount'
-		obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
 	secondDiscountView := DummySingleSelectionView new.
-	secondDiscountPicker := SingleModelPicker
-		named: 'second discount'
-		obtainingSelectionFrom: secondDiscountView.
-	productCreator := (GenericModelCreatorBuilder
-		named: 'product'
-		building: nil
-		accessedUsing: #(leftOperand rightOperand))
-		of: firstDiscountPicker
-		and: secondDiscountPicker.
-	supervisor := ModelCreationSupervisor
-		supervising: productCreator
-		showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: firstDiscountPicker and: secondDiscountPicker.
+	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withDescription:
-			(self
-				format:
-					(SortedCollection
-						with: 'first discount: A valid element must be selected'
-						with: 'second discount: A valid element must be selected'))
+		withExceptionDo:
+			[ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'second discount: A valid element must be selected')) ]
 ]
 
 { #category : #tests }
