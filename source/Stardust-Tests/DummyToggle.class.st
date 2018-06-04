@@ -1,45 +1,39 @@
 Class {
-	#name : #ToggleViewExample,
+	#name : #DummyToggle,
 	#superclass : #Object,
 	#instVars : [
 		'interested'
 	],
-	#category : 'Stardust-Tests-ViewExamples'
+	#category : #'Stardust-Tests-ViewExamples'
 }
 
-{ #category : #enumerating }
-ToggleViewExample class >> implementedInterfacesDo: aBlock [
-
-	aBlock value: BinaryChoiceView
-]
-
 { #category : #'instance creation' }
-ToggleViewExample class >> new [
+DummyToggle class >> new [
 
 	^ super new initialize
 ]
 
 { #category : #initialization }
-ToggleViewExample >> initialize [
+DummyToggle >> initialize [
 
 	super initialize.
 	interested := Set new
 ]
 
 { #category : #notifying }
-ToggleViewExample >> notifyChangesTo: aSupervisor [
+DummyToggle >> notifyChangesTo: aSupervisor [
 
 	interested add: aSupervisor
 ]
 
 { #category : #notifying }
-ToggleViewExample >> notifyInterested [
+DummyToggle >> notifyInterested [
 
 	interested do: [ :anInterested | anInterested changeNotifiedBy: self ]
 ]
 
 { #category : #'selection protocol' }
-ToggleViewExample >> toggleCurrentSelection [
+DummyToggle >> toggleCurrentSelection [
 
 	self notifyInterested
 ]

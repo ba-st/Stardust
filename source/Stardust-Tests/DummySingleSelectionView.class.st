@@ -1,28 +1,22 @@
 Class {
-	#name : #SingleSelectionViewExample,
+	#name : #DummySingleSelectionView,
 	#superclass : #Object,
 	#instVars : [
 		'availableElements',
 		'chosenElement',
 		'interested'
 	],
-	#category : 'Stardust-Tests-ViewExamples'
+	#category : #'Stardust-Tests-ViewExamples'
 }
 
-{ #category : #enumerating }
-SingleSelectionViewExample class >> implementedInterfacesDo: aBlock [
-
-	aBlock value: SingleSelectionView
-]
-
 { #category : #'instance creation' }
-SingleSelectionViewExample class >> new [
+DummySingleSelectionView class >> new [
 
 	^ super new initialize
 ]
 
 { #category : #'selection protocol' }
-SingleSelectionViewExample >> allowAnyOf: anElementCollection [
+DummySingleSelectionView >> allowAnyOf: anElementCollection [
 
 	availableElements := anElementCollection.
 	chosenElement
@@ -31,38 +25,44 @@ SingleSelectionViewExample >> allowAnyOf: anElementCollection [
 ]
 
 { #category : #'selection protocol' }
-SingleSelectionViewExample >> chooseAnySatisfying: aMatchBlock ifNone: aBlock [
+DummySingleSelectionView >> allowsAnySatisfying: aPredicate [
+
+	^ availableElements anySatisfy: aPredicate
+]
+
+{ #category : #'selection protocol' }
+DummySingleSelectionView >> chooseAnySatisfying: aMatchBlock ifNone: aBlock [
 
 	availableElements detect: aMatchBlock ifFound: [ :found | self setChosenElementTo: (Optional containing: found) ] ifNone: aBlock
 ]
 
 { #category : #accessing }
-SingleSelectionViewExample >> chooseElementAt: anIndex [
+DummySingleSelectionView >> chooseElementAt: anIndex [
 
 	self setChosenElementTo: (Optional containing: (availableElements at: anIndex))
 ]
 
 { #category : #'private-accessing' }
-SingleSelectionViewExample >> chosenIndex [
+DummySingleSelectionView >> chosenIndex [
 
 	^ chosenElement withContentDo: [ :selection | availableElements indexOf: selection ] ifUnused: [ 0	"Same behavior as SequentiableCollection" ]
 ]
 
 { #category : #accessing }
-SingleSelectionViewExample >> currentSelectionIfNone: aBlock [
+DummySingleSelectionView >> currentSelectionIfNone: aBlock [
 
 	^ chosenElement withContentDo: [ :element | element ] ifUnused: aBlock
 ]
 
 { #category : #'selection protocol' }
-SingleSelectionViewExample >> disallowAll [
+DummySingleSelectionView >> disallowAll [
 
 	availableElements := #().
 	self invalidateSelection
 ]
 
 { #category : #initialization }
-SingleSelectionViewExample >> initialize [
+DummySingleSelectionView >> initialize [
 
 	super initialize.
 	interested := Set new.
@@ -70,31 +70,31 @@ SingleSelectionViewExample >> initialize [
 ]
 
 { #category : #'private-accessing' }
-SingleSelectionViewExample >> invalidSelection [
+DummySingleSelectionView >> invalidSelection [
 
 	^ Optional unusedBecause: 'No element selected'
 ]
 
 { #category : #'selection protocol' }
-SingleSelectionViewExample >> invalidateSelection [
+DummySingleSelectionView >> invalidateSelection [
 
 	self setChosenElementTo: self invalidSelection
 ]
 
 { #category : #notifying }
-SingleSelectionViewExample >> notifyChangesTo: aSupervisor [
+DummySingleSelectionView >> notifyChangesTo: aSupervisor [
 
 	interested add: aSupervisor
 ]
 
 { #category : #notifying }
-SingleSelectionViewExample >> notifyInterested [
+DummySingleSelectionView >> notifyInterested [
 
 	interested do: [ :anInterested | anInterested changeNotifiedBy: self ]
 ]
 
 { #category : #initialization }
-SingleSelectionViewExample >> setChosenElementTo: anElement [
+DummySingleSelectionView >> setChosenElementTo: anElement [
 
 	chosenElement := anElement.
 	self notifyInterested

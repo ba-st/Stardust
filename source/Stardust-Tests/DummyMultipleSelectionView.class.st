@@ -1,28 +1,22 @@
 Class {
-	#name : #MultipleSelectionViewExample,
+	#name : #DummyMultipleSelectionView,
 	#superclass : #Object,
 	#instVars : [
 		'availableElements',
 		'chosenElements',
 		'interested'
 	],
-	#category : 'Stardust-Tests-ViewExamples'
+	#category : #'Stardust-Tests-ViewExamples'
 }
 
-{ #category : #enumerating }
-MultipleSelectionViewExample class >> implementedInterfacesDo: aBlock [
-
-	aBlock value: MultipleSelectionView
-]
-
 { #category : #'instance creation' }
-MultipleSelectionViewExample class >> new [
+DummyMultipleSelectionView class >> new [
 
 	^ super new initialize
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> allowAnyOf: anElementCollection [
+DummyMultipleSelectionView >> allowAnyOf: anElementCollection [
 
 	availableElements := anElementCollection.
 	self
@@ -32,7 +26,13 @@ MultipleSelectionViewExample >> allowAnyOf: anElementCollection [
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> choose: aCollection matchedUsing: aMatchBlock ifUnable: anUnableBlock [
+DummyMultipleSelectionView >> allowAnySatisfying: aPredicate [
+
+	^ availableElements anySatisfy: aPredicate
+]
+
+{ #category : #'selection protocol' }
+DummyMultipleSelectionView >> choose: aCollection matchedUsing: aMatchBlock ifUnable: anUnableBlock [
 
 	| matches |
 
@@ -47,44 +47,44 @@ MultipleSelectionViewExample >> choose: aCollection matchedUsing: aMatchBlock if
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> chooseAll [
+DummyMultipleSelectionView >> chooseAll [
 
 	self setChosenElementsTo: availableElements
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> chooseElementsAtAll: anIndexCollection [
+DummyMultipleSelectionView >> chooseElementsAtAll: anIndexCollection [
 
 	self setChosenElementsTo: (anIndexCollection collect: [ :index | availableElements at: index ])
 ]
 
 { #category : #accessing }
-MultipleSelectionViewExample >> chosenIndexes [
+DummyMultipleSelectionView >> chosenIndexes [
 
 	^ chosenElements collect: [ :chosenElement | availableElements indexOf: chosenElement ]
 ]
 
 { #category : #api }
-MultipleSelectionViewExample >> clearSelection [
+DummyMultipleSelectionView >> clearSelection [
 
 	self setChosenElementsTo: #()
 ]
 
 { #category : #accessing }
-MultipleSelectionViewExample >> currentSelection [
+DummyMultipleSelectionView >> currentSelection [
 
 	^ chosenElements
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> disallowAll [
+DummyMultipleSelectionView >> disallowAll [
 
 	availableElements := #().
 	chosenElements := #()
 ]
 
 { #category : #initialization }
-MultipleSelectionViewExample >> initialize [
+DummyMultipleSelectionView >> initialize [
 
 	super initialize.
 	interested := Set new.
@@ -92,13 +92,13 @@ MultipleSelectionViewExample >> initialize [
 ]
 
 { #category : #notifying }
-MultipleSelectionViewExample >> notifyChangesTo: aSupervisor [
+DummyMultipleSelectionView >> notifyChangesTo: aSupervisor [
 
 	interested add: aSupervisor
 ]
 
 { #category : #'selection protocol' }
-MultipleSelectionViewExample >> setChosenElementsTo: aCollection [
+DummyMultipleSelectionView >> setChosenElementsTo: aCollection [
 
 	chosenElements := aCollection
 ]

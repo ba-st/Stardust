@@ -84,7 +84,7 @@ ModelCreationProcessUserStoryTest >> selectablePoints [
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> singleSelectionView [
 
-	^ SingleSelectionViewExample new
+	^ DummySingleSelectionView new
 ]
 
 { #category : #'private - accessing' }
@@ -161,7 +161,7 @@ ModelCreationProcessUserStoryTest >> testFirstFailureInformedWhenSeveralCreators
 		named: 'selection'
 		obtainingSelectionFrom: firstDiscountView.
 
-	secondDiscountView := SingleSelectionViewExample new.
+	secondDiscountView := DummySingleSelectionView new.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
 	secondDiscountPicker := SingleModelPicker
 		named: 'selection'
@@ -215,7 +215,7 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorDependsOnViews 
 
 	| discountView discountPicker priceToDiscountView giftCreator costCreator supervisor |
 
-	discountView := SingleSelectionViewExample new.
+	discountView := DummySingleSelectionView new.
 	discountView allowAnyOf: self selectableDiscounts.
 	discountPicker := SingleModelPicker
 		named: 'selection'
@@ -306,7 +306,7 @@ ModelCreationProcessUserStoryTest >> testModelForMultipleSelectionCreatorDepends
 
 	| discountsView discountsPicker costsCreator supervisor |
 
-	discountsView := MultipleSelectionViewExample new.
+	discountsView := DummyMultipleSelectionView new.
 	discountsView allowAnyOf: self selectableDiscounts.
 	discountsView chooseElementsAtAll: #(1 3).
 
@@ -326,7 +326,7 @@ ModelCreationProcessUserStoryTest >> testModelObtainedChangesAfterUserInteractio
 
 	| supervisor discountView discountCodec discountCreator |
 
-	discountView := TextInputViewExample new.
+	discountView := DummyTextInput new.
 	discountCodec := self numberCodecFor: discountView.
 	discountCreator := (GenericModelCreatorBuilder
 		named: 'percentage'
@@ -350,11 +350,11 @@ ModelCreationProcessUserStoryTest >> testModelObtainedThroughDifferentBranchesIs
 		named: 'percentage'
 		building: Percentage
 		accessedUsing: #(number)) of: discountCodec.
-	someItemPriceView := TextInputViewExample new.
+	someItemPriceView := DummyTextInput new.
 	someItemGiftCreator := self
 		productCreatorBetween: discountCreator
 		and: someItemPriceView.
-	anotherItemPriceView := TextInputViewExample new.
+	anotherItemPriceView := DummyTextInput new.
 	anotherItemGiftCreator := self
 		productCreatorBetween: discountCreator
 		and: anotherItemPriceView.
@@ -478,16 +478,16 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 
 	| inputView numberCodec firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker discountArrayCreator productCreator supervisor |
 
-	inputView := TextInputViewExample new.
+	inputView := DummyTextInput new.
 	numberCodec := TextCodec
 		workingWith: (ContainerController named: 'number' controlling: inputView)
 		parsingWith: IntegerParser new
 		formattingWith: NullFormatter new.
-	firstDiscountView := SingleSelectionViewExample new.
+	firstDiscountView := DummySingleSelectionView new.
 	firstDiscountPicker := SingleModelPicker
 		named: 'first discount'
 		obtainingSelectionFrom: firstDiscountView.
-	secondDiscountView := SingleSelectionViewExample new.
+	secondDiscountView := DummySingleSelectionView new.
 	secondDiscountPicker := SingleModelPicker
 		named: 'second discount'
 		obtainingSelectionFrom: secondDiscountView.
@@ -523,12 +523,12 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 
 	| inputView numberCodec discountView discountPicker productCreator supervisor |
 
-	inputView := TextInputViewExample new.
+	inputView := DummyTextInput new.
 	numberCodec := TextCodec
 		workingWith: (ContainerController named: 'text' controlling: inputView)
 		parsingWith: IntegerParser new
 		formattingWith: NullFormatter new.
-	discountView := SingleSelectionViewExample new.
+	discountView := DummySingleSelectionView new.
 	discountPicker := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: discountView.
@@ -559,11 +559,11 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLe
 
 	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker productCreator supervisor |
 
-	firstDiscountView := SingleSelectionViewExample new.
+	firstDiscountView := DummySingleSelectionView new.
 	firstDiscountPicker := SingleModelPicker
 		named: 'first discount'
 		obtainingSelectionFrom: firstDiscountView.
-	secondDiscountView := SingleSelectionViewExample new.
+	secondDiscountView := DummySingleSelectionView new.
 	secondDiscountPicker := SingleModelPicker
 		named: 'second discount'
 		obtainingSelectionFrom: secondDiscountView.
@@ -594,7 +594,7 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
 
-	discountView := SingleSelectionViewExample new.
+	discountView := DummySingleSelectionView new.
 	discountPicker := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: discountView.
@@ -617,7 +617,7 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
 
-	discountView := SingleSelectionViewExample new.
+	discountView := DummySingleSelectionView new.
 	discountPicker := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: discountView.
@@ -642,5 +642,5 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 { #category : #'private - accessing' }
 ModelCreationProcessUserStoryTest >> textInputView [
 
-	^ TextInputViewExample new
+	^ DummyTextInput new
 ]

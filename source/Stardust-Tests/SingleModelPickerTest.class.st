@@ -15,7 +15,7 @@ SingleModelPickerTest >> testAfterChangeOfSelectionModelObtainedRepresentsNewSel
 
 	| view creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: view.
@@ -29,7 +29,7 @@ SingleModelPickerTest >> testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaf
 
 	| view previousModel creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: view.
@@ -49,7 +49,7 @@ SingleModelPickerTest >> testChangeOfSelectionIsNotAllowedIfSelectionIsNotAnAvai
 
 	| creator |
 
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: SingleSelectionViewExample new.
+	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: DummySingleSelectionView new.
 	self should: [ creator changeModelTo: 4 in: self ] raise: ObjectNotFound.
 	creator allowAnyOf: (Array with: (self selectableModelFor: 1)).
 	self should: [ creator changeModelTo: 4 in: self ] raise: ObjectNotFound
@@ -60,7 +60,7 @@ SingleModelPickerTest >> testCreationIsNotAllowedWhenThereIsNoSelection [
 
 	| creator |
 
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: SingleSelectionViewExample new.
+	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: DummySingleSelectionView new.
 	self should: [ creator modelIn: self ] raise: ModelCreationFailed
 ]
 
@@ -69,7 +69,7 @@ SingleModelPickerTest >> testModelIsTheSameAsViewSelection [
 
 	| view creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: view.
@@ -92,7 +92,7 @@ SingleModelPickerTest >> testSelectionIsKeptIfIncludedInNewOptions [
 
 	| view creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker
 		named: 'selection'
 		obtainingSelectionFrom: view.
@@ -118,7 +118,7 @@ SingleModelPickerTest >> testSelectionIsLostIfNotIncludedInNewOptions [
 
 	| view creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator
 		allowAnyOf:
@@ -142,7 +142,7 @@ SingleModelPickerTest >> testSelectionIsLostIfOptionsAreCleared [
 
 	| view creator |
 
-	view := SingleSelectionViewExample new.
+	view := DummySingleSelectionView new.
 	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator
 		allowAnyOf:

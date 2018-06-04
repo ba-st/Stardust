@@ -1,40 +1,34 @@
 Class {
-	#name : #TextInputViewExample,
+	#name : #DummyTextInput,
 	#superclass : #Object,
 	#instVars : [
 		'contents',
 		'interested'
 	],
-	#category : 'Stardust-Tests-ViewExamples'
+	#category : #'Stardust-Tests-ViewExamples'
 }
 
-{ #category : #enumerating }
-TextInputViewExample class >> implementedInterfacesDo: aBlock [
-
-	aBlock value: ContainerView
-]
-
 { #category : #'instance creation' }
-TextInputViewExample class >> new [
+DummyTextInput class >> new [
 
 	^ super new initialize
 ]
 
 { #category : #accessing }
-TextInputViewExample >> changeContentsTo: aText [
+DummyTextInput >> changeContentsTo: aText [
 
 	contents := aText.
 	self notifyInterested
 ]
 
 { #category : #accessing }
-TextInputViewExample >> contents [
+DummyTextInput >> contents [
 
 	^ contents
 ]
 
 { #category : #initialization }
-TextInputViewExample >> initialize [
+DummyTextInput >> initialize [
 
 	super initialize.
 	interested := Set new.
@@ -42,13 +36,13 @@ TextInputViewExample >> initialize [
 ]
 
 { #category : #notifying }
-TextInputViewExample >> notifyChangesTo: aSupervisor [
+DummyTextInput >> notifyChangesTo: aSupervisor [
 
 	interested add: aSupervisor
 ]
 
 { #category : #notifying }
-TextInputViewExample >> notifyInterested [
+DummyTextInput >> notifyInterested [
 
 	interested do: [ :anInterested | anInterested changeNotifiedBy: self ]
 ]

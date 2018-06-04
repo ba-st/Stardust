@@ -11,7 +11,10 @@ Class {
 { #category : #'instance creation' }
 BinaryChoiceModelPicker class >> named: aName obtainingSelectionFrom: aBinaryChoiceView [
 
-	self assertNotEmpty: aName.
+	self
+		assertNotEmpty: aName;
+		assert: aBinaryChoiceView implements: ModelCreationAPI >> #BinaryChoice.
+
 	^ self new initializeNamed: aName obtainingSelectionFrom: aBinaryChoiceView
 ]
 

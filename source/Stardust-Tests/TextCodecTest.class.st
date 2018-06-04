@@ -36,7 +36,7 @@ TextCodecTest >> testForDateParserCanCreateDate [
 
 	| creator codec |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	codec := TextCodec
 		workingWith: creator
 		parsingWith: ISO8601DateParser new
@@ -50,7 +50,7 @@ TextCodecTest >> testForNumberParserCanCreateNumber [
 
 	| creator codec |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	codec := TextCodec
 		workingWith: creator
 		parsingWith: NaturalNumberParser new
@@ -67,7 +67,7 @@ TextCodecTest >> testForStringParserCanCreateString [
 
 	| creator codec |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	codec := TextCodec
 		workingWith: creator
 		parsingWith: NullParser new
@@ -84,7 +84,7 @@ TextCodecTest >> testFormatterIsUsedToSetViewContents [
 
 	| creator codec |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	codec := TextCodec
 		workingWith: creator
 		parsingWith: NumberParser new
@@ -99,7 +99,7 @@ TextCodecTest >> testInvalidParsingExceptionIsRaisedWhenViewContentsIsNotValid [
 
 	| view creator codec |
 
-	view := TextInputViewExample new.
+	view := DummyTextInput new.
 	creator := ContainerController named: 'text' controlling: view.
 	codec := TextCodec
 		workingWith: creator
@@ -115,7 +115,7 @@ TextCodecTest >> testParserIsUsedToObtainViewContents [
 
 	| view creator codec |
 
-	view := TextInputViewExample new.
+	view := DummyTextInput new.
 	creator := ContainerController named: 'text' controlling: view.
 	codec := TextCodec
 		workingWith: creator

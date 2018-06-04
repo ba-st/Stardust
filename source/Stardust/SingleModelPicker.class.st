@@ -24,7 +24,9 @@ SingleModelPicker class >> named: aName obtainingSelectionFrom: aSingleSelection
 { #category : #'private-instance creation' }
 SingleModelPicker class >> named: aName obtainingSelectionFrom: aSingleSelectionView accordingTo: aModelPickingPolicy [
 
-	self assertNotEmpty: aName.
+	self
+		assertNotEmpty: aName;
+		assert: aSingleSelectionView implements: ModelCreationAPI >> #SingleSelection.
 	^ self new initializeNamed: aName obtainingSelectionFrom: aSingleSelectionView accordingTo: aModelPickingPolicy
 ]
 

@@ -2,7 +2,6 @@ Class {
 	#name : #ModelCreationSequence,
 	#superclass : #Object,
 	#instVars : [
-		'visitedCreators',
 		'creationGraph',
 		'orderedCreators',
 		'errorDisplayStrategy'
@@ -14,19 +13,6 @@ Class {
 ModelCreationSequence class >> startingAt: aCreator notifyingChangesTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
 
 	^ self new initializeStartingAt: aCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy
-]
-
-{ #category : #private }
-ModelCreationSequence >> addEdgesFor: aCreator to: edges notifyingChangesTo: aSupervisor [
-
-	(visitedCreators includes: aCreator)
-		ifTrue: [ ^ self ].
-	visitedCreators add: aCreator.
-	aCreator notifyChangesTo: aSupervisor.
-	aCreator
-		dependenciesDo: [ :dependency | 
-			edges add: (Edge from: dependency to: aCreator).
-			self addEdgesFor: dependency to: edges notifyingChangesTo: aSupervisor ]
 ]
 
 { #category : #testing }
@@ -44,25 +30,28 @@ ModelCreationSequence >> changeModelTo: aModel in: aContext [
 { #category : #accessing }
 ModelCreationSequence >> creatorsAffectedByChangeIn: aCreator [
 
-	| affectedCreators |
-
-	affectedCreators := Set with: aCreator.
-	(creationGraph edgesStartingOn: aCreator) do: [ :edge | affectedCreators addAll: (self creatorsAffectedByChangeIn: edge target) ].
-	^ affectedCreators
+	^ Set new
+		add: aCreator;
+		addAll: (creationGraph verticesReachableFrom: aCreator);
+		yourself
 ]
 
 { #category : #initialization }
 ModelCreationSequence >> initializeStartingAt: aCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
 
-	| edges |
+	| graphBuilder |
 
 	self initialize.
 	errorDisplayStrategy := anErrorDisplayStrategy.
-	visitedCreators := Set new.
-	edges := OrderedCollection new.
-	self addEdgesFor: aCreator to: edges notifyingChangesTo: aSupervisor.
-	creationGraph := Graph edges: edges nodes: visitedCreators.
-	orderedCreators := (TopologicalSort for: creationGraph) value
+	graphBuilder := DirectedGraphBuilder new.
+	graphBuilder addVertex: aCreator.
+	self
+		relateDependenciesOf: aCreator
+		configuring: graphBuilder
+		notifyingChangesTo: aSupervisor
+		alreadySeen: Set new.
+	creationGraph := graphBuilder build.
+	orderedCreators := creationGraph topologicalSort
 ]
 
 { #category : #accessing }
@@ -88,4 +77,22 @@ ModelCreationSequence >> modelIn: aContext [
 		do: [ :signal | 
 			failuresByCreator isEmpty
 				ifFalse: [ ModelCreationFailed signalObtainedFrom: failuresByCreator ] ]
+]
+
+{ #category : #private }
+ModelCreationSequence >> relateDependenciesOf: aCreator configuring: graphBuilder notifyingChangesTo: aSupervisor alreadySeen: aRecursionSet [
+
+	(aRecursionSet includes: aCreator)
+		ifTrue: [ ^ self ].
+
+	aRecursionSet add: aCreator.
+	aCreator notifyChangesTo: aSupervisor.
+	aCreator
+		dependenciesDo: [ :dependency | 
+			graphBuilder connect: dependency to: aCreator.
+			self
+				relateDependenciesOf: dependency
+				configuring: graphBuilder
+				notifyingChangesTo: aSupervisor
+				alreadySeen: aRecursionSet ]
 ]

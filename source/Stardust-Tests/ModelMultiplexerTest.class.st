@@ -17,7 +17,7 @@ ModelMultiplexerTest >> modelFor: aSingleModelPicker [
 ModelMultiplexerTest >> setUp [
 
 	super setUp.
-	view := SingleSelectionViewExample new
+	view := DummySingleSelectionView new
 ]
 
 { #category : #'private - accessing' }

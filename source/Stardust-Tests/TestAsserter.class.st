@@ -73,6 +73,13 @@ TestAsserter >> assert: aBoolean [
 ]
 
 { #category : #asserting }
+TestAsserter >> assert: actualNumber closeTo: expectedNumber [
+	^ self
+		assert: (actualNumber closeTo: expectedNumber)
+		description: [self comparingStringBetween: actualNumber and: expectedNumber]
+]
+
+{ #category : #asserting }
 TestAsserter >> assert: aBooleanOrBlock description: aStringOrBlock [
 	aBooleanOrBlock value ifFalse: [
 		| aString |
@@ -95,6 +102,53 @@ TestAsserter >> assert: aBooleanOrBlock description: aStringOrBlock resumable: r
 						ifFalse: [self classForTestResult failure].
 			exception signal: aString]
 			
+]
+
+{ #category : #asserting }
+TestAsserter >> assert: actual equals: expected [
+	^ self
+		assert: actual = expected
+		description: [self comparingStringBetween: actual and: expected]
+]
+
+{ #category : #asserting }
+TestAsserter >> assert: actual identicalTo: expected [
+	^ self
+		assert: expected == actual
+		description: [self comparingIdentityStringBetween: actual and: expected]
+]
+
+{ #category : #asserting }
+TestAsserter >> assertCollection: actual equals: expected [
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		assert: expected = actual
+		description: [ self comparingCollectionBetween: actual and: expected ]
+]
+
+{ #category : #asserting }
+TestAsserter >> assertCollection: actual hasSameElements: expected [
+	"Assert that a collection contains the same elements as the given collection. Order is not checked, only the presence/absence of elements."
+	| missingElements additionalElements |
+	
+	additionalElements := actual difference: expected.
+	missingElements := expected difference: (actual intersection: expected).
+	self 
+		assert: (additionalElements isEmpty and: [ missingElements isEmpty ])
+		description: (String streamContents: 
+			[:stream |
+			stream
+				nextPutAll: 'Given Collections do not match!'; lf;
+				tab; nextPutAll: 'additions : '; print: additionalElements asArray; lf;
+				tab; nextPutAll: 'missing: '; print: missingElements asArray; lf ])
+]
+
+{ #category : #asserting }
+TestAsserter >> assertCollection: actual includesAll: subcollection [
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		assert: (actual includesAll: subcollection)
+		description: [ actual asString, ' does not include all in ', subcollection asString ]
 ]
 
 { #category : #factory }
@@ -156,6 +210,29 @@ TestAsserter >> comparingCollectionBetween: left and: right [
 					tab; print: additionalRight  ]]
 ]
 
+{ #category : #private }
+TestAsserter >> comparingIdentityStringBetween: actual and: expected [
+
+	^ String streamContents: [:stream |
+			stream
+				nextPutAll: actual fullPrintString;
+				nextPutAll: ' is not identical to ';
+				nextPutAll: expected fullPrintString;
+				nextPutAll: '.']
+]
+
+{ #category : #private }
+TestAsserter >> comparingStringBetween: actual and: expected [
+
+	^ String streamContents: [:stream |
+			stream
+				nextPutAll: 'Got ';
+				nextPutAll: actual fullPrintString;
+				nextPutAll: ' instead of ';
+				nextPutAll: expected fullPrintString;
+				nextPutAll: '.']
+]
+
 { #category : #factory }
 TestAsserter >> defaultTestError [
 
@@ -168,9 +245,152 @@ TestAsserter >> defaultTestFailure [
 	^ self classForTestResult failure
 ]
 
+{ #category : #asserting }
+TestAsserter >> deny: aBooleanOrBlock [
+
+	self assert: aBooleanOrBlock value not
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> deny: aBooleanOrBlock description: aString [
+	self assert: aBooleanOrBlock value not description: aString
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> deny: aBooleanOrBlock description: aString resumable: resumableBoolean [ 
+	self
+		assert: aBooleanOrBlock value not
+		description: aString
+		resumable: resumableBoolean
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> deny: actual equals: expected [
+	^ self
+		deny: expected = actual
+		description: [self unexpectedEqualityStringBetween: actual and: expected]
+]
+
+{ #category : #asserting }
+TestAsserter >> deny: actual identicalTo: expected [
+	^ self
+		deny: expected == actual
+		description: [self unexpectedIdentityEqualityStringBetween: actual and: expected]
+]
+
+{ #category : #asserting }
+TestAsserter >> denyCollection: actual equals: expected [
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		deny: expected = actual
+		description: [ self unexpectedEqualityStringBetween: actual and: expected ]
+]
+
+{ #category : #asserting }
+TestAsserter >> executeShould: aBlock inScopeOf: anExceptionalEvent [ 
+	^[aBlock value.
+ 	false] on: anExceptionalEvent
+		do: [:ex | ex return: true]
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> executeShould: aBlock inScopeOf: anExceptionalEvent withDescriptionNotContaining: aString [
+	^[aBlock value.
+ 	false] on: anExceptionalEvent
+		do: [:ex | ex return: (ex description includesSubstring: aString) not ]
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock [
+
+	^[aBlock value.
+ 	false] 
+		on: anException
+		do: [:exception | 
+			anotherBlock value: exception.
+			exception return: true]
+]
+
+{ #category : #asserting }
+TestAsserter >> fail [
+
+	^self assert: false
+]
+
+{ #category : #asserting }
+TestAsserter >> fail: aDescriptionString [
+
+	^self assert: false description: aDescriptionString
+]
+
 { #category : #logging }
 TestAsserter >> logFailure: aString [
 	self class logFailure: aString.
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock [
+	self assert: aBlock value
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock description: aString [
+	self assert: aBlock value description: aString
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock notTakeMoreThan: aDuration [
+    "Evaluate aBlock and if it takes more than given duration
+    to run we report a test failure. "
+
+	^ aBlock valueWithin: aDuration onTimeout: [
+		self 
+			assert: false 
+			description: ['Block evaluation took more than the expected <1p>' expandMacrosWith: aDuration]
+	]
+	
+
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock notTakeMoreThanMilliseconds: anInteger [
+    "For compatibility with other Smalltalks"
+
+   self should: aBlock notTakeMoreThan: (Duration milliSeconds: anInteger).
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock raise: anExceptionalEvent [ 
+	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock raise: anExceptionalEvent description: aString [ 
+	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
+		description: aString
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock raise: anExceptionalEvent whoseDescriptionDoesNotInclude: substring description: aString [ 
+	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent withDescriptionNotContaining: substring)
+		description: aString
+
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock raise: anExceptionalEvent whoseDescriptionIncludes: substring description: aString [ 
+	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent withDescriptionContaining: substring)
+		description: aString
+
 ]
 
 { #category : #'*Stardust-Tests-ModelCreator' }
@@ -181,4 +401,103 @@ TestAsserter >> should: aBlock raise: anException withDescription: aDescription 
 		raise: anException
 		whoseDescriptionIncludes: aDescription
 		description: ('Exception message should be: <1s>' expandMacrosWith: aDescription)
+]
+
+{ #category : #asserting }
+TestAsserter >> should: aBlock raise: anException withExceptionDo: anotherBlock [ 
+
+	^self assert: (self executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock)
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldFix: aBlock [ 
+	"Run the block expecting an Exception. Throw an assertion failure if the block does NOT throw an exception."
+	^self should: aBlock raise: Exception
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock [
+	self deny: aBlock value
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock description: aString [
+	self deny: aBlock value description: aString
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock raise: anExceptionalEvent [  
+	 
+	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock raise: anExceptionalEvent description: aString [  
+ 
+	^self
+		assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
+		description: aString
+			
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock raise: anExceptionalEvent whoseDescriptionDoesNotInclude: substring description: aString [ 
+	 
+	^self
+		assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent withDescriptionNotContaining: substring) not
+		description: aString
+
+]
+
+{ #category : #asserting }
+TestAsserter >> shouldnt: aBlock raise: anExceptionalEvent whoseDescriptionIncludes: substring description: aString [  
+	 
+	^self 
+		assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent withDescriptionContaining: substring) not
+		description: aString
+
+]
+
+{ #category : #asserting }
+TestAsserter >> signalFailure: aString [
+	self classForTestResult failure signal: aString
+]
+
+{ #category : #asserting }
+TestAsserter >> skip [
+	"Don't run this test, and don't mark it as failure"
+	TestSkip signal
+]
+
+{ #category : #extensions }
+TestAsserter >> skip: aComment [
+	"Don't run this test, and don't mark it as failure"
+	TestSkip signal: aComment
+]
+
+{ #category : #private }
+TestAsserter >> unexpectedEqualityStringBetween: actual and: expected [
+
+	^ String streamContents: [:stream |
+			stream
+				nextPutAll: 'Unexpected equality of ';
+				nextPutAll: actual fullPrintString;
+				nextPutAll: ' and ';
+				nextPutAll: expected fullPrintString;
+				nextPutAll: '.']
+]
+
+{ #category : #private }
+TestAsserter >> unexpectedIdentityEqualityStringBetween: actual and: expected [
+
+	^ String streamContents: [:stream |
+			stream
+				nextPutAll: 'Unexpected identity equality of ';
+				nextPutAll: actual fullPrintString;
+				nextPutAll: ' and ';
+				nextPutAll: expected fullPrintString;
+				nextPutAll: '.']
 ]

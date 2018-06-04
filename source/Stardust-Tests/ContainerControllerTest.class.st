@@ -9,7 +9,7 @@ ContainerControllerTest >> testAfterChangeOfContentsModelObtainedRepresentsNewCo
 
 	| creator |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	creator changeModelTo: 'new text' in: self.
 	self assert: (creator modelIn: self) equals: 'new text'
 ]
@@ -19,7 +19,7 @@ ContainerControllerTest >> testAfterChangeOfContentsModelPreviouslyObtainedIsUna
 
 	| previousModel creator |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
+	creator := ContainerController named: 'text' controlling: DummyTextInput new.
 	creator changeModelTo: 'old text' in: self.
 	previousModel := creator modelIn: self.
 	creator changeModelTo: 'new text' in: self.

@@ -15,7 +15,7 @@ MultipleSelectionModelCreatorTest >> testAfterChangeOfSelectionModelObtainedRepr
 
 	| view creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator allowAnyOf: (Array with: (self selectableModelFor: 3) with: (self selectableModelFor: 4) with: (self selectableModelFor: 6)).
 	view chooseElementsAtAll: #(1 2).
@@ -27,7 +27,7 @@ MultipleSelectionModelCreatorTest >> testAfterChangeOfSelectionModelPreviouslyOb
 
 	| view previousModel creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator
 		allowAnyOf:
@@ -49,7 +49,7 @@ MultipleSelectionModelCreatorTest >> testChangeOfSelectionIsNotAllowedIfSelectio
 
 	creator := MultipleModelPicker
 		named: 'selection'
-		obtainingSelectionFrom: MultipleSelectionViewExample new.
+		obtainingSelectionFrom: DummyMultipleSelectionView new.
 	self should: [ creator changeModelTo: #(1 2) in: self ] raise: ObjectNotFound
 ]
 
@@ -58,7 +58,7 @@ MultipleSelectionModelCreatorTest >> testEmptyCollectionIsObtainedWhenThereIsNoS
 
 	| creator |
 
-	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: MultipleSelectionViewExample new.
+	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: DummyMultipleSelectionView new.
 	self assert: (creator modelIn: self) isEmpty
 ]
 
@@ -67,7 +67,7 @@ MultipleSelectionModelCreatorTest >> testModelIsTheSameAsViewSelection [
 
 	| view creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator
 		allowAnyOf:
@@ -89,7 +89,7 @@ MultipleSelectionModelCreatorTest >> testSelectionIsKeptIfCompletelyIncludedInNe
 
 	| view creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator allowAnyOf: (Array with: (self selectableModelFor: 2) with: (self selectableModelFor: 4) with: (self selectableModelFor: 6)).
 	view chooseElementsAtAll: #(1 2).
@@ -109,7 +109,7 @@ MultipleSelectionModelCreatorTest >> testSelectionIsLostIfNotCompletelyIncludedI
 
 	| view creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator allowAnyOf: (Array with: (self selectableModelFor: 2) with: (self selectableModelFor: 4) with: (self selectableModelFor: 6)).
 	view chooseElementsAtAll: #(1 2).
@@ -129,7 +129,7 @@ MultipleSelectionModelCreatorTest >> testSelectionIsLostIfOptionsAreCleared [
 
 	| view creator |
 
-	view := MultipleSelectionViewExample new.
+	view := DummyMultipleSelectionView new.
 	creator := MultipleModelPicker named: 'selection' obtainingSelectionFrom: view.
 	creator allowAnyOf: (Array with: (self selectableModelFor: 2) with: (self selectableModelFor: 4) with: (self selectableModelFor: 6)).
 	view chooseElementsAtAll: #(1 2).

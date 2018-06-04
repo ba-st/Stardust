@@ -11,7 +11,9 @@ Class {
 { #category : #'instance creation' }
 ContainerController class >> named: aName controlling: aView [
 
-	self assertNotEmpty: aName.
+	self
+		assertNotEmpty: aName;
+		assert: aView implements: ModelCreationAPI >> #Container.
 	^ self new initializeNamed: aName controlling: aView
 ]
 
