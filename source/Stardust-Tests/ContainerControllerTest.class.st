@@ -1,27 +1,40 @@
+"
+I'm a test case
+"
 Class {
 	#name : #ContainerControllerTest,
-	#superclass : #TestCase,
+	#superclass : #ModelCreatorTest,
 	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #tests }
-ContainerControllerTest >> testAfterChangeOfContentsModelObtainedRepresentsNewContents [
+ContainerControllerTest >> testCanCreate [
 
 	| creator |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	creator changeModelTo: 'new text' in: self.
-	self assert: (creator modelIn: self) equals: 'new text'
+	creator := ContainerController named: 'First Name' controlling: self textField.
+
+	self
+		assert: (creator canCreate: '');
+		assert: (creator canCreate: 'Gabriel')
 ]
 
 { #category : #tests }
-ContainerControllerTest >> testAfterChangeOfContentsModelPreviouslyObtainedIsUnaffected [
+ContainerControllerTest >> testChangeModelToIn [
 
-	| previousModel creator |
+	| creator |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	creator changeModelTo: 'old text' in: self.
-	previousModel := creator modelIn: self.
-	creator changeModelTo: 'new text' in: self.
-	self assert: previousModel equals: 'old text'
+	creator := ContainerController named: 'First Name' controlling: self textField.
+	creator changeModelTo: 'Gabriel' in: context.
+
+	self assert: (creator modelIn: context) equals: 'Gabriel'
+]
+
+{ #category : #tests }
+ContainerControllerTest >> testModelIn [
+
+	| creator |
+
+	creator := ContainerController named: 'First Name' controlling: self textField.
+	self assert: (creator modelIn: context) isEmpty
 ]
