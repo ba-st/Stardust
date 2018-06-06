@@ -40,6 +40,20 @@ SingleModelPickerTest >> testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaf
 ]
 
 { #category : #tests }
+SingleModelPickerTest >> testCanCreate [
+
+	| view creator |
+
+	view := self singleSelectionView.
+	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
+	creator allowAnyOf: #(G).
+
+	self
+		assert: (creator canCreate: #G);
+		deny: (creator canCreate: #Z)
+]
+
+{ #category : #tests }
 SingleModelPickerTest >> testChangeOfSelectionIsNotAllowedIfSelectionIsNotAnAvailableOption [
 
 	| creator |
