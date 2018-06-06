@@ -1,3 +1,6 @@
+"
+I'm a test case
+"
 Class {
 	#name : #ModelMultiplexerTest,
 	#superclass : #TestCase,
