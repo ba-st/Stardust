@@ -4,14 +4,14 @@ I'm a test case covering cross funcionality
 Class {
 	#name : #ModelCreationProcessUserStoryTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'ratingPicker',
+		'titleCreator',
+		'authorNameCreator',
+		'paperCreator'
+	],
 	#category : #'Stardust-Tests-ModelCreation'
 }
-
-{ #category : #'private - accessing' }
-ModelCreationProcessUserStoryTest >> format: aCollection [
-
-	^ (CollectionFormatter separatingWith: Character cr) format: aCollection
-]
 
 { #category : #'private - building' }
 ModelCreationProcessUserStoryTest >> numberCodecFor: aTextView [
@@ -74,6 +74,22 @@ ModelCreationProcessUserStoryTest >> selectableDiscounts [
 ModelCreationProcessUserStoryTest >> selectablePoints [
 
 	^ #(1 2 3) collect: [ :number | number @ number ]
+]
+
+{ #category : #running }
+ModelCreationProcessUserStoryTest >> setUp [
+
+	super setUp.
+	ratingPicker := SingleModelPicker named: 'Rating' pickingFrom: self singleSelectionView.
+	titleCreator := ContainerController named: 'Title' controlling: self textField.
+	authorNameCreator := TextCodec
+		workingWith: (ContainerController named: 'Author Name' controlling: self textField)
+		decodingWith: [ :string | 
+			string isEmpty
+				ifTrue: [ InstanceCreationFailed signal: 'The author name cannot be empty' ]
+				ifFalse: [ string ] ]
+		encodingWith: [ :string | string ].
+	paperCreator := (GenericModelCreatorBuilder named: 'Paper' building: StardustPaper accessedUsing: #(title authorName rating)) titled: titleCreator authoredBy: authorNameCreator rated: ratingPicker
 ]
 
 { #category : #'widget - support' }
@@ -412,47 +428,44 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreatorAndCompositeCreatorOnSameLevelFail [
 
-	| inputView numberCodec discountView discountPicker productCreator supervisor |
+	| numberCodec discountPicker productCreator supervisor |
 
-	inputView := DummyTextInput new.
-	numberCodec := TextCodec workingWith: (ContainerController named: 'text' controlling: inputView) parsingWith: IntegerParser new formattingWith: NullFormatter new.
-	discountView := DummySingleSelectionView new.
-	discountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: discountView.
-	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: numberCodec and: discountPicker.
+	numberCodec := TextCodec
+		workingWith: (ContainerController named: 'text' controlling: self textField)
+		parsingWith: IntegerParser new
+		formattingWith: NullFormatter new.
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: self singleSelectionView.
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: Array accessedUsing: #(first last))
+		with: numberCodec
+		with: discountPicker.
 	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
-	discountView allowAnyOf: self selectableDiscounts.
-	inputView changeContentsTo: 'ABC'.
+
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
 		withExceptionDo: [ :error | 
-			self
-				assert: error messageText
-				equals:
-					(self
-						format:
-							(SortedCollection
-								with: #'text: First character of an integer is either a digit, + or -, not A. An integer only contains digits optionally prepended by + or -'
-								with: #'selection: A valid element must be selected')) ]
+			| errorMessages |
+
+			errorMessages := error messageText lines.
+			errorMessages
+				with: #('selection: A valid element must be selected' ' text: Empty string is not an integer')
+				do: [ :errorMessage :expectedErrorMessage | self assert: errorMessage equals: expectedErrorMessage ] ]
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLeafCreatorsFail [
 
-	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker productCreator supervisor |
+	| supervisor |
 
-	firstDiscountView := self singleSelectionView.
-	firstDiscountPicker := SingleModelPicker named: 'first discount' pickingFrom: firstDiscountView.
-	secondDiscountView := self singleSelectionView.
-	secondDiscountPicker := SingleModelPicker named: 'second discount' pickingFrom: secondDiscountView.
-	productCreator := self productCreatorBetween: firstDiscountPicker and: secondDiscountPicker.
-	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
-	firstDiscountView allowAnyOf: self selectableDiscounts.
-	secondDiscountView allowAnyOf: self selectableDiscounts.
+	supervisor := ModelCreationSupervisor supervising: paperCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withExceptionDo: [ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'second discount: A valid element must be selected')) ]
+		withExceptionDo: [ :error | 
+			| errors |
+
+			errors := error messageText lines.
+			errors with: #('Author Name: The author name cannot be empty' 'Rating: A valid element must be selected') do: [ :errorText :expectedErrorText | self assert: errorText trimBoth equals: expectedErrorText ] ]
 ]
 
 { #category : #'tests - model creation failed' }
@@ -460,7 +473,7 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
 
-	discountView := DummySingleSelectionView new.
+	discountView := self singleSelectionView.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
@@ -475,18 +488,25 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 
-	| discountView discountPicker costCreator supervisor model |
+	| supervisor model |
 
-	discountView := self singleSelectionView.
-	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
-	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
-	supervisor := ModelCreationSupervisor supervising: costCreator.
-	discountView allowAnyOf: self selectableDiscounts.
-	self shouldnt: [ model := supervisor withModelDo: [ :theModel | self fail ] ifUnable: [ 7777 ] ] raise: ModelCreationFailed.
+	supervisor := ModelCreationSupervisor supervising: paperCreator.
+
+	ratingPicker allowAnyOf: #(1 2 3 4 5).
+
+	model := supervisor withModelDo: [ :theModel | self fail ] ifUnable: [ 7777 ].
 	self assert: model equals: 7777.
-	discountView chooseElementAt: 1.
+
+	ratingPicker updateModelInViewsConsidering: 3.
+	titleCreator updateModelInViewsConsidering: 'The greatest paper'.
+	authorNameCreator updateModelInViewsConsidering: 'Juan'.
+
 	supervisor withModelDo: [ :theModel | model := theModel ] ifUnable: [ self fail ].
-	self assert: model equals: 990
+	self
+		assert: (model isA: StardustPaper);
+		assert: model rating equals: 3;
+		assert: model title equals: 'The greatest paper';
+		assert: model authorName equals: 'Juan'
 ]
 
 { #category : #'widget - support' }

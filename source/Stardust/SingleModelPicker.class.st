@@ -78,7 +78,7 @@ SingleModelPicker >> initializeNamed: aName obtainingSelectionFrom: aSingleSelec
 { #category : #assembling }
 SingleModelPicker >> modelIn: aContext [
 
-	^ pickingPolicy pickFrom: (view currentSelectionIfNone: [ ModelCreationFailed signal: 'A valid element must be selected' ])
+	^ pickingPolicy pickFrom: (view currentSelectionIfNone: [ InstanceCreationFailed signal: 'A valid element must be selected' ])
 ]
 
 { #category : #accessing }

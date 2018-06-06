@@ -57,7 +57,7 @@ TextCodec >> modelIn: aContext [
 
 	^ [ decodingAction value: (aContext modelFor: textCreator) ]
 		on: DecodingFailed
-		do: [ :signal | ModelCreationFailed signal: signal messageText ]
+		do: [ :signal | InstanceCreationFailed signal: signal messageText ]
 ]
 
 { #category : #accessing }
