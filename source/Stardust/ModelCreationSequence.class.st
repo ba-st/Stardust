@@ -1,3 +1,9 @@
+"
+I'm responsible of given a top level creator, figure it out the right order to evaluate the child creators so the top level model can be created. 
+I can respond for any creator in the given graph, the other ones affected by changes in it.
+
+I'm a private class not intended to be used outside the library.
+"
 Class {
 	#name : #ModelCreationSequence,
 	#superclass : #Object,
@@ -6,47 +12,43 @@ Class {
 		'orderedCreators',
 		'errorDisplayStrategy'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation-Private'
 }
 
 { #category : #'instance creation' }
-ModelCreationSequence class >> startingAt: aCreator notifyingChangesTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
+ModelCreationSequence class >> startingAt: aTopLevelCreator notifyingChangesTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
 
-	^ self new initializeStartingAt: aCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy
+	^ self new initializeStartingAt: aTopLevelCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy
 ]
 
 { #category : #testing }
 ModelCreationSequence >> canCreate: aModel [
 
-	^ orderedCreators last canCreate: aModel
+	^ self topLevelCreator canCreate: aModel
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 ModelCreationSequence >> changeModelTo: aModel in: aContext [
 
-	aContext changeModelFor: orderedCreators last to: aModel
+	aContext changeModelFor: self topLevelCreator to: aModel
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 ModelCreationSequence >> creatorsAffectedByChangeIn: aCreator [
 
-	^ Set new
-		add: aCreator;
-		addAll: (creationGraph verticesReachableFrom: aCreator);
-		yourself
+	^ creationGraph verticesReachableFrom: aCreator
 ]
 
 { #category : #initialization }
-ModelCreationSequence >> initializeStartingAt: aCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
+ModelCreationSequence >> initializeStartingAt: aTopLevelCreator notifyingUserInteractionTo: aSupervisor handlingErrorsAccordingTo: anErrorDisplayStrategy [
 
 	| graphBuilder |
 
-	self initialize.
 	errorDisplayStrategy := anErrorDisplayStrategy.
 	graphBuilder := DirectedGraphBuilder new.
-	graphBuilder addVertex: aCreator.
+	graphBuilder addVertex: aTopLevelCreator.
 	self
-		relateDependenciesOf: aCreator
+		relateDependenciesOf: aTopLevelCreator
 		configuring: graphBuilder
 		notifyingChangesTo: aSupervisor
 		alreadySeen: Set new.
@@ -54,7 +56,14 @@ ModelCreationSequence >> initializeStartingAt: aCreator notifyingUserInteraction
 	orderedCreators := creationGraph topologicalSort
 ]
 
-{ #category : #accessing }
+{ #category : #invalidating }
+ModelCreationSequence >> invalidateModelFor: aCreator in: modelCreationContext [
+
+	modelCreationContext invalidateModelFor: aCreator.
+	(self creatorsAffectedByChangeIn: aCreator) do: [ :dependent | modelCreationContext invalidateModelFor: dependent ]
+]
+
+{ #category : #assembling }
 ModelCreationSequence >> modelIn: aContext [
 
 	| failuresByCreator |
@@ -63,20 +72,14 @@ ModelCreationSequence >> modelIn: aContext [
 	orderedCreators
 		do: [ :creator | 
 			[ [ aContext modelInSequenceFor: creator ]
-				on: ModelCreationFailed
-				do: [ :signal | 
-					errorDisplayStrategy
-						handle: signal
-						originatedIn: creator
-						storingFailuresOn: failuresByCreator ] ]
+				on: InstanceCreationFailed
+				do: [ :signal | errorDisplayStrategy handle: signal originatedIn: creator storingFailuresOn: failuresByCreator ] ]
 				on: ModelInContextNotFound
 				do: [ :ex | ex return ] ].
 
-	^ [ aContext modelFor: orderedCreators last ]
+	^ [ aContext modelFor: self topLevelCreator ]
 		on: ModelInContextNotFound
-		do: [ :signal | 
-			failuresByCreator isEmpty
-				ifFalse: [ ModelCreationFailed signalObtainedFrom: failuresByCreator ] ]
+		do: [ :signal | failuresByCreator ifNotEmpty: [ ModelCreationFailed signalObtainedFrom: failuresByCreator ] ]
 ]
 
 { #category : #private }
@@ -95,4 +98,10 @@ ModelCreationSequence >> relateDependenciesOf: aCreator configuring: graphBuilde
 				configuring: graphBuilder
 				notifyingChangesTo: aSupervisor
 				alreadySeen: aRecursionSet ]
+]
+
+{ #category : #private }
+ModelCreationSequence >> topLevelCreator [
+
+	^ orderedCreators last
 ]

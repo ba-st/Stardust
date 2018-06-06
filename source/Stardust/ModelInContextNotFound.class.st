@@ -1,5 +1,5 @@
 Class {
 	#name : #ModelInContextNotFound,
 	#superclass : #Error,
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation-Private'
 }

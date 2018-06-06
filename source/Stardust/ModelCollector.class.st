@@ -5,7 +5,7 @@ Class {
 		'modelCreators',
 		'name'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }

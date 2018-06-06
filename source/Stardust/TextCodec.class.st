@@ -6,7 +6,7 @@ Class {
 		'parser',
 		'formatter'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }

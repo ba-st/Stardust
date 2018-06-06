@@ -1,11 +1,16 @@
+"
+I'm a container controller. 
+I interact with some UI component that needs to implement ModelCreationAPI >> #Container .
+I support the use case of returning an object contained in some UI component. Typical UI components compatible with me are tables, text fields and lists.
+"
 Class {
 	#name : #ContainerController,
-	#superclass : #ModelCreator,
+	#superclass : #BasicModelCreator,
 	#instVars : [
 		'view',
 		'name'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }
@@ -27,12 +32,6 @@ ContainerController >> canCreate: aModel [
 ContainerController >> changeModelTo: aModel in: aContent [
 
 	view changeContentsTo: aModel
-]
-
-{ #category : #enumerating }
-ContainerController >> dependenciesDo: aBlock [
-
-	
 ]
 
 { #category : #initialization }

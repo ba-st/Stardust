@@ -1,11 +1,11 @@
 Class {
 	#name : #MultipleModelPicker,
-	#superclass : #ModelCreator,
+	#superclass : #BasicModelCreator,
 	#instVars : [
 		'view',
 		'name'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }
@@ -38,12 +38,6 @@ MultipleModelPicker >> changeModelTo: aCollection in: aContext [
 		choose: aCollection
 		matchedUsing: [ :model :selectableElement | model = selectableElement representedObject ]
 		ifUnable: [ ObjectNotFound signal: 'Selected elements are not valid' ]
-]
-
-{ #category : #enumerating }
-MultipleModelPicker >> dependenciesDo: aBlock [
-
-	
 ]
 
 { #category : #'selection protocol' }

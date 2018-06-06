@@ -1,12 +1,12 @@
 Class {
 	#name : #SingleModelPicker,
-	#superclass : #ModelCreator,
+	#superclass : #BasicModelCreator,
 	#instVars : [
 		'view',
 		'name',
 		'pickingPolicy'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }
@@ -54,12 +54,6 @@ SingleModelPicker >> changeModelTo: anOption in: aContext [
 	view
 		chooseAnySatisfying: [ :element | pickingPolicy is: element equalTo: anOption ]
 		ifNone: [ ObjectNotFound signal: ('<1s> is not a valid option' expandMacrosWith: anOption asString) ]
-]
-
-{ #category : #enumerating }
-SingleModelPicker >> dependenciesDo: aBlock [
-
-	
 ]
 
 { #category : #'selection protocol' }

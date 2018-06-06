@@ -7,7 +7,7 @@ Class {
 		'name',
 		'creatorInstantiator'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }
@@ -55,9 +55,7 @@ GenericModelCreatorBuilder class >> named: aName using: aBlock [
 { #category : #'private-accessing' }
 GenericModelCreatorBuilder >> creatorInstanceUsing: instanceCreationArguments [
 
-	"Para compatibilidad con GemStone. -mtabacman"
-
-	^ GenericModelCreator perform: creatorInstantiator withArguments: instanceCreationArguments
+^ GenericModelCreator perform: creatorInstantiator withArguments: instanceCreationArguments
 ]
 
 { #category : #'reflective operations' }
@@ -74,7 +72,7 @@ GenericModelCreatorBuilder >> doesNotUnderstand: aMessage [
 				asArray)
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #initialization }
 GenericModelCreatorBuilder >> initializeNamed: aName building: aModelClass accessedUsing: aCollectionOfSelectors creatingInstanceOfCreatorWith: anInstanceCreationSelector [
 
 	name := aName.
@@ -92,16 +90,11 @@ GenericModelCreatorBuilder >> printOn: aStream [
 { #category : #printing }
 GenericModelCreatorBuilder >> printString [
 
-	"Implementado para evitar que lo agarre el DNU. -mtabacman"
-
 	^ String streamContents: [ :stream | self printOn: stream ]
 ]
 
 { #category : #'reflective operations' }
-GenericModelCreatorBuilder >> respondsTo: aSelector [
+GenericModelCreatorBuilder >> respondsTo: aSymbol [
 
-	^ (self class canUnderstand: aSelector)
-		or: [ [ modelClass respondsTo: aSelector ]
-				on: InstanceCreationFailed
-				do: [ :aSignal | aSignal return: false ] ]
+	^ (self class canUnderstand: aSymbol) or: [ modelClass respondsTo: aSymbol ]
 ]

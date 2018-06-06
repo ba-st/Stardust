@@ -1,10 +1,13 @@
+"
+I'm an abstract class representing a Model Creator. A model creator is responsible of assembling/dissasembling a model. Most of my subclasses will interact with some UI component driving the user interaction. The other ones are for composing, transforming and filtering complex models. 
+"
 Class {
 	#name : #ModelCreator,
 	#superclass : #Object,
 	#pools : [
 		'Stardust'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'private - preconditions' }
@@ -19,7 +22,7 @@ ModelCreator class >> assertNotEmpty: aName [
 	AssertionChecker enforce: [ aName trimBoth notEmpty ] because: 'A model creator must have a name.' raising: InstanceCreationFailed
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 ModelCreator >> changeModelTo: aModel in: aContext [
 
 	self subclassResponsibility
@@ -31,7 +34,7 @@ ModelCreator >> dependenciesDo: aBlock [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelCreator >> modelIn: aContext [
 
 	self subclassResponsibility
@@ -55,7 +58,7 @@ ModelCreator >> printOn: aStream [
 	aStream nextPutAll: self name
 ]
 
-{ #category : #utility }
+{ #category : #disassembling }
 ModelCreator >> updateModelInViewsConsidering: aModel [
 
 	(ModelCreationSupervisor supervising: self) changeModelTo: aModel

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'userAwareDescription'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }

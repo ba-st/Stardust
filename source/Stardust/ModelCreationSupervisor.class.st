@@ -1,3 +1,7 @@
+"
+I'm a model creation supervisor and I'm responsible of coordinating the whole process of creating a top level model for a given model creator structure. 
+I'm the one guy who is hooked up as the event listener on the UI components interacting with the user.
+"
 Class {
 	#name : #ModelCreationSupervisor,
 	#superclass : #Object,
@@ -6,38 +10,32 @@ Class {
 		'creatorsByView',
 		'creationSequence'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #'Stardust-ModelCreation'
 }
 
-{ #category : #defaults }
-ModelCreationSupervisor class >> defaultErrorDisplay [
+{ #category : #'instance creation' }
+ModelCreationSupervisor class >> supervising: aTopLevelCreator [
 
-	^ SupervisorStrategy displayingSingleError
+	^ self supervising: aTopLevelCreator showingErrorsAccordingTo: SupervisorStrategy displayingSingleError
 ]
 
 { #category : #'instance creation' }
-ModelCreationSupervisor class >> supervising: aCreator [
-
-	^ self supervising: aCreator showingErrorsAccordingTo: self defaultErrorDisplay
-]
-
-{ #category : #'instance creation' }
-ModelCreationSupervisor class >> supervising: aCreator showingErrorsAccordingTo: anErrorDisplayStrategy [
+ModelCreationSupervisor class >> supervising: aTopLevelCreator showingErrorsAccordingTo: anErrorDisplayStrategy [
 
 	^ self new
-		initializeSupervising: aCreator
+		initializeSupervising: aTopLevelCreator
 		showingErrorsAccordingTo: anErrorDisplayStrategy
 ]
 
-{ #category : #asserting }
+{ #category : #private }
 ModelCreationSupervisor >> assert: aView canBeRelatedTo: aCreator [
 
 	creatorsByView
 		at: aView
 		ifPresent: [ :existingCreator | 
-			ProgrammingError
+			Error
 				signal:
-					('Can''t select <1s> with <2s> because <3s> was already registered'
+					('Can''t relate the view (<1s>) with the creator (<2s>) because was already related to <3s>.'
 						expandMacrosWith: aCreator asString
 						with: aView asString
 						with: existingCreator asString) ]
@@ -49,58 +47,49 @@ ModelCreationSupervisor >> canCreate: aModel [
 	^ creationSequence canCreate: aModel
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 ModelCreationSupervisor >> changeModelTo: aModel [
 
 	creationSequence changeModelTo: aModel in: context
 ]
 
-{ #category : #changing }
+{ #category : #notification }
 ModelCreationSupervisor >> changeNotifiedBy: aView [
 
-	| relatedCreator affectedCreators |
-
-	relatedCreator := self creatorRelatedTo: aView.
-	affectedCreators := creationSequence creatorsAffectedByChangeIn: relatedCreator.
-	affectedCreators do: [ :creator | context invalidateModelFor: creator ]
+	creationSequence invalidateModelFor: (self creatorRelatedTo: aView) in: context
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 ModelCreationSupervisor >> creatorRelatedTo: aView [
 
-	^ creatorsByView
-		at: aView
-		ifAbsent: [ ObjectNotFound
-				signal: #'A model creation supervisor recieved a change notification from a unknow view' ]
+	^ creatorsByView at: aView ifAbsent: [ ObjectNotFound signal: #'A model creation supervisor recieved a change notification from a unknow view' ]
 ]
 
 { #category : #initialization }
-ModelCreationSupervisor >> initializeSupervising: aCreator showingErrorsAccordingTo: anErrorDisplayStrategy [
+ModelCreationSupervisor >> initializeSupervising: aTopLevelCreator showingErrorsAccordingTo: anErrorDisplayStrategy [
 
 	self initialize.
 	context := ModelCreationContext new.
 	creatorsByView := Dictionary new.
 	creationSequence := ModelCreationSequence
-		startingAt: aCreator
+		startingAt: aTopLevelCreator
 		notifyingChangesTo: self
 		handlingErrorsAccordingTo: anErrorDisplayStrategy
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelCreationSupervisor >> model [
 
 	^ creationSequence modelIn: context
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelCreationSupervisor >> modelIfUnable: aBlock [
 
-	^ [ self model ]
-		on: ModelCreationFailed
-		do: [ :signal | signal return: aBlock value ]
+	^ self withModelDo: [ :model | model ] ifUnable: aBlock
 ]
 
-{ #category : #changing }
+{ #category : #notification }
 ModelCreationSupervisor >> relateChangesIn: aView withModelFor: aCreator [
 
 	self assert: aView canBeRelatedTo: aCreator.
@@ -111,16 +100,10 @@ ModelCreationSupervisor >> relateChangesIn: aView withModelFor: aCreator [
 			aCreator ]
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelCreationSupervisor >> withModelDo: aMonadycBlock ifUnable: aModelCreationFailedBlock [
 
-	| model modelCreated |
-
-	modelCreated := [ model := self model.
-	true ]
+	^ [ aMonadycBlock value: self model ]
 		on: ModelCreationFailed
-		do: [ :signal | signal return: false ].
-	^ modelCreated
-		ifTrue: [ aMonadycBlock value: model ]
-		ifFalse: aModelCreationFailedBlock
+		do: [ :error | error return: aModelCreationFailedBlock value ]
 ]
