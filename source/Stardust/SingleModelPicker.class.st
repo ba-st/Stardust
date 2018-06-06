@@ -1,3 +1,8 @@
+"
+I'm a single model picker. 
+I interact with some UI component that needs to implement ModelCreationAPI >> #SingleSelection .
+I support the use case of selecting one of many valid options. Typical UI components compatible with me are dropdown lists, tables and combo boxes.
+"
 Class {
 	#name : #SingleModelPicker,
 	#superclass : #BasicModelCreator,
@@ -36,19 +41,19 @@ SingleModelPicker class >> named: aName pickingFrom: aSingleSelectionView [
 	^ self named: aName obtainingSelectionFrom: aSingleSelectionView accordingTo: PickModelPolicy new
 ]
 
-{ #category : #'selection protocol' }
-SingleModelPicker >> allowAnyOf: anOptionCollection [
+{ #category : #configuring }
+SingleModelPicker >> allowAnyOf: validOptions [
 
-	view allowAnyOf: anOptionCollection
+	view allowAnyOf: validOptions
 ]
 
 { #category : #testing }
 SingleModelPicker >> canCreate: aModel [
 
-	^ view allowsAnySatisfying: [ :element | pickingPolicy is: element equalTo: aModel ]
+	^ view allowsAnySatisfying: [ :uiElement | pickingPolicy is: uiElement equalTo: aModel ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 SingleModelPicker >> changeModelTo: anOption in: aContext [
 
 	view
@@ -56,7 +61,7 @@ SingleModelPicker >> changeModelTo: anOption in: aContext [
 		ifNone: [ ObjectNotFound signal: ('<1s> is not a valid option' expandMacrosWith: anOption asString) ]
 ]
 
-{ #category : #'selection protocol' }
+{ #category : #configuring }
 SingleModelPicker >> disallowAll [
 
 	view disallowAll
@@ -67,11 +72,10 @@ SingleModelPicker >> initializeNamed: aName obtainingSelectionFrom: aSingleSelec
 
 	name := aName.
 	view := aSingleSelectionView.
-	"Esto deberÌa morir cuando se dejen de usar los UI representation adentro de las selecciones. Para eso est· el LabelingCommand - gabriel"
 	pickingPolicy := aModelPickingPolicy
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 SingleModelPicker >> modelIn: aContext [
 
 	^ pickingPolicy pickFrom: (view currentSelectionIfNone: [ ModelCreationFailed signal: 'A valid element must be selected' ])
