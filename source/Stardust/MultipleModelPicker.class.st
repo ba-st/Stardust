@@ -15,12 +15,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-MultipleModelPicker class >> named: aName obtainingSelectionFrom: aView [
-
-	^ self named: aName obtainingSelectionFrom: aView accordingTo: PickModelPolicy new
-]
-
-{ #category : #'instance creation' }
 MultipleModelPicker class >> named: aName obtainingSelectionFrom: aView accordingTo: aModelPickingPolicy [
 
 	self
@@ -28,6 +22,12 @@ MultipleModelPicker class >> named: aName obtainingSelectionFrom: aView accordin
 		assert: aView implements: ModelCreationAPI >> #MultipleSelection.
 
 	^ self new initializeNamed: aName obtainingSelectionFrom: aView accordingTo: aModelPickingPolicy
+]
+
+{ #category : #'instance creation' }
+MultipleModelPicker class >> named: aName pickingFrom: aView [
+
+	^ self named: aName obtainingSelectionFrom: aView accordingTo: PickModelPolicy new
 ]
 
 { #category : #configuring }

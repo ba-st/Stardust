@@ -1,7 +1,7 @@
 Class {
 	#name : #ContainerControllerTest,
 	#superclass : #TestCase,
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #tests }

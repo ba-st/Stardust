@@ -1,7 +1,7 @@
 Class {
 	#name : #MultipleSelectionModelCreatorTest,
 	#superclass : #TestCase,
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #'private - accessing' }

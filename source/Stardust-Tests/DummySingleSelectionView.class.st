@@ -6,7 +6,7 @@ Class {
 		'chosenElement',
 		'interested'
 	],
-	#category : #'Stardust-Tests-ViewExamples'
+	#category : #'Stardust-Tests-Support'
 }
 
 { #category : #'instance creation' }

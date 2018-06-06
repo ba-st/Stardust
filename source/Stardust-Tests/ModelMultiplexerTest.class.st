@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'view'
 	],
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #'private - accessing' }

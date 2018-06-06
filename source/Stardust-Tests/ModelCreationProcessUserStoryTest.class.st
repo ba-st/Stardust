@@ -1,7 +1,7 @@
 Class {
 	#name : #ModelCreationProcessUserStoryTest,
 	#superclass : #TestCase,
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #'private - accessing' }
@@ -64,11 +64,7 @@ ModelCreationProcessUserStoryTest >> rectangleCreatorFrom: originPicker to: corn
 { #category : #'private - accessing' }
 ModelCreationProcessUserStoryTest >> selectableDiscounts [
 
-	^ #(10 15 20)
-		collect: [ :number | 
-			UISelectableModel
-				representing: (Percentage of: number)
-				with: ('<1p> %2' expandMacrosWith: number) ]
+	^ #(10 15 20) collect: [ :number | Percentage of: number ]
 ]
 
 { #category : #'private - accessing' }
@@ -206,18 +202,12 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorDependsOnViews 
 
 	discountView := DummySingleSelectionView new.
 	discountView allowAnyOf: self selectableDiscounts.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
 	priceToDiscountView := self textInputView.
-	giftCreator := self
-		productCreatorBetween: discountPicker
-		and: priceToDiscountView.
+	giftCreator := self productCreatorBetween: discountPicker and: priceToDiscountView.
 
-	costCreator := PluggableModelCreatorAdapter
-		adapting: giftCreator
-		with: [ :gift | 1100 - gift ].
+	costCreator := PluggableModelCreatorAdapter adapting: giftCreator with: [ :gift | 1100 - gift ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -236,27 +226,19 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorWithLoopsDepend
 		allowAnyOf: self selectableDiscounts;
 		chooseElementAt: 2;
 		yourself.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
 	someItemPriceView := self textInputView.
 	someItemPriceView changeContentsTo: '1100'.
 
-	someItemGiftCreator := self
-		productCreatorBetween: discountPicker
-		and: someItemPriceView.
+	someItemGiftCreator := self productCreatorBetween: discountPicker and: someItemPriceView.
 
 	anotherItemPriceView := self textInputView.
 	anotherItemPriceView changeContentsTo: '700'.
 
-	anotherItemGiftCreator := self
-		productCreatorBetween: discountPicker
-		and: anotherItemPriceView.
+	anotherItemGiftCreator := self productCreatorBetween: discountPicker and: anotherItemPriceView.
 
-	totalGiftCreator := self
-		sumCreatorBetween: someItemGiftCreator
-		and: anotherItemGiftCreator.
+	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
 
 	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
 	totalGift := supervisor model.
@@ -277,13 +259,9 @@ ModelCreationProcessUserStoryTest >> testModelForCreatorDependsOnView [
 		chooseElementAt: 2;
 		yourself.
 
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	costCreator := PluggableModelCreatorAdapter
-		adapting: discountPicker
-		with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -299,11 +277,9 @@ ModelCreationProcessUserStoryTest >> testModelForMultipleSelectionCreatorDepends
 	discountsView allowAnyOf: self selectableDiscounts.
 	discountsView chooseElementsAtAll: #(1 3).
 
-	discountsPicker := MultipleModelPicker named: 'selection' obtainingSelectionFrom: discountsView.
+	discountsPicker := MultipleModelPicker named: 'selection' pickingFrom: discountsView.
 
-	costsCreator := PluggableModelCreatorAdapter
-		adapting: discountsPicker
-		with: [ :discounts | discounts collect: [ :discount | 1100 * (Percentage oneHundred - discount) ] ].
+	costsCreator := PluggableModelCreatorAdapter adapting: discountsPicker with: [ :discounts | discounts collect: [ :discount | 1100 * (Percentage oneHundred - discount) ] ].
 
 	supervisor := ModelCreationSupervisor supervising: costsCreator.
 
@@ -406,25 +382,23 @@ ModelCreationProcessUserStoryTest >> testModelUnnafectedByUserInteractionDoesNot
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenDifferentLevelLeafCreatorsFail [
 
-	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker thirdDiscountView thirdDiscountPicker discountArrayCreator productCreator supervisor operandsCreator |
+	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker thirdDiscountView thirdDiscountPicker productCreator supervisor operandsCreator |
 
 	firstDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		yourself.
-	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' pickingFrom: firstDiscountView.
 
 	secondDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		chooseElementAt: 1;
 		yourself.
-	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' pickingFrom: secondDiscountView.
 
 	thirdDiscountView := self singleSelectionView
 		allowAnyOf: self selectableDiscounts;
 		yourself.
-	thirdDiscountPicker := SingleModelPicker named: 'third discount' obtainingSelectionFrom: thirdDiscountView.
-
-	discountArrayCreator := ModelCollector named: 'discount array' containing: (Array with: secondDiscountPicker with: thirdDiscountPicker).
+	thirdDiscountPicker := SingleModelPicker named: 'third discount' pickingFrom: thirdDiscountView.
 
 	operandsCreator := ModelCollector named: 'sum-operands' containing: (Array with: firstDiscountPicker with: secondDiscountPicker with: thirdDiscountPicker).
 
@@ -435,8 +409,7 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenDifferentLe
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withExceptionDo:
-			[ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'third discount: A valid element must be selected')) ]
+		withExceptionDo: [ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'third discount: A valid element must be selected')) ]
 ]
 
 { #category : #tests }
@@ -447,11 +420,11 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenLeafCreator
 	inputView := DummyTextInput new.
 	numberCodec := TextCodec workingWith: (ContainerController named: 'number' controlling: inputView) parsingWith: IntegerParser new formattingWith: NullFormatter new.
 	firstDiscountView := DummySingleSelectionView new.
-	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' pickingFrom: firstDiscountView.
 	secondDiscountView := DummySingleSelectionView new.
-	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' pickingFrom: secondDiscountView.
 	discountArrayCreator := ModelCollector named: 'discount array' containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
-	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: numberCodec andAll: discountArrayCreator.
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: Array accessedUsing: #(first last)) with: numberCodec with: discountArrayCreator.
 	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
@@ -524,17 +497,11 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 	| discountView discountPicker costCreator supervisor model |
 
 	discountView := DummySingleSelectionView new.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
-	costCreator := PluggableModelCreatorAdapter
-		adapting: discountPicker
-		with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
+	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 	discountView allowAnyOf: self selectableDiscounts.
-	self
-		shouldnt: [ model := supervisor modelIfUnable: [ 7777 ] ]
-		raise: ModelCreationFailed.
+	self shouldnt: [ model := supervisor modelIfUnable: [ 7777 ] ] raise: ModelCreationFailed.
 	self assert: model equals: 7777.
 	discountView chooseElementAt: 1.
 	model := supervisor modelIfUnable: [ self fail ].
@@ -547,24 +514,14 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 	| discountView discountPicker costCreator supervisor model |
 
 	discountView := DummySingleSelectionView new.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
-	costCreator := PluggableModelCreatorAdapter
-		adapting: discountPicker
-		with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
+	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 	discountView allowAnyOf: self selectableDiscounts.
-	self
-		shouldnt: [ model := supervisor
-				withModelDo: [ :theModel | self fail ]
-				ifUnable: [ 7777 ] ]
-		raise: ModelCreationFailed.
+	self shouldnt: [ model := supervisor withModelDo: [ :theModel | self fail ] ifUnable: [ 7777 ] ] raise: ModelCreationFailed.
 	self assert: model equals: 7777.
 	discountView chooseElementAt: 1.
-	supervisor
-		withModelDo: [ :theModel | model := theModel ]
-		ifUnable: [ self fail ].
+	supervisor withModelDo: [ :theModel | model := theModel ] ifUnable: [ self fail ].
 	self assert: model equals: 990
 ]
 

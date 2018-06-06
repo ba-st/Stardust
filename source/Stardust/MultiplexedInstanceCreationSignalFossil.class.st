@@ -19,6 +19,12 @@ MultiplexedInstanceCreationSignalFossil >> initializeWith: errorDescription [
 	userAwareDescription := errorDescription
 ]
 
+{ #category : #accessing }
+MultiplexedInstanceCreationSignalFossil >> messageText [
+
+	^ self userAwareDescription
+]
+
 { #category : #handling }
 MultiplexedInstanceCreationSignalFossil >> return [
 
