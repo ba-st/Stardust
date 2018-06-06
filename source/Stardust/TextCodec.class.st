@@ -1,3 +1,6 @@
+"
+I'm a composite model creator. I can create a model parsing the string provided by the creator I know, and do the opposite formatting some object into a string.
+"
 Class {
 	#name : #TextCodec,
 	#superclass : #ModelCreator,
@@ -23,7 +26,7 @@ TextCodec >> canCreate: anObject [
 		do: [ :aSignal | aSignal return: false ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 TextCodec >> changeModelTo: aModel in: aContext [
 
 	aContext changeModelFor: creator to: (formatter format: aModel)
@@ -43,7 +46,7 @@ TextCodec >> initializeWorkingWith: aCreator parsingWith: aParser formattingWith
 	formatter := aFormatter
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 TextCodec >> modelIn: aContext [
 
 	^ [ parser parse: (aContext modelFor: creator) ]

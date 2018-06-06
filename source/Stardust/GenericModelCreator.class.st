@@ -1,3 +1,6 @@
+"
+I'm a composite model creator. I'm intended to create complex objects.
+"
 Class {
 	#name : #GenericModelCreator,
 	#superclass : #ModelCreator,
@@ -11,7 +14,7 @@ Class {
 	#category : #'Stardust-ModelCreation'
 }
 
-{ #category : #asserting }
+{ #category : #'private - asserting' }
 GenericModelCreator class >> assertSizeOf: aModelCreatorCollection equalsArgumentCountOf: aSelector [
 
 	AssertionChecker
@@ -24,7 +27,7 @@ GenericModelCreator class >> assertSizeOf: aModelCreatorCollection equalsArgumen
 		raising: InstanceCreationFailed
 ]
 
-{ #category : #asserting }
+{ #category : #'private - asserting' }
 GenericModelCreator class >> assertSizeOf: aModelCreatorCollection equalsSizeOf: aSelectorCollection [
 
 	AssertionChecker
@@ -76,7 +79,7 @@ GenericModelCreator >> canCreate: aModel [
 			allowedByAccessors ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 GenericModelCreator >> changeModelTo: aModel in: aContext [
 
 	accessors
@@ -103,19 +106,19 @@ GenericModelCreator >> initializeNamed: aName creatingInstancesOf: aModelClassOr
 	accessors := aSelectorCollection
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GenericModelCreator >> modelClass [
 
 	^ modelClassReference value
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GenericModelCreator >> modelCreators [
 
 	^ modelCreators
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 GenericModelCreator >> modelIn: aContext [
 
 	| models |

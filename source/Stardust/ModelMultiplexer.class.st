@@ -1,3 +1,9 @@
+"
+I'm a composite model creator, and the more complex one. I provide some kind of branching for cases when some part of the model can use instances of different classes whose construction differ.
+
+I'm working with a single model picker, used by the user to select the current active branch. 
+So when someone ask me the assemble the model, I delegate that to the supervisors acting on the active branch.
+"
 Class {
 	#name : #ModelMultiplexer,
 	#superclass : #ModelCreator,
@@ -9,9 +15,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-ModelMultiplexer class >> multiplexing: aModelCreatorCollection selectingFrom: aSingleSelectionView [
+ModelMultiplexer class >> multiplexing: aModelCreatorCollection selectingFrom: aSingleModelPicker [
 
-	^ self new initializeMultiplexing: aModelCreatorCollection selectingFrom: aSingleSelectionView
+	^ self new initializeMultiplexing: aModelCreatorCollection selectingFrom: aSingleModelPicker
 ]
 
 { #category : #testing }
@@ -23,7 +29,7 @@ ModelMultiplexer >> canCreate: aModel [
 		ifNone: [ false ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 ModelMultiplexer >> changeModelTo: aModel in: aContext [
 
 	self
@@ -31,7 +37,7 @@ ModelMultiplexer >> changeModelTo: aModel in: aContext [
 		ifFound: [ :supervisor | 
 			self changeSelectionModelIn: aContext using: supervisor.
 			supervisor changeModelTo: aModel ]
-		ifNone: [ ObjectNotFound signal: 'More than one vaid model was found' ]
+		ifNone: [ ObjectNotFound signal: 'More than one valid model was found' ]
 ]
 
 { #category : #private }
@@ -73,7 +79,7 @@ ModelMultiplexer >> initializeMultiplexing: aModelCreatorCollection selectingFro
 			supervisorsByName at: modelCreator name put: supervisor ]
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelMultiplexer >> modelIn: aContext [
 
 	| currentSupervisor |

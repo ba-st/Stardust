@@ -5,7 +5,7 @@ Class {
 		'representedObject',
 		'description'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #'Stardust-Tests-Support'
 }
 
 { #category : #'instance creation' }
