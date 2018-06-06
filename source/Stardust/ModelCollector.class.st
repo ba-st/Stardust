@@ -1,3 +1,6 @@
+"
+I'm a composite model creator. I'm responsible for creating a collection containing the models provided by the creators given to me.
+"
 Class {
 	#name : #ModelCollector,
 	#superclass : #ModelCreator,
@@ -15,7 +18,7 @@ ModelCollector class >> named: aName containing: anCollectionOfModelCreators [
 	^ self new initializeNamed: aName containing: anCollectionOfModelCreators
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 ModelCollector >> changeModelTo: aModelCollection in: aContext [
 
 	modelCreators with: aModelCollection do: [ :modelCreator :model | aContext changeModelFor: modelCreator to: model ]
@@ -34,7 +37,7 @@ ModelCollector >> initializeNamed: aName containing: anCollectionOfModelCreators
 	modelCreators := anCollectionOfModelCreators
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 ModelCollector >> modelIn: aContext [
 
 	^ modelCreators collect: [ :modelCreator | aContext modelFor: modelCreator ]

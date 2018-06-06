@@ -1,3 +1,6 @@
+"
+I'm a composite model creator, allowing to filter the models provided by the creators given to me.
+"
 Class {
 	#name : #FilteredModelCollector,
 	#superclass : #ModelCreator,
@@ -15,21 +18,17 @@ FilteredModelCollector class >> named: aName containing: anCollectionOfModelCrea
 	^ self new initializeNamed: aName containing: anCollectionOfModelCreators
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 FilteredModelCollector >> changeModelTo: aModelCollection in: aContext [
 
-	optionalModelCreators
-		do:
-			[ :modelCreator | aContext changeModelFor: modelCreator to: UINullSelection new ].
+	optionalModelCreators do: [ :modelCreator | aContext changeModelFor: modelCreator to: Optional unused ].
 
 	aModelCollection
 		do: [ :aModel | 
 			| selection |
 
-			selection := UISelection is: aModel.
-			optionalModelCreators
-				detect: [ :modelCreator | modelCreator canCreate: selection ]
-				ifFound: [ :modelCreator | aContext changeModelFor: modelCreator to: selection ] ]
+			selection := Optional containing: aModel.
+			optionalModelCreators detect: [ :modelCreator | modelCreator canCreate: selection ] ifFound: [ :modelCreator | aContext changeModelFor: modelCreator to: selection ] ]
 ]
 
 { #category : #enumerating }
@@ -45,15 +44,13 @@ FilteredModelCollector >> initializeNamed: aName containing: anCollectionOfModel
 	optionalModelCreators := anCollectionOfModelCreators
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 FilteredModelCollector >> modelIn: aContext [
 
 	| models |
 
 	models := OrderedCollection new.
-	optionalModelCreators
-		do:
-			[ :modelCreator | (aContext modelFor: modelCreator) withSelectionDo: [ :model | models add: model ] ].
+	optionalModelCreators do: [ :modelCreator | (aContext modelFor: modelCreator) withContentDo: [ :model | models add: model ] ].
 	^ models
 ]
 
