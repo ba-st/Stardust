@@ -47,7 +47,7 @@ Stardust class >> initializeMultipleSelectionAPI [
 		to:
 			(Interface
 				named: #MultipleSelection
-				declaring: #(#disallowAll #allowAnyOf: #currentSelection #allowAnySatisfying: #notifyChangesTo: #chooseAll #choose:matchedUsing:ifUnable:))
+				declaring: #(#disallowAll #allowAnyOf: #currentSelection #allowsAnySatisfying: #notifyChangesTo: #chooseAll #choose:matchedUsing:ifUnable:))
 ]
 
 { #category : #'class initialization' }

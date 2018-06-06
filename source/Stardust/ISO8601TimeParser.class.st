@@ -16,7 +16,7 @@ ISO8601TimeParser class >> acceptedFormats [
 ISO8601TimeParser >> assertIsValidTime: aString withHour: hours minute: minutes second: seconds nanoSecond: nanoSeconds [
 
 	AssertionCheckerBuilder new
-		raising: ParsingFailed;
+		raising: DecodingFailed;
 		checking: [ :asserter | 
 			asserter
 				enforce: [ hours between: 0 and: 23 ] because: ('Hours ''<1p>'' should be between 0 and 23 in: <2p>' expandMacrosWith: hours with: aString);

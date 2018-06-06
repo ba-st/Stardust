@@ -5,59 +5,65 @@ Class {
 	#name : #TextCodec,
 	#superclass : #ModelCreator,
 	#instVars : [
-		'creator',
-		'parser',
-		'formatter'
+		'decodingAction',
+		'encodingAction',
+		'textCreator'
 	],
 	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #'instance creation' }
+TextCodec class >> workingWith: aCreator decodingWith: aDecodingAction encodingWith: anEncodingAction [
+
+	^ self new initializeWorkingWith: aCreator decodingWith: aDecodingAction encodingWith: anEncodingAction
+]
+
+{ #category : #'instance creation' }
 TextCodec class >> workingWith: aCreator parsingWith: aParser formattingWith: aFormatter [
 
-	^ self new initializeWorkingWith: aCreator parsingWith: aParser formattingWith: aFormatter
+	^ self workingWith: aCreator decodingWith: [ :string | aParser parse: string ] encodingWith: [ :object | aFormatter format: object ]
 ]
 
 { #category : #testing }
 TextCodec >> canCreate: anObject [
 
-	^ [ (parser parse: (formatter format: anObject)) = anObject ]
-		on: InstanceCreationFailed , ParsingFailed
+	^ [ (decodingAction value: (encodingAction value: anObject)) = anObject ]
+		on: InstanceCreationFailed , DecodingFailed
 		do: [ :aSignal | aSignal return: false ]
 ]
 
 { #category : #disassembling }
 TextCodec >> changeModelTo: aModel in: aContext [
 
-	aContext changeModelFor: creator to: (formatter format: aModel)
+	aContext changeModelFor: textCreator to: (encodingAction value: aModel)
 ]
 
 { #category : #enumerating }
 TextCodec >> dependenciesDo: aBlock [
 
-	^ aBlock value: creator
+	^ aBlock value: textCreator
 ]
 
 { #category : #initialization }
-TextCodec >> initializeWorkingWith: aCreator parsingWith: aParser formattingWith: aFormatter [
+TextCodec >> initializeWorkingWith: aCreator decodingWith: aDecodingAction encodingWith: anEcodingAction [
 
-	creator := aCreator.
-	parser := aParser.
-	formatter := aFormatter
+	textCreator := aCreator.
+	decodingAction := aDecodingAction.
+	encodingAction := anEcodingAction
 ]
 
 { #category : #assembling }
 TextCodec >> modelIn: aContext [
 
-	^ [ parser parse: (aContext modelFor: creator) ]
-		on: ParsingFailed
+	^ [ decodingAction value: (aContext modelFor: textCreator) ]
+		on: DecodingFailed
 		do: [ :signal | ModelCreationFailed signal: signal messageText ]
 ]
 
 { #category : #accessing }
 TextCodec >> name [
 
-	^ creator name
+	^ textCreator name
 ]
 
 { #category : #notifying }

@@ -32,7 +32,7 @@ ISO8601TimestampParser class >> acceptedFormats [
 ISO8601TimestampParser >> assertIsValidTime: aString withHour: hours minute: minutes [
 
 	AssertionCheckerBuilder new
-		raising: ParsingFailed;
+		raising: DecodingFailed;
 		checking: [ :asserter | 
 			asserter
 				enforce: [ hours between: -3 and: 23 ]

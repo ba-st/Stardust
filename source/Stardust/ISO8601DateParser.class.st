@@ -17,7 +17,7 @@ ISO8601DateParser class >> acceptedFormats [
 ISO8601DateParser >> assertIsValidDate: aString withYear: year month: monthIndex day: dayOfMonth [
 
 	AssertionCheckerBuilder new
-		raising: ParsingFailed;
+		raising: DecodingFailed;
 		checking: [ :asserter | 
 			| daysInMonth |
 

@@ -34,6 +34,27 @@ MultipleModelPickerTest >> testAfterChangeOfSelectionModelPreviouslyObtainedIsUn
 ]
 
 { #category : #tests }
+MultipleModelPickerTest >> testCanCreate [
+
+	| view creator |
+
+	view := self multipleSelectionView.
+	creator := MultipleModelPicker named: 'Letters' pickingFrom: view.
+
+	self
+		assert: (creator canCreate: #());
+		deny: (creator canCreate: #(A)).
+
+	creator allowAnyOf: #(A B C).
+
+	self
+		assert: (creator canCreate: #(A B C));
+		assert: (creator canCreate: #(A B));
+		assert: (creator canCreate: #(A));
+		assert: (creator canCreate: #(C))
+]
+
+{ #category : #tests }
 MultipleModelPickerTest >> testChangeOfSelectionIsNotAllowedIfSelectionIncludesAnUnavailableOption [
 
 	| creator |

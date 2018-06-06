@@ -1,3 +1,6 @@
+"
+I'm a test case covering cross funcionality
+"
 Class {
 	#name : #ModelCreationProcessUserStoryTest,
 	#superclass : #TestCase,
@@ -10,19 +13,19 @@ ModelCreationProcessUserStoryTest >> format: aCollection [
 	^ (CollectionFormatter separatingWith: Character cr) format: aCollection
 ]
 
-{ #category : #'private - accessing' }
+{ #category : #'private - building' }
 ModelCreationProcessUserStoryTest >> numberCodecFor: aTextView [
 
-	| textController |
-
-	textController := ContainerController named: 'text' controlling: aTextView.
 	^ TextCodec
-		workingWith: textController
-		parsingWith: NaturalNumberParser new
-		formattingWith: NullFormatter new
+		workingWith: (ContainerController named: 'text' controlling: aTextView)
+		decodingWith: [ :string | 
+			[ Number readFrom: string ]
+				on: Error
+				do: [ :error | DecodingFailed signal: error messageText ] ]
+		encodingWith: [ :number | number printString ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : #'private - building' }
 ModelCreationProcessUserStoryTest >> pointCreatorFrom: cornerXView and: cornerYView [
 
 	^ (GenericModelCreatorBuilder
@@ -50,7 +53,7 @@ ModelCreationProcessUserStoryTest >> productCreatorBetween: aFirstCreator and: a
 		using: [ :operands | operands first * operands last ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : #'private - building' }
 ModelCreationProcessUserStoryTest >> rectangleCreatorFrom: originPicker to: cornerCreator [
 
 	^ (GenericModelCreatorBuilder
@@ -70,14 +73,10 @@ ModelCreationProcessUserStoryTest >> selectableDiscounts [
 { #category : #'private - accessing' }
 ModelCreationProcessUserStoryTest >> selectablePoints [
 
-	^ #(1 2 3)
-		collect: [ :number | 
-			UISelectableModel
-				representing: number @ number
-				with: ('<1p>@<1p>' expandMacrosWith: number) ]
+	^ #(1 2 3) collect: [ :number | number @ number ]
 ]
 
-{ #category : #tests }
+{ #category : #'widget - support' }
 ModelCreationProcessUserStoryTest >> singleSelectionView [
 
 	^ DummySingleSelectionView new
@@ -103,13 +102,16 @@ ModelCreationProcessUserStoryTest >> testChangingModelThroughCreatorChangesViewC
 
 	| cornerXView cornerYView cornerCreator supervisor |
 
-	cornerXView := self textInputView.
-	cornerYView := self textInputView.
+	cornerXView := self textField.
+	cornerYView := self textField.
 	cornerCreator := self pointCreatorFrom: cornerXView and: cornerYView.
-	
+
 	supervisor := ModelCreationSupervisor supervising: cornerCreator.
+
+	self should: [ supervisor model ] raise: ModelCreationFailed.
+
 	supervisor changeModelTo: 2 @ 3.
-	
+
 	self assert: cornerXView contents equals: '2'.
 	self assert: cornerYView contents equals: '3'
 ]
@@ -122,12 +124,10 @@ ModelCreationProcessUserStoryTest >> testChangingModelThroughCreatorWithLoopsCha
 	originView := self singleSelectionView
 		allowAnyOf: self selectablePoints;
 		yourself.
-	originPicker := SingleModelPicker
-		named: 'origin'
-		obtainingSelectionFrom: originView.
+	originPicker := SingleModelPicker named: 'origin' pickingFrom: originView.
 
-	cornerXView := self textInputView.
-	cornerYView := self textInputView.
+	cornerXView := self textField.
+	cornerYView := self textField.
 	cornerCreator := self pointCreatorFrom: cornerXView and: cornerYView.
 
 	rectangleCreator := self rectangleCreatorFrom: originPicker to: cornerCreator.
@@ -140,55 +140,43 @@ ModelCreationProcessUserStoryTest >> testChangingModelThroughCreatorWithLoopsCha
 	self assert: cornerYView contents equals: '3'
 ]
 
-{ #category : #tests }
+{ #category : #'tests - model creation failed' }
 ModelCreationProcessUserStoryTest >> testFirstFailureInformedWhenSeveralCreatorsWouldFail [
 
-	| inputView numberCodec firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker discountArrayCreator productCreator supervisor |
+	| textField numberCodec firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker discountArrayCreator productCreator supervisor |
 
-	inputView := self textInputView.
-	numberCodec := TextCodec
-		workingWith: (ContainerController named: 'text' controlling: inputView)
-		parsingWith: ScaledDecimalParser new
-		formattingWith: NullFormatter new.
+	textField := self textField.
+	numberCodec := self numberCodecFor: textField.
 
 	firstDiscountView := self singleSelectionView.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
-	firstDiscountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: firstDiscountView.
+	firstDiscountPicker := SingleModelPicker named: 'selection' pickingFrom: firstDiscountView.
 
-	secondDiscountView := DummySingleSelectionView new.
+	secondDiscountView := self singleSelectionView.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
-	secondDiscountPicker := SingleModelPicker named: 'selection' obtainingSelectionFrom: secondDiscountView.
+	secondDiscountPicker := SingleModelPicker named: 'selection' pickingFrom: secondDiscountView.
 
 	discountArrayCreator := ModelCollector named: 'collection' containing: (Array with: firstDiscountPicker with: secondDiscountPicker).
 
-	productCreator := (GenericModelCreatorBuilder named: 'product' building: Array accessedUsing: #(first allButFirst))
-		with: numberCodec
-		withAll: discountArrayCreator.
+	productCreator := (GenericModelCreatorBuilder named: 'product' building: Array accessedUsing: #(first allButFirst)) with: numberCodec withAll: discountArrayCreator.
 
 	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingSingleError.
 
-	inputView changeContentsTo: 'ABC'.
+	textField changeContentsTo: 'ABC'.
 
-	self
-		should: [ supervisor model ]
-		raise: ModelCreationFailed
-		withExceptionDo: [ :error | self assert: (error messageText endsWith: 'A valid element must be selected') ]
+	self should: [ supervisor model ] raise: ModelCreationFailed withExceptionDo: [ :error | self assert: (error messageText endsWith: 'A valid element must be selected') ]
 ]
 
-{ #category : #tests }
+{ #category : #'tests - model creation failed' }
 ModelCreationProcessUserStoryTest >> testInstanceCreationFailsWhenModelCanNotBeObtained [
 
 	| discountView discountPicker costCreator supervisor |
 
 	discountView := self singleSelectionView.
 	discountView allowAnyOf: self selectableDiscounts.
-	discountPicker := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: discountView.
+	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	costCreator := PluggableModelCreatorAdapter
-		adapting: discountPicker
-		with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -204,7 +192,7 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorDependsOnViews 
 	discountView allowAnyOf: self selectableDiscounts.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	priceToDiscountView := self textInputView.
+	priceToDiscountView := self textField.
 	giftCreator := self productCreatorBetween: discountPicker and: priceToDiscountView.
 
 	costCreator := PluggableModelCreatorAdapter adapting: giftCreator with: [ :gift | 1100 - gift ].
@@ -228,12 +216,12 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorWithLoopsDepend
 		yourself.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	someItemPriceView := self textInputView.
+	someItemPriceView := self textField.
 	someItemPriceView changeContentsTo: '1100'.
 
 	someItemGiftCreator := self productCreatorBetween: discountPicker and: someItemPriceView.
 
-	anotherItemPriceView := self textInputView.
+	anotherItemPriceView := self textField.
 	anotherItemPriceView changeContentsTo: '700'.
 
 	anotherItemGiftCreator := self productCreatorBetween: discountPicker and: anotherItemPriceView.
@@ -309,31 +297,20 @@ ModelCreationProcessUserStoryTest >> testModelObtainedThroughDifferentBranchesIs
 
 	| discountView discountCodec discountCreator someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator supervisor totalGift |
 
-	discountView := self textInputView.
+	discountView := self textField.
 	discountCodec := self numberCodecFor: discountView.
-	discountCreator := (GenericModelCreatorBuilder
-		named: 'percentage'
-		building: Percentage
-		accessedUsing: #(number)) of: discountCodec.
-	someItemPriceView := DummyTextInput new.
-	someItemGiftCreator := self
-		productCreatorBetween: discountCreator
-		and: someItemPriceView.
-	anotherItemPriceView := DummyTextInput new.
-	anotherItemGiftCreator := self
-		productCreatorBetween: discountCreator
-		and: anotherItemPriceView.
-	totalGiftCreator := self
-		sumCreatorBetween: someItemGiftCreator
-		and: anotherItemGiftCreator.
+	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: discountCodec.
+	someItemPriceView := self textField.
+	someItemGiftCreator := self productCreatorBetween: discountCreator and: someItemPriceView.
+	anotherItemPriceView := self textField.
+	anotherItemGiftCreator := self productCreatorBetween: discountCreator and: anotherItemPriceView.
+	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
 	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
 	discountView changeContentsTo: '15'.
 	someItemPriceView changeContentsTo: '1100'.
 	anotherItemPriceView changeContentsTo: '700'.
 	totalGift := supervisor model.
 	self assert: totalGift equals: 270
-
-	"self assert: totalGift leftOperand leftOperand == totalGift rightOperand leftOper"
 ]
 
 { #category : #tests }
@@ -341,31 +318,22 @@ ModelCreationProcessUserStoryTest >> testModelUnnafectedByUserInteractionDoesNot
 
 	| discountView discountCreator someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator supervisor modelBeforeChange modelAfterChange |
 
-	discountView := self textInputView
+	discountView := self textField
 		changeContentsTo: '15';
 		yourself.
-	discountCreator := (GenericModelCreatorBuilder
-		named: 'percentage'
-		building: Percentage
-		accessedUsing: #(number)) of: (self numberCodecFor: discountView).
+	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: (self numberCodecFor: discountView).
 
-	someItemPriceView := self textInputView
+	someItemPriceView := self textField
 		changeContentsTo: '1100';
 		yourself.
-	someItemGiftCreator := self
-		productCreatorBetween: discountCreator
-		and: someItemPriceView.
+	someItemGiftCreator := self productCreatorBetween: discountCreator and: someItemPriceView.
 
-	anotherItemPriceView := self textInputView
+	anotherItemPriceView := self textField
 		changeContentsTo: '700';
 		yourself.
-	anotherItemGiftCreator := self
-		productCreatorBetween: discountCreator
-		and: anotherItemPriceView.
+	anotherItemGiftCreator := self productCreatorBetween: discountCreator and: anotherItemPriceView.
 
-	totalGiftCreator := self
-		sumCreatorBetween: someItemGiftCreator
-		and: anotherItemGiftCreator.
+	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
 	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
 
 	modelBeforeChange := supervisor model.
@@ -374,9 +342,6 @@ ModelCreationProcessUserStoryTest >> testModelUnnafectedByUserInteractionDoesNot
 	someItemPriceView changeContentsTo: '850'.
 	modelAfterChange := supervisor model.
 	self assert: modelAfterChange equals: 232.5
-
-	"	self deny: modelBeforeChange leftOperand == modelAfterChange leftOperand.
-	self assert: modelBeforeChange rightOperand == modelAfterChange rightOperand"
 ]
 
 { #category : #tests }
@@ -476,22 +441,21 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLe
 
 	| firstDiscountView firstDiscountPicker secondDiscountView secondDiscountPicker productCreator supervisor |
 
-	firstDiscountView := DummySingleSelectionView new.
-	firstDiscountPicker := SingleModelPicker named: 'first discount' obtainingSelectionFrom: firstDiscountView.
-	secondDiscountView := DummySingleSelectionView new.
-	secondDiscountPicker := SingleModelPicker named: 'second discount' obtainingSelectionFrom: secondDiscountView.
-	productCreator := (GenericModelCreatorBuilder named: 'product' building: nil accessedUsing: #(leftOperand rightOperand)) of: firstDiscountPicker and: secondDiscountPicker.
+	firstDiscountView := self singleSelectionView.
+	firstDiscountPicker := SingleModelPicker named: 'first discount' pickingFrom: firstDiscountView.
+	secondDiscountView := self singleSelectionView.
+	secondDiscountPicker := SingleModelPicker named: 'second discount' pickingFrom: secondDiscountView.
+	productCreator := self productCreatorBetween: firstDiscountPicker and: secondDiscountPicker.
 	supervisor := ModelCreationSupervisor supervising: productCreator showingErrorsAccordingTo: SupervisorStrategy displayingMultipleErrors.
 	firstDiscountView allowAnyOf: self selectableDiscounts.
 	secondDiscountView allowAnyOf: self selectableDiscounts.
 	self
 		should: [ supervisor model ]
 		raise: ModelCreationFailed
-		withExceptionDo:
-			[ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'second discount: A valid element must be selected')) ]
+		withExceptionDo: [ :error | self assert: error messageText equals: (self format: (SortedCollection with: 'first discount: A valid element must be selected' with: 'second discount: A valid element must be selected')) ]
 ]
 
-{ #category : #tests }
+{ #category : #'tests - model creation failed' }
 ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
@@ -513,7 +477,7 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
 
-	discountView := DummySingleSelectionView new.
+	discountView := self singleSelectionView.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
@@ -525,8 +489,8 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 	self assert: model equals: 990
 ]
 
-{ #category : #'private - accessing' }
-ModelCreationProcessUserStoryTest >> textInputView [
+{ #category : #'widget - support' }
+ModelCreationProcessUserStoryTest >> textField [
 
 	^ DummyTextInput new
 ]

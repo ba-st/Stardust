@@ -26,7 +26,7 @@ DummyMultipleSelectionView >> allowAnyOf: anElementCollection [
 ]
 
 { #category : #'selection protocol' }
-DummyMultipleSelectionView >> allowAnySatisfying: aPredicate [
+DummyMultipleSelectionView >> allowsAnySatisfying: aPredicate [
 
 	^ availableElements anySatisfy: aPredicate
 ]

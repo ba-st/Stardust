@@ -7,12 +7,6 @@ Class {
 	#category : #'Stardust-Tests-ModelCreation'
 }
 
-{ #category : #'private - accessing' }
-SingleModelPickerTest >> selectableModelFor: aModel [
-
-	^ UISelectableModel representing: aModel with: aModel asString
-]
-
 { #category : #tests }
 SingleModelPickerTest >> testAfterChangeOfSelectionModelObtainedRepresentsNewSelection [
 

@@ -1,32 +1,32 @@
 Class {
-	#name : #ParsingFailed,
+	#name : #DecodingFailed,
 	#superclass : #Error,
 	#instVars : [
 		'failures'
 	],
-	#category : #'Stardust-Parser'
+	#category : #'Stardust-ModelCreation'
 }
 
 { #category : #signalling }
-ParsingFailed class >> signal: failureExplanation parsing: aString [
+DecodingFailed class >> signal: failureExplanation parsing: aString [
 
 	^ self signalAll: (Array with: failureExplanation) parsing: aString
 ]
 
 { #category : #signalling }
-ParsingFailed class >> signalAll: failureExplanations parsing: aString [
+DecodingFailed class >> signalAll: failureExplanations parsing: aString [
 
 	^ (self new initializeParsing: aString explainedByAll: failureExplanations) signal: ('. ' join: failureExplanations)
 ]
 
 { #category : #initialization }
-ParsingFailed >> failures [
+DecodingFailed >> failures [
 
 	^ failures
 ]
 
 { #category : #initialization }
-ParsingFailed >> initializeParsing: aString explainedByAll: failureExplanations [
+DecodingFailed >> initializeParsing: aString explainedByAll: failureExplanations [
 
 	self tag: aString.
 	failures := failureExplanations.

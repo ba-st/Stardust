@@ -3,128 +3,88 @@ I'm a test case
 "
 Class {
 	#name : #TextCodecTest,
-	#superclass : #TestCase,
+	#superclass : #ModelCreatorTest,
+	#instVars : [
+		'textField',
+		'containerController'
+	],
 	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #'private - accessing' }
-TextCodecTest >> changeModelFor: aCreator to: aModel [
+TextCodecTest >> numberDecoding [
 
-	aCreator changeModelTo: aModel in: self
+	^ [ :string | 
+	[ Number readFrom: string ]
+		on: Error
+		do: [ :error | DecodingFailed signal: error messageText ] ]
 ]
 
-{ #category : #'private - accessing' }
-TextCodecTest >> localeProvider [
+{ #category : #running }
+TextCodecTest >> setUp [
 
-	^FixedLocaleProvider providing: (
-		MCPConfigurableLocale
-			thousandsSeparator: (PluggableSeparator printing: $.)
-			decimalSeparator: (PluggableSeparator printing: $,))
-]
-
-{ #category : #'private - accessing' }
-TextCodecTest >> modelFor: aCreator [
-
-	^ aCreator modelIn: self
-]
-
-{ #category : #'private - accessing' }
-TextCodecTest >> numberFormatter [
-
-	^MCPFixDecimalsRealNumberFormatter numberOfDecimalPlaces: 2 localeProvidedBy: self localeProvider
+	super setUp.
+	textField := self textField.
+	containerController := ContainerController named: 'Text' controlling: textField
 ]
 
 { #category : #tests }
-TextCodecTest >> testForDateParserCanCreateDate [
+TextCodecTest >> testDecodingActionIsUsedToObtainViewContents [
 
-	| creator codec |
+	| codec |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: ISO8601DateParser new
-		formattingWith: ISO8601DateFormatter new.
+	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
+	context changeModelFor: containerController to: '1234.5678'.
 
-	self assert: (codec canCreate: Date today)
+	self assert: (codec modelIn: context) equals: 1234.5678
+]
+
+{ #category : #tests }
+TextCodecTest >> testEncodingActionIsUsedToSetViewContents [
+
+	| codec |
+
+	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
+
+	codec changeModelTo: 45.1234 in: context.
+
+	self
+		assert: (codec modelIn: context) equals: 45.1234;
+		assert: (containerController modelIn: context) equals: '45.1234'
 ]
 
 { #category : #tests }
 TextCodecTest >> testForNumberParserCanCreateNumber [
 
-	| creator codec |
+	| codec |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: NaturalNumberParser new
-		formattingWith: NullFormatter new.
+	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
 
 	self
 		assert: (codec canCreate: 4);
-		deny: (codec canCreate: 4.5);
-		deny: (codec canCreate: String new)
+		assert: (codec canCreate: 4.5);
+		deny: (codec canCreate: '')
 ]
 
 { #category : #tests }
 TextCodecTest >> testForStringParserCanCreateString [
 
-	| creator codec |
+	| codec |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: NullParser new
-		formattingWith: NullFormatter new.
-
+	codec := TextCodec workingWith: containerController decodingWith: [ :string | string ] encodingWith: [ :object | object asString ].
 	self
 		assert: (codec canCreate: 'a text');
-		assert: (codec canCreate: String new);
+		assert: (codec canCreate: '');
 		deny: (codec canCreate: 4)
 ]
 
 { #category : #tests }
-TextCodecTest >> testFormatterIsUsedToSetViewContents [
+TextCodecTest >> testModelCreationFailedWhenViewContentsIsNotValid [
 
-	| creator codec |
+	| codec |
 
-	creator := ContainerController named: 'text' controlling: DummyTextInput new.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: NumberParser new
-		formattingWith: NullFormatter new.
-	codec changeModelTo: 45.1234 in: self.
-	
-	self assert: (creator modelIn: self) equals: '45.1234'
-]
+	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
+	context changeModelFor: containerController to: 'AAAZ'.
 
-{ #category : #tests }
-TextCodecTest >> testInvalidParsingExceptionIsRaisedWhenViewContentsIsNotValid [
-
-	| view creator codec |
-
-	view := DummyTextInput new.
-	creator := ContainerController named: 'text' controlling: view.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: NaturalNumberParser new
-		formattingWith: NullFormatter new.
-	view changeContentsTo: '1.234.5678'.
-	
-	self should: [ codec modelIn: self ] raise: ModelCreationFailed 
-]
-
-{ #category : #tests }
-TextCodecTest >> testParserIsUsedToObtainViewContents [
-
-	| view creator codec |
-
-	view := DummyTextInput new.
-	creator := ContainerController named: 'text' controlling: view.
-	codec := TextCodec
-		workingWith: creator
-		parsingWith: ScaledDecimalParser new
-		formattingWith: NullFormatter new.
-	view changeContentsTo: '1234.5678'.
-	
-	self assert: (codec modelIn: self) equals: 1234.5678
+	self should: [ codec modelIn: context ] raise: ModelCreationFailed
 ]

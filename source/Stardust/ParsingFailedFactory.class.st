@@ -22,11 +22,11 @@ ParsingFailedFactory >> initializeParsing: aString [
 { #category : #signalling }
 ParsingFailedFactory >> signal: aMessageText [
 
-	^ ParsingFailed signal: aMessageText parsing: parsedString
+	^ DecodingFailed signal: aMessageText parsing: parsedString
 ]
 
 { #category : #signalling }
 ParsingFailedFactory >> signalAll: failureExplanations [
 
-	^ ParsingFailed signalAll: failureExplanations parsing: parsedString
+	^ DecodingFailed signalAll: failureExplanations parsing: parsedString
 ]
