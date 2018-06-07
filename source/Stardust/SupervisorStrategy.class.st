@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'handler'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }

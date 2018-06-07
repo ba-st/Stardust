@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'knownModels'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }

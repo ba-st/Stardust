@@ -1,7 +1,7 @@
 Class {
 	#name : #PickUIRepresentationPolicy,
 	#superclass : #ModelPickingPolicy,
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #testing }

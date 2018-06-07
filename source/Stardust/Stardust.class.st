@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'ModelCreationAPI'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'class initialization' }

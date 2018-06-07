@@ -11,7 +11,7 @@ Class {
 		'name',
 		'pickingPolicy'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }

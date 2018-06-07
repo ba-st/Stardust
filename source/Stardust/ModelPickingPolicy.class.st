@@ -13,7 +13,7 @@ Also don't forget to configure the picker with the objects the UI component will
 Class {
 	#name : #ModelPickingPolicy,
 	#superclass : #Object,
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #testing }

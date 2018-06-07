@@ -12,7 +12,7 @@ Class {
 		'orderedCreators',
 		'errorDisplayStrategy'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }

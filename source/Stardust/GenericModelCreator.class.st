@@ -11,7 +11,7 @@ Class {
 		'modelCreators',
 		'name'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'private - asserting' }

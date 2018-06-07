@@ -11,7 +11,7 @@ Class {
 		'supervisorsByName',
 		'selectionModelCreator'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }

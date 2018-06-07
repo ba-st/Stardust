@@ -4,7 +4,7 @@ I'm the default picking policy.
 Class {
 	#name : #PickModelPolicy,
 	#superclass : #ModelPickingPolicy,
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #testing }

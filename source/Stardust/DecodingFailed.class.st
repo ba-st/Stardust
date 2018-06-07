@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'failures'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #signalling }

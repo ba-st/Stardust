@@ -7,7 +7,7 @@ Class {
 	#pools : [
 		'Stardust'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'private - preconditions' }

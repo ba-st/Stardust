@@ -10,7 +10,7 @@ Class {
 		'creatorsByView',
 		'creationSequence'
 	],
-	#category : #'Stardust-ModelCreation'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }
