@@ -86,5 +86,5 @@ TextCodecTest >> testModelCreationFailedWhenViewContentsIsNotValid [
 	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
 	context changeModelFor: containerController to: 'AAAZ'.
 
-	self should: [ codec modelIn: context ] raise: ModelCreationFailed
+	self should: [ codec modelIn: context ] raise: InstanceCreationFailed
 ]

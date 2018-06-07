@@ -67,7 +67,7 @@ SingleModelPickerTest >> testCreationIsNotAllowedWhenThereIsNoSelection [
 
 	creator := SingleModelPicker named: 'Letter' pickingFrom: self singleSelectionView.
 
-	self should: [ creator modelIn: context ] raise: ModelCreationFailed
+	self should: [ creator modelIn: context ] raise: InstanceCreationFailed 
 ]
 
 { #category : #tests }
@@ -121,7 +121,7 @@ SingleModelPickerTest >> testSelectionIsLostIfNotIncludedInNewOptions [
 	self assert: (creator modelIn: context) equals: #B.
 
 	creator allowAnyOf: #(D J L).
-	self should: [ creator modelIn: context ] raise: ModelCreationFailed
+	self should: [ creator modelIn: context ] raise: InstanceCreationFailed
 ]
 
 { #category : #tests }
@@ -139,5 +139,5 @@ SingleModelPickerTest >> testSelectionIsLostIfOptionsAreCleared [
 	self assert: (creator modelIn: context) equals: #B.
 
 	creator disallowAll.
-	self should: [ creator modelIn: context ] raise: ModelCreationFailed
+	self should: [ creator modelIn: context ] raise: InstanceCreationFailed
 ]
