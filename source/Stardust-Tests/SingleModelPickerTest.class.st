@@ -12,7 +12,7 @@ SingleModelPickerTest >> testAfterChangeOfSelectionModelObtainedRepresentsNewSel
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 	creator allowAnyOf: #(G).
 	view chooseElementAt: 1.
@@ -24,7 +24,7 @@ SingleModelPickerTest >> testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaf
 
 	| view previousModel creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 	creator allowAnyOf: #(C G).
 	view chooseElementAt: 1.
@@ -38,7 +38,7 @@ SingleModelPickerTest >> testCanCreate [
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 	creator allowAnyOf: #(G).
 
@@ -52,7 +52,7 @@ SingleModelPickerTest >> testChangeOfSelectionIsNotAllowedIfSelectionIsNotAnAvai
 
 	| creator |
 
-	creator := SingleModelPicker named: 'Letter' pickingFrom: self singleSelectionView.
+	creator := SingleModelPicker named: 'Letter' pickingFrom: self newSingleSelectionView.
 
 	self should: [ creator changeModelTo: #D in: context ] raise: ObjectNotFound.
 
@@ -65,7 +65,7 @@ SingleModelPickerTest >> testCreationIsNotAllowedWhenThereIsNoSelection [
 
 	| creator |
 
-	creator := SingleModelPicker named: 'Letter' pickingFrom: self singleSelectionView.
+	creator := SingleModelPicker named: 'Letter' pickingFrom: self newSingleSelectionView.
 
 	self should: [ creator modelIn: context ] raise: InstanceCreationFailed 
 ]
@@ -75,7 +75,7 @@ SingleModelPickerTest >> testModelIsTheSameAsViewSelection [
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 
 	creator allowAnyOf: #(A B C).
@@ -96,7 +96,7 @@ SingleModelPickerTest >> testSelectionIsKeptIfIncludedInNewOptions [
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letters' pickingFrom: view.
 
 	creator allowAnyOf: #(A B C).
@@ -112,7 +112,7 @@ SingleModelPickerTest >> testSelectionIsLostIfNotIncludedInNewOptions [
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 
 	creator allowAnyOf: #(A B C).
@@ -129,7 +129,7 @@ SingleModelPickerTest >> testSelectionIsLostIfOptionsAreCleared [
 
 	| view creator |
 
-	view := self singleSelectionView.
+	view := self newSingleSelectionView.
 	creator := SingleModelPicker named: 'Letter' pickingFrom: view.
 	creator allowAnyOf: #(A B C).
 

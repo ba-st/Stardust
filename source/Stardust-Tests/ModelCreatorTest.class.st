@@ -22,17 +22,17 @@ ModelCreatorTest >> multipleSelectionView [
 	^ DummyMultipleSelectionView new
 ]
 
+{ #category : #'widget - support' }
+ModelCreatorTest >> newSingleSelectionView [
+
+	^ DummySingleSelectionView new
+]
+
 { #category : #running }
 ModelCreatorTest >> setUp [
 
 	super setUp.
 	context := ModelCreationContext new
-]
-
-{ #category : #'widget - support' }
-ModelCreatorTest >> singleSelectionView [
-
-	^ DummySingleSelectionView new
 ]
 
 { #category : #'widget - support' }

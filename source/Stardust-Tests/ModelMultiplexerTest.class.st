@@ -21,7 +21,7 @@ ModelMultiplexerTest >> modelFor: aSingleModelPicker [
 ModelMultiplexerTest >> setUp [
 
 	super setUp.
-	singleSelectionView := self singleSelectionView.
+	singleSelectionView := self newSingleSelectionView.
 	picker := SingleModelPicker named: 'Test' pickingFrom: singleSelectionView
 ]
 
