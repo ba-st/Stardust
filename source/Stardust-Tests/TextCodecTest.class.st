@@ -3,9 +3,8 @@ I'm a test case
 "
 Class {
 	#name : #TextCodecTest,
-	#superclass : #ModelCreatorTest,
+	#superclass : #CompositeModelCreatorTest,
 	#instVars : [
-		'textField',
 		'containerController'
 	],
 	#category : #'Stardust-Tests-ModelCreation'
@@ -24,8 +23,7 @@ TextCodecTest >> numberDecoding [
 TextCodecTest >> setUp [
 
 	super setUp.
-	textField := self textField.
-	containerController := ContainerController named: 'Text' controlling: textField
+	containerController := self newContainerControllerNamed: 'Text'
 ]
 
 { #category : #tests }
@@ -34,9 +32,9 @@ TextCodecTest >> testDecodingActionIsUsedToObtainViewContents [
 	| codec |
 
 	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
-	context changeModelFor: containerController to: '1234.5678'.
+	containerController updateModelInViewsConsidering: '1234.5678'.
 
-	self assert: (codec modelIn: context) equals: 1234.5678
+	self assertModelAssembledBy: codec equals: 1234.5678
 ]
 
 { #category : #tests }
@@ -46,11 +44,13 @@ TextCodecTest >> testEncodingActionIsUsedToSetViewContents [
 
 	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
 
-	codec changeModelTo: 45.1234 in: context.
+	self assertModelAssembledBy: containerController equals: ''.
+
+	codec updateModelInViewsConsidering: 45.1234.
 
 	self
-		assert: (codec modelIn: context) equals: 45.1234;
-		assert: (containerController modelIn: context) equals: '45.1234'
+		assertModelAssembledBy: codec equals: 45.1234;
+		assertModelAssembledBy: containerController equals: '45.1234'
 ]
 
 { #category : #tests }
@@ -84,7 +84,8 @@ TextCodecTest >> testModelCreationFailedWhenViewContentsIsNotValid [
 	| codec |
 
 	codec := TextCodec workingWith: containerController decodingWith: self numberDecoding encodingWith: [ :number | number printString ].
-	context changeModelFor: containerController to: 'AAAZ'.
 
-	self should: [ codec modelIn: context ] raise: InstanceCreationFailed
+	containerController updateModelInViewsConsidering: 'AAAZ'.
+
+	self assertModelCreationFailedFor: codec
 ]

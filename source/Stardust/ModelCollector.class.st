@@ -18,6 +18,12 @@ ModelCollector class >> named: aName containing: anCollectionOfModelCreators [
 	^ self new initializeNamed: aName containing: anCollectionOfModelCreators
 ]
 
+{ #category : #testing }
+ModelCollector >> canCreate: anObject [
+
+	^ anObject isCollection and: [ anObject size = modelCreators size and: [ self eachModelCreatorCanCreateTheObjectsIn: anObject ] ]
+]
+
 { #category : #disassembling }
 ModelCollector >> changeModelTo: aModelCollection in: aContext [
 
@@ -28,6 +34,17 @@ ModelCollector >> changeModelTo: aModelCollection in: aContext [
 ModelCollector >> dependenciesDo: aBlock [
 
 	^ modelCreators do: aBlock
+]
+
+{ #category : #private }
+ModelCollector >> eachModelCreatorCanCreateTheObjectsIn: aCollection [
+
+	modelCreators
+		with: aCollection
+		do: [ :childCreator :model | 
+			(childCreator canCreate: model)
+				ifFalse: [ ^ false ] ].
+	^ true
 ]
 
 { #category : #initialization }
