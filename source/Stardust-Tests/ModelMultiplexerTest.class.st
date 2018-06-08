@@ -26,6 +26,16 @@ ModelMultiplexerTest >> setUp [
 ]
 
 { #category : #tests }
+ModelMultiplexerTest >> testAccessing [
+
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	self assert: multiplexer name equals: picker name
+]
+
+{ #category : #tests }
 ModelMultiplexerTest >> testCanCreate [
 
 	| creator |
@@ -81,4 +91,26 @@ ModelMultiplexerTest >> testModelChangesWhenViewSelectionChanges [
 
 	singleSelectionView chooseElementAt: 2.
 	self assertModelAssembledBy: multiplexer equals: 232
+]
+
+{ #category : #tests }
+ModelMultiplexerTest >> testModelWhenActiveBranchFail [
+
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	singleSelectionView chooseElementAt: 1.
+	self assertModelCreationFailedFor: multiplexer
+]
+
+{ #category : #tests }
+ModelMultiplexerTest >> testModelWhenInactiveBranchFail [
+
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	singleSelectionView chooseElementAt: 2.
+	self assertModelAssembledBy: multiplexer  equals: 232
 ]
