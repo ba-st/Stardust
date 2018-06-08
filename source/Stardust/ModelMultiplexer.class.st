@@ -6,7 +6,7 @@ So when someone ask me the assemble the model, I delegate that to the supervisor
 "
 Class {
 	#name : #ModelMultiplexer,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
 		'supervisorsByName',
 		'selectionModelCreator'
@@ -94,12 +94,6 @@ ModelMultiplexer >> modelIn: aContext [
 ModelMultiplexer >> name [
 
 	^ selectionModelCreator name
-]
-
-{ #category : #notifying }
-ModelMultiplexer >> notifyChangesTo: aSupervisor [
-
-	
 ]
 
 { #category : #private }

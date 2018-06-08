@@ -5,7 +5,7 @@ I support the use case of selecting one of two valid options. Typical UI compone
 "
 Class {
 	#name : #BinaryChoiceModelPicker,
-	#superclass : #BasicModelCreator,
+	#superclass : #ModelCreator,
 	#instVars : [
 		'name',
 		'view'

@@ -62,7 +62,7 @@ ModelCreationSupervisor >> changeNotifiedBy: aView [
 { #category : #private }
 ModelCreationSupervisor >> creatorRelatedTo: aView [
 
-	^ creatorsByView at: aView ifAbsent: [ ObjectNotFound signal: #'A model creation supervisor recieved a change notification from a unknow view' ]
+	^ creatorsByView at: aView ifAbsent: [ ObjectNotFound signal: #'A model creation supervisor received a change notification from an unknow view' ]
 ]
 
 { #category : #initialization }

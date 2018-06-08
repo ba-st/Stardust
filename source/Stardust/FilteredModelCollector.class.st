@@ -3,7 +3,7 @@ I'm a composite model creator, allowing to filter the models provided by the cre
 "
 Class {
 	#name : #FilteredModelCollector,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
 		'name',
 		'optionalModelCreators'
@@ -58,10 +58,4 @@ FilteredModelCollector >> modelIn: aContext [
 FilteredModelCollector >> name [
 
 	^ name
-]
-
-{ #category : #notifying }
-FilteredModelCollector >> notifyChangesTo: aSupervisor [
-
-	
 ]

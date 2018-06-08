@@ -5,7 +5,7 @@ I support the use case of selecting several of the valid options. Typical UI com
 "
 Class {
 	#name : #MultipleModelPicker,
-	#superclass : #BasicModelCreator,
+	#superclass : #ModelCreator,
 	#instVars : [
 		'view',
 		'name',

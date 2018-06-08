@@ -1,3 +1,6 @@
+"
+I'm something simulating a text input
+"
 Class {
 	#name : #DummyTextInput,
 	#superclass : #Object,

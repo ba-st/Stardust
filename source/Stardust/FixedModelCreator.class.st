@@ -4,7 +4,7 @@ I don't interact with any UI component, just returns the model previosuly config
 "
 Class {
 	#name : #FixedModelCreator,
-	#superclass : #BasicModelCreator,
+	#superclass : #ModelCreator,
 	#instVars : [
 		'model'
 	],

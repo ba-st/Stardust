@@ -3,7 +3,7 @@ I'm a composite model creator. I'm responsible for creating a collection contain
 "
 Class {
 	#name : #ModelCollector,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
 		'modelCreators',
 		'name'
@@ -47,10 +47,4 @@ ModelCollector >> modelIn: aContext [
 ModelCollector >> name [
 
 	^ name
-]
-
-{ #category : #notifying }
-ModelCollector >> notifyChangesTo: aSupervisor [
-
-	
 ]

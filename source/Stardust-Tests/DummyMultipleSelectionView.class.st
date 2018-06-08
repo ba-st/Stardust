@@ -1,3 +1,6 @@
+"
+I'm something simulating a multiple selection view
+"
 Class {
 	#name : #DummyMultipleSelectionView,
 	#superclass : #Object,

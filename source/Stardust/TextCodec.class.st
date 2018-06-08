@@ -3,11 +3,11 @@ I'm a composite model creator. I can create a model parsing the string provided 
 "
 Class {
 	#name : #TextCodec,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
-		'decodingAction',
-		'encodingAction',
-		'textCreator'
+		'textCreator',
+		'decodingBlock',
+		'encodingBlock'
 	],
 	#category : #Stardust
 }
@@ -27,7 +27,7 @@ TextCodec class >> workingWith: aCreator parsingWith: aParser formattingWith: aF
 { #category : #testing }
 TextCodec >> canCreate: anObject [
 
-	^ [ (decodingAction value: (encodingAction value: anObject)) = anObject ]
+	^ [ (decodingBlock value: (encodingBlock value: anObject)) = anObject ]
 		on: InstanceCreationFailed , DecodingFailed
 		do: [ :aSignal | aSignal return: false ]
 ]
@@ -35,7 +35,7 @@ TextCodec >> canCreate: anObject [
 { #category : #disassembling }
 TextCodec >> changeModelTo: aModel in: aContext [
 
-	aContext changeModelFor: textCreator to: (encodingAction value: aModel)
+	aContext changeModelFor: textCreator to: (encodingBlock value: aModel)
 ]
 
 { #category : #enumerating }
@@ -45,17 +45,17 @@ TextCodec >> dependenciesDo: aBlock [
 ]
 
 { #category : #initialization }
-TextCodec >> initializeWorkingWith: aCreator decodingWith: aDecodingAction encodingWith: anEcodingAction [
+TextCodec >> initializeWorkingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock [
 
 	textCreator := aCreator.
-	decodingAction := aDecodingAction.
-	encodingAction := anEcodingAction
+	decodingBlock := aDecodingBlock.
+	encodingBlock := anEncodingBlock
 ]
 
 { #category : #assembling }
 TextCodec >> modelIn: aContext [
 
-	^ [ decodingAction value: (aContext modelFor: textCreator) ]
+	^ [ decodingBlock value: (aContext modelFor: textCreator) ]
 		on: DecodingFailed
 		do: [ :signal | InstanceCreationFailed signal: signal messageText ]
 ]
@@ -66,14 +66,8 @@ TextCodec >> name [
 	^ textCreator name
 ]
 
-{ #category : #notifying }
-TextCodec >> notifyChangesTo: aSupervisor [
-
-	
-]
-
 { #category : #printing }
 TextCodec >> printOn: aStream [
 
-	aStream nextPutAll: ('Codec para <1s>' expandMacrosWith: self name)
+	aStream nextPutAll: ('Codec for <1s>' expandMacrosWith: self name)
 ]

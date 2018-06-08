@@ -1,5 +1,8 @@
+"
+I'm something simulating a toggle view
+"
 Class {
-	#name : #DummyToggle,
+	#name : #DummyToggleView,
 	#superclass : #Object,
 	#instVars : [
 		'interested'
@@ -8,32 +11,32 @@ Class {
 }
 
 { #category : #'instance creation' }
-DummyToggle class >> new [
+DummyToggleView class >> new [
 
 	^ super new initialize
 ]
 
 { #category : #initialization }
-DummyToggle >> initialize [
+DummyToggleView >> initialize [
 
 	super initialize.
 	interested := Set new
 ]
 
 { #category : #notifying }
-DummyToggle >> notifyChangesTo: aSupervisor [
+DummyToggleView >> notifyChangesTo: aSupervisor [
 
 	interested add: aSupervisor
 ]
 
 { #category : #notifying }
-DummyToggle >> notifyInterested [
+DummyToggleView >> notifyInterested [
 
 	interested do: [ :anInterested | anInterested changeNotifiedBy: self ]
 ]
 
 { #category : #'selection protocol' }
-DummyToggle >> toggleCurrentSelection [
+DummyToggleView >> toggleCurrentSelection [
 
 	self notifyInterested
 ]

@@ -31,7 +31,7 @@ ModelCreator >> changeModelTo: aModel in: aContext [
 { #category : #enumerating }
 ModelCreator >> dependenciesDo: aBlock [
 
-	self subclassResponsibility
+	
 ]
 
 { #category : #assembling }

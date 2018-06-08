@@ -5,7 +5,7 @@ I support the use case of returning an object contained in some UI component. Ty
 "
 Class {
 	#name : #ContainerController,
-	#superclass : #BasicModelCreator,
+	#superclass : #ModelCreator,
 	#instVars : [
 		'view',
 		'name'

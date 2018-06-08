@@ -3,7 +3,7 @@ I'm a composite model creator. I'm intended to create complex objects.
 "
 Class {
 	#name : #GenericModelCreator,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
 		'accessors',
 		'instanceCreationSelector',
@@ -131,10 +131,4 @@ GenericModelCreator >> modelIn: aContext [
 GenericModelCreator >> name [
 
 	^ name
-]
-
-{ #category : #notifying }
-GenericModelCreator >> notifyChangesTo: aSupervisor [
-
-	
 ]

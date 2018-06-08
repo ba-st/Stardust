@@ -5,7 +5,7 @@ I support the use case of selecting one of many valid options. Typical UI compon
 "
 Class {
 	#name : #SingleModelPicker,
-	#superclass : #BasicModelCreator,
+	#superclass : #ModelCreator,
 	#instVars : [
 		'view',
 		'name',
@@ -13,18 +13,6 @@ Class {
 	],
 	#category : #Stardust
 }
-
-{ #category : #'instance creation' }
-SingleModelPicker class >> named: aName obtainingSelectionFrom: aSingleSelectionView [
-
-	self
-		deprecated:
-			'Deberiamos eliminar el uso de los UIRepresentation,
-			todas las view de selection tienen alguna forma de configurarles que mostrar, generalmente usando el ListLabelingCommand.
-			Cuando se eliminen los usos se puede borrar la jerarquia de ModelPickingPolicy'.
-
-	^ self named: aName obtainingSelectionFrom: aSingleSelectionView accordingTo: PickUIRepresentationPolicy new
-]
 
 { #category : #'private-instance creation' }
 SingleModelPicker class >> named: aName obtainingSelectionFrom: aSingleSelectionView accordingTo: aModelPickingPolicy [
