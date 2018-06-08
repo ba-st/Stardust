@@ -3,7 +3,7 @@ I'm a test case covering cross funcionality
 "
 Class {
 	#name : #ModelCreationProcessUserStoryTest,
-	#superclass : #TestCase,
+	#superclass : #CompositeModelCreatorTest,
 	#instVars : [
 		'ratingPicker',
 		'titleCreator',
@@ -24,22 +24,10 @@ ModelCreationProcessUserStoryTest >> firstDiscountPicker [
 ]
 
 { #category : #private }
-ModelCreationProcessUserStoryTest >> newSingleModelPickerNamed: aName [
-
-	^ SingleModelPicker named: aName pickingFrom: self newSingleSelectionView
-]
-
-{ #category : #'widget - support' }
-ModelCreationProcessUserStoryTest >> newSingleSelectionView [
-
-	^ DummySingleSelectionView new
-]
-
-{ #category : #private }
 ModelCreationProcessUserStoryTest >> numberCodec [
 
 	^ TextCodec
-		workingWith: (ContainerController named: 'number' controlling: self textField)
+		workingWith: (ContainerController named: 'number' controlling: self newTextField)
 		decodingWith: self numberDecoding
 		encodingWith: self numberEncoding
 ]
@@ -66,14 +54,11 @@ ModelCreationProcessUserStoryTest >> numberEncoding [
 ]
 
 { #category : #private }
-ModelCreationProcessUserStoryTest >> pointCreatorFrom: cornerXView and: cornerYView [
+ModelCreationProcessUserStoryTest >> pointCreatorFrom: xCoordinateCreator and: yCoordinateCreator [
 
-	^ (GenericModelCreatorBuilder
-		named: 'corner'
-		building: Point
-		accessedUsing: #(x y))
-		x: (self numberCodecFor: cornerXView)
-		y: (self numberCodecFor: cornerYView)
+	^ (GenericModelCreatorBuilder named: 'point' building: Point accessedUsing: #(x y))
+		x: xCoordinateCreator
+		y: yCoordinateCreator
 ]
 
 { #category : #'private - accessing' }
@@ -94,13 +79,13 @@ ModelCreationProcessUserStoryTest >> productCreatorBetween: aFirstCreator and: a
 ]
 
 { #category : #private }
-ModelCreationProcessUserStoryTest >> rectangleCreatorFrom: originPicker to: cornerCreator [
+ModelCreationProcessUserStoryTest >> rectangleCreatorFrom: originCreator to: cornerCreator [
 
 	^ (GenericModelCreatorBuilder
 		named: 'rectangle'
 		building: Rectangle
 		accessedUsing: #(#origin #corner))
-		origin: originPicker
+		origin: originCreator
 		corner: cornerCreator
 ]
 
@@ -118,26 +103,27 @@ ModelCreationProcessUserStoryTest >> selectableDiscounts [
 	^ #(10 15 20) collect: [ :number | Percentage of: number ]
 ]
 
-{ #category : #'private - accessing' }
-ModelCreationProcessUserStoryTest >> selectablePoints [
-
-	^ #(1 2 3) collect: [ :number | number @ number ]
-]
-
 { #category : #running }
 ModelCreationProcessUserStoryTest >> setUp [
 
 	super setUp.
-	ratingPicker := SingleModelPicker named: 'Rating' pickingFrom: self newSingleSelectionView.
-	titleCreator := ContainerController named: 'Title' controlling: self textField.
+	ratingPicker := self newSingleModelPickerNamed: 'Rating'.
+	ratingPicker allowAnyOf: #(1 2 3 4 5).
+
+	titleCreator := self newContainerControllerNamed: 'Title'.
+
 	authorNameCreator := TextCodec
-		workingWith: (ContainerController named: 'Author Name' controlling: self textField)
+		workingWith: (self newContainerControllerNamed: 'Author Name')
 		decodingWith: [ :string | 
 			string isEmpty
 				ifTrue: [ InstanceCreationFailed signal: 'The author name cannot be empty' ]
 				ifFalse: [ string ] ]
 		encodingWith: [ :string | string ].
-	paperCreator := (GenericModelCreatorBuilder named: 'Paper' building: StardustPaper accessedUsing: #(title authorName rating)) titled: titleCreator authoredBy: authorNameCreator rated: ratingPicker
+
+	paperCreator := (GenericModelCreatorBuilder named: 'Paper' building: StardustPaper accessedUsing: #(title authorName rating))
+		titled: titleCreator
+		authoredBy: authorNameCreator
+		rated: ratingPicker
 ]
 
 { #category : #'private - accessing' }
@@ -158,44 +144,43 @@ ModelCreationProcessUserStoryTest >> sumCreatorBetween: aFirstCreator and: aSeco
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testChangingModelThroughCreatorChangesViewContents [
 
-	| cornerXView cornerYView cornerCreator supervisor |
+	| xField yField pointCreator |
 
-	cornerXView := self textField.
-	cornerYView := self textField.
-	cornerCreator := self pointCreatorFrom: cornerXView and: cornerYView.
+	xField := self newTextField.
+	yField := self newTextField.
+	pointCreator := self pointCreatorFrom: (self numberCodecFor: xField) and: (self numberCodecFor: yField).
 
-	supervisor := ModelCreationSupervisor supervising: cornerCreator.
+	self assertModelCreationFailedFor: pointCreator.
 
-	self should: [ supervisor model ] raise: ModelCreationFailed.
+	pointCreator updateModelInViewsConsidering: 2 @ 3.
 
-	supervisor changeModelTo: 2 @ 3.
-
-	self assert: cornerXView contents equals: '2'.
-	self assert: cornerYView contents equals: '3'
+	self
+		assertModelAssembledBy: pointCreator equals: 2 @ 3;
+		assert: xField contents equals: '2';
+		assert: yField contents equals: '3'
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testChangingModelThroughCreatorWithLoopsChangesViewContents [
 
-	| originView originPicker cornerXView cornerYView cornerCreator rectangleCreator supervisor |
+	| originCreator xCoordinateField originYCoordinateField cornerYCoordinateField cornerCreator xCoordinateCreator rectangleCreator |
 
-	originView := self newSingleSelectionView
-		allowAnyOf: self selectablePoints;
-		yourself.
-	originPicker := SingleModelPicker named: 'origin' pickingFrom: originView.
+	xCoordinateField := self newTextField.
+	cornerYCoordinateField := self newTextField.
+	originYCoordinateField := self newTextField.
 
-	cornerXView := self textField.
-	cornerYView := self textField.
-	cornerCreator := self pointCreatorFrom: cornerXView and: cornerYView.
+	xCoordinateCreator := self numberCodecFor: xCoordinateField.
+	originCreator := self pointCreatorFrom: xCoordinateCreator and: (self numberCodecFor: originYCoordinateField).
+	cornerCreator := self pointCreatorFrom: xCoordinateCreator and: (self numberCodecFor: cornerYCoordinateField).
 
-	rectangleCreator := self rectangleCreatorFrom: originPicker to: cornerCreator.
+	rectangleCreator := self rectangleCreatorFrom: originCreator to: cornerCreator.
 
-	supervisor := ModelCreationSupervisor supervising: rectangleCreator.
-	supervisor changeModelTo: (1 @ 1 corner: 2 @ 3).
+	rectangleCreator updateModelInViewsConsidering: (2 @ 1 corner: 2 @ 3).
 
-	self assert: originView chosenIndex equals: 1.
-	self assert: cornerXView contents equals: '2'.
-	self assert: cornerYView contents equals: '3'
+	self
+		assert: xCoordinateField contents equals: '2';
+		assert: cornerYCoordinateField contents equals: '3';
+		assert: originYCoordinateField contents equals: '1'
 ]
 
 { #category : #'tests - model creation failed' }
@@ -203,7 +188,7 @@ ModelCreationProcessUserStoryTest >> testFirstFailureInformedWhenSeveralCreators
 
 	| textField numberCodec firstDiscountPicker discountArrayCreator productCreator supervisor |
 
-	textField := self textField.
+	textField := self newTextField.
 	numberCodec := self numberCodecFor: textField.
 	firstDiscountPicker := self firstDiscountPicker.
 	discountArrayCreator := ModelCollector named: 'collection' containing: (Array with: firstDiscountPicker with: self secondDiscountPicker).
@@ -232,29 +217,27 @@ ModelCreationProcessUserStoryTest >> testInstanceCreationFailsWhenModelCanNotBeO
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorDependsOnViews [
 
-	| discountView discountPicker priceToDiscountView giftCreator costCreator supervisor |
+	| discountView discountPicker priceToDiscountView giftCreator costCreator |
 
 	discountView := DummySingleSelectionView new.
-	discountView allowAnyOf: self selectableDiscounts.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
+	discountPicker allowAnyOf: self selectableDiscounts.
 
-	priceToDiscountView := self textField.
+	priceToDiscountView := self newTextField.
 	giftCreator := self productCreatorBetween: discountPicker and: priceToDiscountView.
 
 	costCreator := ModelCreatorAdapter adaptingModelOf: giftCreator using: [ :gift | 1100 - gift ].
 
-	supervisor := ModelCreationSupervisor supervising: costCreator.
-
 	discountView chooseElementAt: 2.
 	priceToDiscountView changeContentsTo: '900'.
 
-	self assert: supervisor model equals: 965
+	self assertModelAssembledBy: costCreator equals: 965
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorWithLoopsDependsOnViews [
 
-	| discountView discountPicker someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator totalGift supervisor |
+	| discountView discountPicker someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator |
 
 	discountView := self newSingleSelectionView
 		allowAnyOf: self selectableDiscounts;
@@ -262,32 +245,25 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorWithLoopsDepend
 		yourself.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	someItemPriceView := self textField.
+	someItemPriceView := self newTextField.
 	someItemPriceView changeContentsTo: '1100'.
 
 	someItemGiftCreator := self productCreatorBetween: discountPicker and: someItemPriceView.
 
-	anotherItemPriceView := self textField.
+	anotherItemPriceView := self newTextField.
 	anotherItemPriceView changeContentsTo: '700'.
 
-	anotherItemGiftCreator := self
-		productCreatorBetween: discountPicker
-		and: anotherItemPriceView.
+	anotherItemGiftCreator := self productCreatorBetween: discountPicker and: anotherItemPriceView.
 
-	totalGiftCreator := self
-		sumCreatorBetween: someItemGiftCreator
-		and: anotherItemGiftCreator.
+	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
 
-	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
-	totalGift := supervisor model.
-
-	self assert: totalGift equals: 270
+	self assertModelAssembledBy: totalGiftCreator equals: 270
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelForCreatorDependsOnView [
 
-	| discountView discountPicker costCreator supervisor |
+	| discountView discountPicker costCreator |
 
 	discountView := self newSingleSelectionView
 		allowAnyOf: self selectableDiscounts;
@@ -298,17 +274,15 @@ ModelCreationProcessUserStoryTest >> testModelForCreatorDependsOnView [
 
 	costCreator := ModelCreatorAdapter adaptingModelOf: discountPicker using: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 
-	supervisor := ModelCreationSupervisor supervising: costCreator.
-
-	self assert: supervisor model equals: 935
+	self assertModelAssembledBy: costCreator equals: 935
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelForMultipleSelectionCreatorDependsOnView [
 
-	| discountsView discountsPicker costsCreator supervisor |
+	| discountsView discountsPicker costsCreator |
 
-	discountsView := DummyMultipleSelectionView new.
+	discountsView := self newMultipleSelectionView.
 	discountsView allowAnyOf: self selectableDiscounts.
 	discountsView chooseElementsAtAll: #(1 3).
 
@@ -316,79 +290,67 @@ ModelCreationProcessUserStoryTest >> testModelForMultipleSelectionCreatorDepends
 
 	costsCreator := ModelCreatorAdapter adaptingModelOf: discountsPicker using: [ :discounts | discounts collect: [ :discount | 1100 * (Percentage oneHundred - discount) ] ].
 
-	supervisor := ModelCreationSupervisor supervising: costsCreator.
-
-	self assert: supervisor model equals: #(990 880)
+	self assertModelAssembledBy: costsCreator equals: #(990 880)
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelObtainedChangesAfterUserInteraction [
 
-	| supervisor discountView discountCodec discountCreator |
+	|  discountView discountCodec discountCreator |
 
-	discountView := DummyTextInput new.
+	discountView := self newTextField.
 	discountCodec := self numberCodecFor: discountView.
-	discountCreator := (GenericModelCreatorBuilder
-		named: 'percentage'
-		building: Percentage
-		accessedUsing: #(number)) of: discountCodec.
-	supervisor := ModelCreationSupervisor supervising: discountCreator.
+	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: discountCodec.
+
 	discountView changeContentsTo: '15'.
-	self assert: supervisor model equals: (Percentage of: 15).
+	self assertModelAssembledBy: discountCreator equals: (Percentage of: 15).
 	discountView changeContentsTo: '25'.
-	self assert: supervisor model equals: (Percentage of: 25)
+	self assertModelAssembledBy: discountCreator equals: (Percentage of: 25)
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelObtainedThroughDifferentBranchesIsIdentical [
 
-	| discountView discountCodec discountCreator someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator supervisor totalGift |
+	| discountView discountCodec discountCreator someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator |
 
-	discountView := self textField.
+	discountView := self newTextField.
 	discountCodec := self numberCodecFor: discountView.
 	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: discountCodec.
-	someItemPriceView := self textField.
+	someItemPriceView := self newTextField.
 	someItemGiftCreator := self productCreatorBetween: discountCreator and: someItemPriceView.
-	anotherItemPriceView := self textField.
+	anotherItemPriceView := self newTextField.
 	anotherItemGiftCreator := self productCreatorBetween: discountCreator and: anotherItemPriceView.
 	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
-	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
 	discountView changeContentsTo: '15'.
 	someItemPriceView changeContentsTo: '1100'.
 	anotherItemPriceView changeContentsTo: '700'.
-	totalGift := supervisor model.
-	self assert: totalGift equals: 270
+
+	self assertModelAssembledBy: totalGiftCreator equals: 270
 ]
 
 { #category : #tests }
 ModelCreationProcessUserStoryTest >> testModelUnnafectedByUserInteractionDoesNotChange [
 
-	| discountView discountCreator someItemPriceView someItemGiftCreator anotherItemPriceView anotherItemGiftCreator totalGiftCreator supervisor modelBeforeChange modelAfterChange |
+	| discountField discountCreator firstItemPriceField firstItemGiftCreator secondItemPriceCreator secondItemGiftCreator totalGiftCreator |
 
-	discountView := self textField
-		changeContentsTo: '15';
-		yourself.
-	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: (self numberCodecFor: discountView).
+	discountField := self newTextField.
+	discountField changeContentsTo: '15'.
+	discountCreator := (GenericModelCreatorBuilder named: 'percentage' building: Percentage accessedUsing: #(number)) of: (self numberCodecFor: discountField).
 
-	someItemPriceView := self textField
-		changeContentsTo: '1100';
-		yourself.
-	someItemGiftCreator := self productCreatorBetween: discountCreator and: someItemPriceView.
+	firstItemPriceField := self newTextField.
+	firstItemPriceField changeContentsTo: '1100'.
+	firstItemGiftCreator := self productCreatorBetween: discountCreator and: firstItemPriceField.
 
-	anotherItemPriceView := self textField
-		changeContentsTo: '700';
-		yourself.
-	anotherItemGiftCreator := self productCreatorBetween: discountCreator and: anotherItemPriceView.
+	secondItemPriceCreator := self newTextField.
+	secondItemPriceCreator changeContentsTo: '700'.
+	secondItemGiftCreator := self productCreatorBetween: discountCreator and: secondItemPriceCreator.
 
-	totalGiftCreator := self sumCreatorBetween: someItemGiftCreator and: anotherItemGiftCreator.
-	supervisor := ModelCreationSupervisor supervising: totalGiftCreator.
+	totalGiftCreator := self sumCreatorBetween: firstItemGiftCreator and: secondItemGiftCreator.
 
-	modelBeforeChange := supervisor model.
-	self assert: modelBeforeChange equals: 270.
+	self assertModelAssembledBy: totalGiftCreator equals: 270.
 
-	someItemPriceView changeContentsTo: '850'.
-	modelAfterChange := supervisor model.
-	self assert: modelAfterChange equals: 232.5
+	firstItemPriceField changeContentsTo: '850'.
+	self assertModelAssembledBy: totalGiftCreator equals: 232.5
 ]
 
 { #category : #'tests - model creation failed' }
@@ -478,7 +440,7 @@ ModelCreationProcessUserStoryTest >> testMultipleFailuresInformedWhenSameLevelLe
 				assert: (error userAwareDescriptionsByCreators at: authorNameCreator) equals: 'Author Name: The author name cannot be empty' ]
 ]
 
-{ #category : #'tests - model creation failed' }
+{ #category : #'test - accessing' }
 ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 
 	| discountView discountPicker costCreator supervisor model |
@@ -495,17 +457,16 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 	self assert: model equals: 990
 ]
 
-{ #category : #tests }
+{ #category : #'test - accessing' }
 ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 
 	| supervisor model |
 
 	supervisor := ModelCreationSupervisor supervising: paperCreator.
 
-	ratingPicker allowAnyOf: #(1 2 3 4 5).
-
-	model := supervisor withModelDo: [ :theModel | self fail ] ifUnable: [ 7777 ].
-	self assert: model equals: 7777.
+	model := nil.
+	supervisor withModelDo: [ :theModel | self fail ] ifUnable: [ model := 32 ].
+	self assert: model equals: 32.
 
 	ratingPicker updateModelInViewsConsidering: 3.
 	titleCreator updateModelInViewsConsidering: 'The greatest paper'.
@@ -517,10 +478,4 @@ ModelCreationProcessUserStoryTest >> testSupervisorWithModelDoIfUnable [
 		assert: model rating equals: 3;
 		assert: model title equals: 'The greatest paper';
 		assert: model authorName equals: 'Juan'
-]
-
-{ #category : #'widget - support' }
-ModelCreationProcessUserStoryTest >> textField [
-
-	^ DummyTextInput new
 ]
