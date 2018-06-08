@@ -87,7 +87,7 @@ ModelCreationProcessUserStoryTest >> productCreatorBetween: aFirstCreator and: a
 		named: 'product-operands'
 		containing: (Array with: aFirstCreator with: codec).
 
-	^ GenericModelCreatorBuilder
+	^ ModelCreatorAdapter 
 		named: 'product'
 		adaptingModelOf: operandsCreator
 		using: [ :operands | operands first * operands last ]
@@ -149,7 +149,7 @@ ModelCreationProcessUserStoryTest >> sumCreatorBetween: aFirstCreator and: aSeco
 		named: 'sum-operands'
 		containing: (Array with: aFirstCreator with: aSecondCreator).
 
-	^ GenericModelCreatorBuilder
+	^ ModelCreatorAdapter
 		named: 'sum'
 		adaptingModelOf: operandsCreator
 		using: [ :operands | operands sum ]
@@ -222,7 +222,7 @@ ModelCreationProcessUserStoryTest >> testInstanceCreationFailsWhenModelCanNotBeO
 
 	discountPicker := self newSingleModelPickerNamed: 'selection'.
 	discountPicker allowAnyOf: self selectableDiscounts.
-	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	costCreator := ModelCreatorAdapter adaptingModelOf: discountPicker using: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -241,7 +241,7 @@ ModelCreationProcessUserStoryTest >> testModelForCompositeCreatorDependsOnViews 
 	priceToDiscountView := self textField.
 	giftCreator := self productCreatorBetween: discountPicker and: priceToDiscountView.
 
-	costCreator := PluggableModelCreatorAdapter adapting: giftCreator with: [ :gift | 1100 - gift ].
+	costCreator := ModelCreatorAdapter adaptingModelOf: giftCreator using: [ :gift | 1100 - gift ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -296,7 +296,7 @@ ModelCreationProcessUserStoryTest >> testModelForCreatorDependsOnView [
 
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
 
-	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	costCreator := ModelCreatorAdapter adaptingModelOf: discountPicker using: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 
@@ -314,7 +314,7 @@ ModelCreationProcessUserStoryTest >> testModelForMultipleSelectionCreatorDepends
 
 	discountsPicker := MultipleModelPicker named: 'selection' pickingFrom: discountsView.
 
-	costsCreator := PluggableModelCreatorAdapter adapting: discountsPicker with: [ :discounts | discounts collect: [ :discount | 1100 * (Percentage oneHundred - discount) ] ].
+	costsCreator := ModelCreatorAdapter adaptingModelOf: discountsPicker using: [ :discounts | discounts collect: [ :discount | 1100 * (Percentage oneHundred - discount) ] ].
 
 	supervisor := ModelCreationSupervisor supervising: costsCreator.
 
@@ -485,7 +485,7 @@ ModelCreationProcessUserStoryTest >> testSupervisorModelIfUnable [
 
 	discountView := self newSingleSelectionView.
 	discountPicker := SingleModelPicker named: 'selection' pickingFrom: discountView.
-	costCreator := PluggableModelCreatorAdapter adapting: discountPicker with: [ :discount | 1100 * (Percentage oneHundred - discount) ].
+	costCreator := ModelCreatorAdapter adaptingModelOf: discountPicker using: [ :discount | 1100 * (Percentage oneHundred - discount) ].
 	supervisor := ModelCreationSupervisor supervising: costCreator.
 	discountView allowAnyOf: self selectableDiscounts.
 	self shouldnt: [ model := supervisor modelIfUnable: [ 7777 ] ] raise: ModelCreationFailed.

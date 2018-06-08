@@ -7,9 +7,9 @@ Class {
 	#instVars : [
 		'accessors',
 		'instanceCreationSelector',
-		'modelClassReference',
 		'modelCreators',
-		'name'
+		'name',
+		'modelClass'
 	],
 	#category : #Stardust
 }
@@ -66,22 +66,21 @@ GenericModelCreator class >> named: aName creatingInstancesOf: modelClass sendin
 { #category : #testing }
 GenericModelCreator >> canCreate: aModel [
 
-	^ (self modelClass isClass not or: [ aModel isA: self modelClass ])
+	^ (aModel isA: modelClass)
 		and: [ | allowedByAccessors |
 
 			allowedByAccessors := true.
-			accessors
-				with: (modelCreators first: accessors size)
-				do: [ :accessor :modelCreator | allowedByAccessors := allowedByAccessors and: [ modelCreator canCreate: (aModel perform: accessor) ] ].
+			self
+				withAccessorsAndCreatorsDo: [ :accessor :creator | 
+					allowedByAccessors := allowedByAccessors
+						and: [ creator canCreate: (aModel perform: accessor) ] ].
 			allowedByAccessors ]
 ]
 
 { #category : #disassembling }
 GenericModelCreator >> changeModelTo: aModel in: aContext [
 
-	accessors
-		with: (modelCreators first: accessors size)
-		do: [ :accessor :modelCreator | aContext changeModelFor: modelCreator to: (aModel perform: accessor) ]
+	self withAccessorsAndCreatorsDo: [ :accessor :modelCreator | aContext changeModelFor: modelCreator to: (aModel perform: accessor) ]
 ]
 
 { #category : #enumerating }
@@ -91,28 +90,13 @@ GenericModelCreator >> dependenciesDo: aBlock [
 ]
 
 { #category : #initialization }
-GenericModelCreator >> initializeNamed: aName creatingInstancesOf: aModelClassOrBlock sending: aSelector with: aModelCreatorCollection accessingModelOnlyWith: aSelectorCollection [
+GenericModelCreator >> initializeNamed: aName creatingInstancesOf: aModelClass sending: aSelector with: aModelCreatorCollection accessingModelOnlyWith: aSelectorCollection [
 
 	name := aName.
-	modelClassReference := aModelClassOrBlock isClass
-		ifTrue: [ aModelClassOrBlock ]
-		ifFalse: [ "The block inside block is intentional. See self>>#modelIn:" [ aModelClassOrBlock ] ].
-
+	modelClass := aModelClass.
 	instanceCreationSelector := aSelector.
 	modelCreators := aModelCreatorCollection.
 	accessors := aSelectorCollection
-]
-
-{ #category : #private }
-GenericModelCreator >> modelClass [
-
-	^ modelClassReference value
-]
-
-{ #category : #private }
-GenericModelCreator >> modelCreators [
-
-	^ modelCreators
 ]
 
 { #category : #assembling }
@@ -121,11 +105,19 @@ GenericModelCreator >> modelIn: aContext [
 	| models |
 
 	models := modelCreators collect: [ :modelCreator | aContext modelFor: modelCreator ].
-	^ self modelClass perform: instanceCreationSelector withArguments: models
+	^ modelClass perform: instanceCreationSelector withArguments: models
 ]
 
 { #category : #accessing }
 GenericModelCreator >> name [
 
 	^ name
+]
+
+{ #category : #private }
+GenericModelCreator >> withAccessorsAndCreatorsDo: aBlock [
+
+	"We allow to have less accessors than creators"
+
+	accessors with: (modelCreators first: accessors size) do: aBlock
 ]

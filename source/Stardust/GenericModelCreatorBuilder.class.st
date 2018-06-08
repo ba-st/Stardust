@@ -11,12 +11,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-GenericModelCreatorBuilder class >> named: aName adaptingModelOf: aModelCreator using: aBlock [
-
-	^ (self named: aName building: aBlock accessedOnlyUsing: #()) value: aModelCreator
-]
-
-{ #category : #'instance creation' }
 GenericModelCreatorBuilder class >> named: aName building: aModelClass accessedOnlyUsing: aCollectionOfSelectors [
 
 	^ self
@@ -44,12 +38,6 @@ GenericModelCreatorBuilder class >> named: aName building: aModelClass accessedU
 		building: aModelClass
 		accessedUsing: aCollectionOfSelectors
 		creatingInstanceOfCreatorWith: anInstanceCreationSelector
-]
-
-{ #category : #'instance creation' }
-GenericModelCreatorBuilder class >> named: aName using: aBlock [
-
-	^ (self named: aName building: aBlock accessedOnlyUsing: #()) value
 ]
 
 { #category : #'private-accessing' }

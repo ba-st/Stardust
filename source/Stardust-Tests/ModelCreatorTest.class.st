@@ -4,9 +4,6 @@ I'm an abstract test case
 Class {
 	#name : #ModelCreatorTest,
 	#superclass : #TestCase,
-	#instVars : [
-		'context'
-	],
 	#category : #'Stardust-Tests-ModelCreation'
 }
 
@@ -44,13 +41,6 @@ ModelCreatorTest >> newSingleSelectionView [
 ModelCreatorTest >> newTextField [
 
 	^ DummyTextInput new
-]
-
-{ #category : #running }
-ModelCreatorTest >> setUp [
-
-	super setUp.
-	context := ModelCreationContext new
 ]
 
 { #category : #'private - building' }
