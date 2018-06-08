@@ -16,13 +16,19 @@ ModelCreatorTest class >> isAbstract [
 { #category : #'private - asserting' }
 ModelCreatorTest >> assertModelAssembledBy: aCreator equals: anExpectedModel [
 
-	self assert: (self supervisorFor: aCreator) model equals: anExpectedModel
+	self assert: (self modelAssembledBy: aCreator) equals: anExpectedModel
 ]
 
 { #category : #'private - asserting' }
 ModelCreatorTest >> assertModelCreationFailedFor: aCreator [
 
 	self should: [ (self supervisorFor: aCreator) model ] raise: ModelCreationFailed
+]
+
+{ #category : #'private - asserting' }
+ModelCreatorTest >> modelAssembledBy: aCreator [
+
+	^ (self supervisorFor: aCreator) model
 ]
 
 { #category : #'private - building' }
