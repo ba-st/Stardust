@@ -28,16 +28,22 @@ ModelCreatorTest >> assertModelCreationFailedFor: aCreator [
 	self should: [ (self supervisorFor: aCreator) model ] raise: ModelCreationFailed
 ]
 
-{ #category : #'widget - support' }
-ModelCreatorTest >> multipleSelectionView [
+{ #category : #'private - building' }
+ModelCreatorTest >> newMultipleSelectionView [
 
 	^ DummyMultipleSelectionView new
 ]
 
-{ #category : #'widget - support' }
+{ #category : #'private - building' }
 ModelCreatorTest >> newSingleSelectionView [
 
 	^ DummySingleSelectionView new
+]
+
+{ #category : #'private - building' }
+ModelCreatorTest >> newTextField [
+
+	^ DummyTextInput new
 ]
 
 { #category : #running }
@@ -51,10 +57,4 @@ ModelCreatorTest >> setUp [
 ModelCreatorTest >> supervisorFor: aCreator [
 
 	^ ModelCreationSupervisor supervising: aCreator
-]
-
-{ #category : #'widget - support' }
-ModelCreatorTest >> textField [
-
-	^ DummyTextInput new
 ]

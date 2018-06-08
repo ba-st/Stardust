@@ -4,9 +4,6 @@ I'm a composite model creator. I will know another creators and combine/transfor
 Class {
 	#name : #CompositeModelCreator,
 	#superclass : #ModelCreator,
-	#pools : [
-		'Stardust'
-	],
 	#category : #Stardust
 }
 

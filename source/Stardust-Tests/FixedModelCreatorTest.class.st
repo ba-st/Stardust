@@ -26,8 +26,9 @@ FixedModelCreatorTest >> testChangeInModelHasNoEffect [
 	| creator |
 
 	creator := FixedModelCreator creating: 30 percent.
-	creator changeModelTo: 55 in: context.
-	self assert: (creator modelIn: context) equals: 30 percent
+	creator updateModelInViewsConsidering: 55.
+
+	self assertModelAssembledBy: creator equals: 30 percent
 ]
 
 { #category : #tests }
@@ -36,5 +37,5 @@ FixedModelCreatorTest >> testModelIn [
 	| creator |
 
 	creator := FixedModelCreator creating: 30 percent.
-	self assert: (creator modelIn: context) equals: 30 percent
+	self assertModelAssembledBy: creator equals: 30 percent
 ]

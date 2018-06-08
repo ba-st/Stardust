@@ -34,6 +34,24 @@ ModelCreationSequence >> changeModelTo: aModel in: aContext [
 ]
 
 { #category : #private }
+ModelCreationSequence >> configure: graphBuilder byRelatingRecursivelyDependenciesOf: aCreator keepingTrackOfProgressOn: aRecursionSet whileNotifyingChangesTo: aSupervisor [
+
+	(aRecursionSet includes: aCreator)
+		ifTrue: [ ^ self ].
+
+	aRecursionSet add: aCreator.
+	aCreator notifyChangesTo: aSupervisor.
+	aCreator
+		dependenciesDo: [ :dependency | 
+			graphBuilder connect: dependency to: aCreator.
+			self
+				configure: graphBuilder
+				byRelatingRecursivelyDependenciesOf: dependency
+				keepingTrackOfProgressOn: aRecursionSet
+				whileNotifyingChangesTo: aSupervisor ]
+]
+
+{ #category : #private }
 ModelCreationSequence >> creatorsAffectedByChangeIn: aCreator [
 
 	^ creationGraph verticesReachableFrom: aCreator
@@ -48,10 +66,10 @@ ModelCreationSequence >> initializeStartingAt: aTopLevelCreator notifyingUserInt
 	graphBuilder := DirectedGraphBuilder new.
 	graphBuilder addVertex: aTopLevelCreator.
 	self
-		relateDependenciesOf: aTopLevelCreator
-		configuring: graphBuilder
-		notifyingChangesTo: aSupervisor
-		alreadySeen: Set new.
+		configure: graphBuilder
+		byRelatingRecursivelyDependenciesOf: aTopLevelCreator
+		keepingTrackOfProgressOn: Set new
+		whileNotifyingChangesTo: aSupervisor.
 	creationGraph := graphBuilder build.
 	orderedCreators := creationGraph topologicalSort
 ]
@@ -80,24 +98,6 @@ ModelCreationSequence >> modelIn: aContext [
 	^ [ aContext modelFor: self topLevelCreator ]
 		on: ModelInContextNotFound
 		do: [ :signal | failuresByCreator ifNotEmpty: [ ModelCreationFailed signalObtainedFrom: failuresByCreator ] ]
-]
-
-{ #category : #private }
-ModelCreationSequence >> relateDependenciesOf: aCreator configuring: graphBuilder notifyingChangesTo: aSupervisor alreadySeen: aRecursionSet [
-
-	(aRecursionSet includes: aCreator)
-		ifTrue: [ ^ self ].
-
-	aRecursionSet add: aCreator.
-	aCreator notifyChangesTo: aSupervisor.
-	aCreator
-		dependenciesDo: [ :dependency | 
-			graphBuilder connect: dependency to: aCreator.
-			self
-				relateDependenciesOf: dependency
-				configuring: graphBuilder
-				notifyingChangesTo: aSupervisor
-				alreadySeen: aRecursionSet ]
 ]
 
 { #category : #private }

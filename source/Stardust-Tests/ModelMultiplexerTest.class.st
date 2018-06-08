@@ -3,7 +3,7 @@ I'm a test case
 "
 Class {
 	#name : #ModelMultiplexerTest,
-	#superclass : #ModelCreatorTest,
+	#superclass : #CompositeModelCreatorTest,
 	#instVars : [
 		'singleSelectionView',
 		'picker'
@@ -30,7 +30,7 @@ ModelMultiplexerTest >> testCanCreate [
 
 	| creator |
 
-	creator := ModelMultiplexer multiplexing: (Array with: (FixedModelCreator creating: 1) with: (FixedModelCreator creating: $A)) selectingFrom: picker.
+	creator := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 1) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
 
 	self
 		assert: (creator canCreate: 1);
@@ -44,15 +44,15 @@ ModelMultiplexerTest >> testChangingModelToInvalidOptionRaisesError [
 
 	| creator |
 
-	creator := ModelMultiplexer multiplexing: (Array with: (FixedModelCreator creating: 1) with: (FixedModelCreator creating: $A)) selectingFrom: picker.
+	creator := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 99) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
+	
+	picker updateModelInViewsConsidering: '99'.
 
-	context changeModelFor: picker to: '1'.
+	self assertModelAssembledBy: creator equals: 99.
 
-	self assert: (creator modelIn: context) equals: 1.
+	self should: [ creator updateModelInViewsConsidering: 3 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'More than one valid model was found' ].
 
-	self should: [ creator changeModelTo: 3 in: self ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'More than one valid model was found' ].
-
-	self assert: (creator modelIn: context) equals: 1
+	self assertModelAssembledBy: creator equals: 99
 ]
 
 { #category : #tests }
@@ -60,25 +60,25 @@ ModelMultiplexerTest >> testChangingModelToValidOption [
 
 	| multiplexer |
 
-	multiplexer := ModelMultiplexer multiplexing: (Array with: (FixedModelCreator creating: 1) with: (FixedModelCreator creating: $A)) selectingFrom: picker.
-	context changeModelFor: picker to: '1'.
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 1) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
+	picker updateModelInViewsConsidering: '1'.
 
-	self assert: (multiplexer modelIn: self) equals: 1.
+	self assertModelAssembledBy: multiplexer equals: 1.
 
-	context changeModelFor: multiplexer to: $A.
-	self assert: (multiplexer modelIn: self) equals: $A
+	multiplexer updateModelInViewsConsidering: $A.
+	self assertModelAssembledBy: multiplexer equals: $A
 ]
 
 { #category : #tests }
 ModelMultiplexerTest >> testModelChangesWhenViewSelectionChanges [
 
-	| creator |
+	| multiplexer |
 
-	creator := ModelMultiplexer multiplexing: (Array with: (FixedModelCreator creating: 150) with: (FixedModelCreator creating: 232)) selectingFrom: picker.
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 150) with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
 
 	singleSelectionView chooseElementAt: 1.
-	self assert: (creator modelIn: self) equals: 150.
+	self assertModelAssembledBy: multiplexer equals: 150.
 
 	singleSelectionView chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 232
+	self assertModelAssembledBy: multiplexer equals: 232
 ]

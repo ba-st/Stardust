@@ -12,7 +12,7 @@ ContainerControllerTest >> testCanCreate [
 
 	| creator |
 
-	creator := ContainerController named: 'First Name' controlling: self textField.
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
 
 	self
 		assert: (creator canCreate: '');
@@ -24,10 +24,13 @@ ContainerControllerTest >> testChangeModelToIn [
 
 	| creator |
 
-	creator := ContainerController named: 'First Name' controlling: self textField.
-	creator changeModelTo: 'Gabriel' in: context.
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
 
-	self assert: (creator modelIn: context) equals: 'Gabriel'
+	self assertModelAssembledBy: creator equals: ''.
+
+	creator updateModelInViewsConsidering: 'Gabriel'.
+
+	self assertModelAssembledBy: creator equals: 'Gabriel'
 ]
 
 { #category : #tests }
@@ -35,6 +38,7 @@ ContainerControllerTest >> testModelIn [
 
 	| creator |
 
-	creator := ContainerController named: 'First Name' controlling: self textField.
-	self assert: (creator modelIn: context) isEmpty
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
+	
+	self assertModelAssembledBy: creator equals: ''
 ]

@@ -16,7 +16,7 @@ CompositeModelCreatorTest class >> isAbstract [
 { #category : #'private - building' }
 CompositeModelCreatorTest >> newContainerControllerNamed: aName [
 
-	^ ContainerController named: aName controlling: self textField
+	^ ContainerController named: aName controlling: self newTextField
 ]
 
 { #category : #'private - building' }

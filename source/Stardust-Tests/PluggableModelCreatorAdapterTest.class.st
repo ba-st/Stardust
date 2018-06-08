@@ -12,8 +12,8 @@ PluggableModelCreatorAdapterTest >> testAdaptedModelConsidersPluggableCriteria [
 
 	| creator adapter |
 
-	creator := ContainerController named: 'text' controlling: self textField.
+	creator := ContainerController named: 'text' controlling: self newTextField.
 	adapter := PluggableModelCreatorAdapter adapting: creator with: [ :adapteeModel | adapteeModel asUppercase ].
-	context changeModelFor: creator to: 'some lowercase input'.
-	self assert: (adapter modelIn: context) equals: 'SOME LOWERCASE INPUT'
+	creator updateModelInViewsConsidering: 'some lowercase input'.
+	self assertModelAssembledBy: adapter equals: 'SOME LOWERCASE INPUT'
 ]
