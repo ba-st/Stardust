@@ -5,21 +5,34 @@ Class {
 	#name : #DummyToggleView,
 	#superclass : #Object,
 	#instVars : [
-		'interested'
+		'interested',
+		'validModels'
 	],
 	#category : #'Stardust-Tests-Support'
 }
 
 { #category : #'instance creation' }
-DummyToggleView class >> new [
+DummyToggleView class >> onModel: anOnModel offModel: anOffModel [
 
-	^ super new initialize
+	^self new initializeOnModel: anOnModel offModel: anOffModel
+]
+
+{ #category : #'selection protocol' }
+DummyToggleView >> allows: anObject [
+
+	^ validModels includes: anObject
+]
+
+{ #category : #'selection protocol' }
+DummyToggleView >> currentSelection [
+
+	^ validModels current
 ]
 
 { #category : #initialization }
-DummyToggleView >> initialize [
+DummyToggleView >> initializeOnModel: anOnModel offModel: anOffModel [
 
-	super initialize.
+	validModels := CircularIterator cyclingOver: {anOffModel. anOnModel}.
 	interested := Set new
 ]
 
@@ -38,5 +51,6 @@ DummyToggleView >> notifyInterested [
 { #category : #'selection protocol' }
 DummyToggleView >> toggleCurrentSelection [
 
+	validModels next.
 	self notifyInterested
 ]
