@@ -1,3 +1,8 @@
+"
+I'm a binary choice picker. 
+I interact with some UI component that needs to implement ModelCreationAPI >> #BinaryChoice .
+I support the use case of selecting one of two valid options. Typical UI components compatible with me are toggles and check boxes.
+"
 Class {
 	#name : #BinaryChoiceModelPicker,
 	#superclass : #ModelCreator,
@@ -5,14 +10,17 @@ Class {
 		'name',
 		'view'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }
-BinaryChoiceModelPicker class >> named: aName obtainingSelectionFrom: aBinaryChoiceView [
+BinaryChoiceModelPicker class >> named: aName obtainingSelectionFrom: aBinaryChoiceUIComponent [
 
-	self assertNotEmpty: aName.
-	^ self new initializeNamed: aName obtainingSelectionFrom: aBinaryChoiceView
+	self
+		assertNotEmpty: aName;
+		assert: aBinaryChoiceUIComponent implements: ModelCreationAPI >> #BinaryChoice.
+
+	^ self new initializeNamed: aName obtainingSelectionFrom: aBinaryChoiceUIComponent
 ]
 
 { #category : #testing }
@@ -21,7 +29,7 @@ BinaryChoiceModelPicker >> canCreate: aModel [
 	^ view allows: aModel
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 BinaryChoiceModelPicker >> changeModelTo: anOption in: aContext [
 
 	(self canCreate: anOption)
@@ -31,12 +39,6 @@ BinaryChoiceModelPicker >> changeModelTo: anOption in: aContext [
 		ifFalse: [ view toggleCurrentSelection ]
 ]
 
-{ #category : #enumerating }
-BinaryChoiceModelPicker >> dependenciesDo: aBlock [
-
-	
-]
-
 { #category : #initialization }
 BinaryChoiceModelPicker >> initializeNamed: aName obtainingSelectionFrom: aBinaryChoiceView [
 
@@ -44,7 +46,7 @@ BinaryChoiceModelPicker >> initializeNamed: aName obtainingSelectionFrom: aBinar
 	view := aBinaryChoiceView
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 BinaryChoiceModelPicker >> modelIn: aContext [
 
 	^ view currentSelection

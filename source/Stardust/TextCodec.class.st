@@ -1,70 +1,73 @@
+"
+I'm a composite model creator. I can create a model parsing the string provided by the creator I know, and do the opposite formatting some object into a string.
+"
 Class {
 	#name : #TextCodec,
-	#superclass : #ModelCreator,
+	#superclass : #CompositeModelCreator,
 	#instVars : [
-		'creator',
-		'parser',
-		'formatter'
+		'textCreator',
+		'decodingBlock',
+		'encodingBlock'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
+
+{ #category : #'instance creation' }
+TextCodec class >> workingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock [
+
+	^ self new initializeWorkingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock
+]
 
 { #category : #'instance creation' }
 TextCodec class >> workingWith: aCreator parsingWith: aParser formattingWith: aFormatter [
 
-	^ self new initializeWorkingWith: aCreator parsingWith: aParser formattingWith: aFormatter
+	^ self workingWith: aCreator decodingWith: [ :string | aParser parse: string ] encodingWith: [ :object | aFormatter format: object ]
 ]
 
 { #category : #testing }
 TextCodec >> canCreate: anObject [
 
-	^ [ (parser parse: (formatter format: anObject)) = anObject ]
-		on: InstanceCreationFailed , ParsingFailed
+	^ [ (decodingBlock value: (encodingBlock value: anObject)) = anObject ]
+		on: InstanceCreationFailed , DecodingFailed
 		do: [ :aSignal | aSignal return: false ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 TextCodec >> changeModelTo: aModel in: aContext [
 
-	aContext changeModelFor: creator to: (formatter format: aModel)
+	aContext changeModelFor: textCreator to: (encodingBlock value: aModel)
 ]
 
 { #category : #enumerating }
 TextCodec >> dependenciesDo: aBlock [
 
-	^ aBlock value: creator
+	^ aBlock value: textCreator
 ]
 
 { #category : #initialization }
-TextCodec >> initializeWorkingWith: aCreator parsingWith: aParser formattingWith: aFormatter [
+TextCodec >> initializeWorkingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock [
 
-	creator := aCreator.
-	parser := aParser.
-	formatter := aFormatter
+	textCreator := aCreator.
+	decodingBlock := aDecodingBlock.
+	encodingBlock := anEncodingBlock
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 TextCodec >> modelIn: aContext [
 
-	^ [ parser parse: (aContext modelFor: creator) ]
-		on: ParsingFailed
-		do: [ :signal | ModelCreationFailed signal: signal messageText ]
+	^ [ decodingBlock value: (aContext modelFor: textCreator) ]
+		on: DecodingFailed
+		do: [ :signal | InstanceCreationFailed signal: signal messageText ]
 ]
 
 { #category : #accessing }
 TextCodec >> name [
 
-	^ creator name
-]
-
-{ #category : #notifying }
-TextCodec >> notifyChangesTo: aSupervisor [
-
-	
+	^ textCreator name
 ]
 
 { #category : #printing }
 TextCodec >> printOn: aStream [
 
-	aStream nextPutAll: ('Codec para <1s>' expandMacrosWith: self name)
+	aStream nextPutAll: ('Codec for <1s>' expandMacrosWith: self name)
 ]

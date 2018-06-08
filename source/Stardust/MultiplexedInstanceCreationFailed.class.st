@@ -1,7 +1,7 @@
 Class {
 	#name : #MultiplexedInstanceCreationFailed,
 	#superclass : #InstanceCreationFailed,
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
 
 { #category : #signalling }

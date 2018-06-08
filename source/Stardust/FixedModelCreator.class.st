@@ -1,10 +1,14 @@
+"
+I'm a fixed model creator. 
+I don't interact with any UI component, just returns the model previosuly configured on me.
+"
 Class {
 	#name : #FixedModelCreator,
 	#superclass : #ModelCreator,
 	#instVars : [
 		'model'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }
@@ -19,18 +23,10 @@ FixedModelCreator >> canCreate: aModel [
 	^ model = aModel
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 FixedModelCreator >> changeModelTo: aModel in: aContext [
 
-	"Como es un modelo fijo no hago nada.
-	No devuelvo un ProgrammingError porque un objeto que lo conozca podría estar enviando este mensaje para configurar sus componentes.
-	-mtabacman"
-
-	
-]
-
-{ #category : #enumerating }
-FixedModelCreator >> dependenciesDo: aBlock [
+	"I never change the model I know"
 
 	
 ]
@@ -41,7 +37,7 @@ FixedModelCreator >> initializeCreating: aModel [
 	model := aModel
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 FixedModelCreator >> modelIn: aContext [
 
 	^ model

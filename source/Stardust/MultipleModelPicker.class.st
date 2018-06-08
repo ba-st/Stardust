@@ -1,21 +1,36 @@
+"
+I'm a multiple model picker. 
+I interact with some UI component that needs to implement ModelCreationAPI >> #MultipleSelection .
+I support the use case of selecting several of the valid options. Typical UI components compatible with me are tables and list boxes.
+"
 Class {
 	#name : #MultipleModelPicker,
 	#superclass : #ModelCreator,
 	#instVars : [
 		'view',
-		'name'
+		'name',
+		'modelPickingPolicy'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }
-MultipleModelPicker class >> named: aName obtainingSelectionFrom: aView [
+MultipleModelPicker class >> named: aName obtainingSelectionFrom: aView accordingTo: aModelPickingPolicy [
 
-	self assertNotEmpty: aName.
-	^ self new initializeNamed: aName obtainingSelectionFrom: aView
+	self
+		assertNotEmpty: aName;
+		assert: aView implements: ModelCreationAPI >> #MultipleSelection.
+
+	^ self new initializeNamed: aName obtainingSelectionFrom: aView accordingTo: aModelPickingPolicy
 ]
 
-{ #category : #'selection protocol' }
+{ #category : #'instance creation' }
+MultipleModelPicker class >> named: aName pickingFrom: aView [
+
+	^ self named: aName obtainingSelectionFrom: aView accordingTo: PickModelPolicy new
+]
+
+{ #category : #configuring }
 MultipleModelPicker >> allowAnyOf: aCollection [
 
 	view allowAnyOf: aCollection
@@ -24,41 +39,33 @@ MultipleModelPicker >> allowAnyOf: aCollection [
 { #category : #testing }
 MultipleModelPicker >> canCreate: aModelCollection [
 
-	^ aModelCollection allSatisfy: [ :aModelElement | view allowsAnySatisfying: [ :element | element representedObject = aModelElement ] ]
+	^ aModelCollection allSatisfy: [ :aModelElement | view allowsAnySatisfying: [ :uiElement | modelPickingPolicy is: aModelElement equalTo: uiElement ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #disassembling }
 MultipleModelPicker >> changeModelTo: aCollection in: aContext [
 
-	view
-		choose: aCollection
-		matchedUsing: [ :model :selectableElement | model = selectableElement representedObject ]
-		ifUnable: [ ObjectNotFound signal: 'Selected elements are not valid' ]
+	view choose: aCollection matchedUsing: [ :model :selectableElement | modelPickingPolicy is: selectableElement equalTo: model ] ifUnable: [ ObjectNotFound signal: 'Selected elements are not valid' ]
 ]
 
-{ #category : #enumerating }
-MultipleModelPicker >> dependenciesDo: aBlock [
-
-	
-]
-
-{ #category : #'selection protocol' }
+{ #category : #configuring }
 MultipleModelPicker >> disallowAll [
 
 	view disallowAll
 ]
 
 { #category : #initialization }
-MultipleModelPicker >> initializeNamed: aName obtainingSelectionFrom: aView [
+MultipleModelPicker >> initializeNamed: aName obtainingSelectionFrom: aView accordingTo: aModelPickingPolicy [
 
 	name := aName.
-	view := aView
+	view := aView.
+	modelPickingPolicy := aModelPickingPolicy
 ]
 
-{ #category : #accessing }
+{ #category : #assembling }
 MultipleModelPicker >> modelIn: aContext [
 
-	^ view currentSelection collect: [ :element | element representedObject ]
+	^ view currentSelection collect: [ :uiElement | modelPickingPolicy pickFrom: uiElement ]
 ]
 
 { #category : #accessing }

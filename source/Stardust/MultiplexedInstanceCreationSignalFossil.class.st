@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'userAwareDescription'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
 
 { #category : #'instance creation' }
@@ -17,6 +17,12 @@ MultiplexedInstanceCreationSignalFossil class >> with: errorDescription [
 MultiplexedInstanceCreationSignalFossil >> initializeWith: errorDescription [
 
 	userAwareDescription := errorDescription
+]
+
+{ #category : #accessing }
+MultiplexedInstanceCreationSignalFossil >> messageText [
+
+	^ self userAwareDescription
 ]
 
 { #category : #handling }

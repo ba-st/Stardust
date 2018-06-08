@@ -1,29 +1,38 @@
+"
+I'm a test case
+"
 Class {
 	#name : #ModelMultiplexerTest,
-	#superclass : #TestCase,
+	#superclass : #CompositeModelCreatorTest,
 	#instVars : [
-		'view'
+		'singleSelectionView',
+		'picker'
 	],
-	#category : 'Stardust-Tests-ModelCreator'
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #'private - accessing' }
 ModelMultiplexerTest >> modelFor: aSingleModelPicker [
 
-	^ view currentSelectionIfNone: [ self fail ]
+	^ singleSelectionView currentSelectionIfNone: [ self fail ]
 ]
 
 { #category : #running }
 ModelMultiplexerTest >> setUp [
 
 	super setUp.
-	view := SingleSelectionViewExample new
+	singleSelectionView := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Test' pickingFrom: singleSelectionView
 ]
 
-{ #category : #'private - accessing' }
-ModelMultiplexerTest >> singleModelPicker [
+{ #category : #tests }
+ModelMultiplexerTest >> testAccessing [
 
-	^ SingleModelPicker named: 'Test' pickingFrom: view
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	self assert: multiplexer name equals: picker name
 ]
 
 { #category : #tests }
@@ -31,17 +40,13 @@ ModelMultiplexerTest >> testCanCreate [
 
 	| creator |
 
-	creator := ModelMultiplexer
-		multiplexing:
-			(Array
-				with: (FixedModelCreator creating: 1)
-				with: (FixedModelCreator creating: 2))
-		selectingFrom: self singleModelPicker.
+	creator := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 1) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
 
 	self
 		assert: (creator canCreate: 1);
-		assert: (creator canCreate: 2);
-		deny: (creator canCreate: 3)
+		assert: (creator canCreate: $A);
+		deny: (creator canCreate: 3);
+		deny: (creator canCreate: 'ZZ')
 ]
 
 { #category : #tests }
@@ -49,56 +54,63 @@ ModelMultiplexerTest >> testChangingModelToInvalidOptionRaisesError [
 
 	| creator |
 
-	creator := ModelMultiplexer
-		multiplexing:
-			(Array
-				with: (FixedModelCreator creating: 1)
-				with: (FixedModelCreator creating: 2))
-		selectingFrom: self singleModelPicker.
-	view chooseElementAt: 1.
+	creator := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 99) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
+	
+	picker updateModelInViewsConsidering: '99'.
 
-	self assert: (creator modelIn: self) equals: 1.
-	self
-		should: [ creator changeModelTo: 3 in: self ]
-		raise: Error
-		withDescription: 'More than one vaid model was found'.
-	self assert: (creator modelIn: self) equals: 1
+	self assertModelAssembledBy: creator equals: 99.
+
+	self should: [ creator updateModelInViewsConsidering: 3 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'More than one valid model was found' ].
+
+	self assertModelAssembledBy: creator equals: 99
 ]
 
 { #category : #tests }
 ModelMultiplexerTest >> testChangingModelToValidOption [
 
-	| creator |
+	| multiplexer |
 
-	creator := ModelMultiplexer
-		multiplexing:
-			(Array
-				with: (FixedModelCreator creating: 1)
-				with: (FixedModelCreator creating: 2))
-		selectingFrom: self singleModelPicker.
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 1) with: (self newFixedCreatorFor: $A)) selectingFrom: picker.
+	picker updateModelInViewsConsidering: '1'.
 
-	view chooseElementAt: 1.
-	self assert: (creator modelIn: self) equals: 1.
+	self assertModelAssembledBy: multiplexer equals: 1.
 
-	creator changeModelTo: 2 in: self.
-	self assert: (creator modelIn: self) equals: 2
+	multiplexer updateModelInViewsConsidering: $A.
+	self assertModelAssembledBy: multiplexer equals: $A
 ]
 
 { #category : #tests }
 ModelMultiplexerTest >> testModelChangesWhenViewSelectionChanges [
 
-	| creator |
+	| multiplexer |
 
-	creator := ModelMultiplexer
-		multiplexing:
-			(Array
-				with: (FixedModelCreator creating: 150)
-				with: (FixedModelCreator creating: 232))
-		selectingFrom: self singleModelPicker.
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newFixedCreatorFor: 150) with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
 
-	view chooseElementAt: 1.
-	self assert: (creator modelIn: self) equals: 150.
+	singleSelectionView chooseElementAt: 1.
+	self assertModelAssembledBy: multiplexer equals: 150.
 
-	view chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 232
+	singleSelectionView chooseElementAt: 2.
+	self assertModelAssembledBy: multiplexer equals: 232
+]
+
+{ #category : #tests }
+ModelMultiplexerTest >> testModelWhenActiveBranchFail [
+
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	singleSelectionView chooseElementAt: 1.
+	self assertModelCreationFailedFor: multiplexer
+]
+
+{ #category : #tests }
+ModelMultiplexerTest >> testModelWhenInactiveBranchFail [
+
+	| multiplexer |
+
+	multiplexer := ModelMultiplexer multiplexing: (Array with: (self newSingleModelPickerNamed: 'Discount') with: (self newFixedCreatorFor: 232)) selectingFrom: picker.
+
+	singleSelectionView chooseElementAt: 2.
+	self assertModelAssembledBy: multiplexer  equals: 232
 ]

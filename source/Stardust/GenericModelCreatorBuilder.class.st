@@ -7,14 +7,8 @@ Class {
 		'name',
 		'creatorInstantiator'
 	],
-	#category : #'Stardust-ModelCreator'
+	#category : #Stardust
 }
-
-{ #category : #'instance creation' }
-GenericModelCreatorBuilder class >> named: aName adaptingModelOf: aModelCreator using: aBlock [
-
-	^ (self named: aName building: aBlock accessedOnlyUsing: #()) value: aModelCreator
-]
 
 { #category : #'instance creation' }
 GenericModelCreatorBuilder class >> named: aName building: aModelClass accessedOnlyUsing: aCollectionOfSelectors [
@@ -46,18 +40,10 @@ GenericModelCreatorBuilder class >> named: aName building: aModelClass accessedU
 		creatingInstanceOfCreatorWith: anInstanceCreationSelector
 ]
 
-{ #category : #'instance creation' }
-GenericModelCreatorBuilder class >> named: aName using: aBlock [
-
-	^ (self named: aName building: aBlock accessedOnlyUsing: #()) value
-]
-
 { #category : #'private-accessing' }
 GenericModelCreatorBuilder >> creatorInstanceUsing: instanceCreationArguments [
 
-	"Para compatibilidad con GemStone. -mtabacman"
-
-	^ GenericModelCreator perform: creatorInstantiator withArguments: instanceCreationArguments
+^ GenericModelCreator perform: creatorInstantiator withArguments: instanceCreationArguments
 ]
 
 { #category : #'reflective operations' }
@@ -74,7 +60,7 @@ GenericModelCreatorBuilder >> doesNotUnderstand: aMessage [
 				asArray)
 ]
 
-{ #category : #'private-accessing' }
+{ #category : #initialization }
 GenericModelCreatorBuilder >> initializeNamed: aName building: aModelClass accessedUsing: aCollectionOfSelectors creatingInstanceOfCreatorWith: anInstanceCreationSelector [
 
 	name := aName.
@@ -86,22 +72,17 @@ GenericModelCreatorBuilder >> initializeNamed: aName building: aModelClass acces
 { #category : #printing }
 GenericModelCreatorBuilder >> printOn: aStream [
 
-	aStream nextPutAll: (#'Creation of <1s> using <2s>' expandMacrosWith: modelClass asString with: (CollectionFormatter new format: accessors))
+	aStream nextPutAll: (#'Creation of <1s> using <2p>' expandMacrosWith: modelClass asString with: accessors)
 ]
 
 { #category : #printing }
 GenericModelCreatorBuilder >> printString [
 
-	"Implementado para evitar que lo agarre el DNU. -mtabacman"
-
 	^ String streamContents: [ :stream | self printOn: stream ]
 ]
 
 { #category : #'reflective operations' }
-GenericModelCreatorBuilder >> respondsTo: aSelector [
+GenericModelCreatorBuilder >> respondsTo: aSymbol [
 
-	^ (self class canUnderstand: aSelector)
-		or: [ [ modelClass respondsTo: aSelector ]
-				on: InstanceCreationFailed
-				do: [ :aSignal | aSignal return: false ] ]
+	^ (self class canUnderstand: aSymbol) or: [ modelClass respondsTo: aSymbol ]
 ]

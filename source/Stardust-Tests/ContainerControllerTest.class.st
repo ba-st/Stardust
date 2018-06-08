@@ -1,27 +1,44 @@
+"
+I'm a test case
+"
 Class {
 	#name : #ContainerControllerTest,
-	#superclass : #TestCase,
-	#category : 'Stardust-Tests-ModelCreator'
+	#superclass : #ModelCreatorTest,
+	#category : #'Stardust-Tests-ModelCreation'
 }
 
 { #category : #tests }
-ContainerControllerTest >> testAfterChangeOfContentsModelObtainedRepresentsNewContents [
+ContainerControllerTest >> testCanCreate [
 
 	| creator |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	creator changeModelTo: 'new text' in: self.
-	self assert: (creator modelIn: self) equals: 'new text'
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
+
+	self
+		assert: (creator canCreate: '');
+		assert: (creator canCreate: 'Gabriel')
 ]
 
 { #category : #tests }
-ContainerControllerTest >> testAfterChangeOfContentsModelPreviouslyObtainedIsUnaffected [
+ContainerControllerTest >> testChangeModelToIn [
 
-	| previousModel creator |
+	| creator |
 
-	creator := ContainerController named: 'text' controlling: TextInputViewExample new.
-	creator changeModelTo: 'old text' in: self.
-	previousModel := creator modelIn: self.
-	creator changeModelTo: 'new text' in: self.
-	self assert: previousModel equals: 'old text'
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
+
+	self assertModelAssembledBy: creator equals: ''.
+
+	creator updateModelInViewsConsidering: 'Gabriel'.
+
+	self assertModelAssembledBy: creator equals: 'Gabriel'
+]
+
+{ #category : #tests }
+ContainerControllerTest >> testModelIn [
+
+	| creator |
+
+	creator := ContainerController named: 'First Name' controlling: self newTextField.
+	
+	self assertModelAssembledBy: creator equals: ''
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #ModelInContextNotFound,
+	#name : #DecodingFailed,
 	#superclass : #Error,
 	#category : #Stardust
 }

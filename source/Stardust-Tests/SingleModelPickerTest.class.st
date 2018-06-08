@@ -1,157 +1,129 @@
+"
+I'm a test case
+"
 Class {
 	#name : #SingleModelPickerTest,
-	#superclass : #TestCase,
-	#category : 'Stardust-Tests-ModelCreator'
+	#superclass : #ModelCreatorTest,
+	#category : #'Stardust-Tests-ModelCreation'
 }
-
-{ #category : #'private - accessing' }
-SingleModelPickerTest >> selectableModelFor: aModel [
-
-	^ UISelectableModel representing: aModel with: aModel asString
-]
 
 { #category : #tests }
 SingleModelPickerTest >> testAfterChangeOfSelectionModelObtainedRepresentsNewSelection [
 
-	| view creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: view.
-	creator allowAnyOf: (Array with: (self selectableModelFor: 7)).
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letter' pickingFrom: view.
+	picker allowAnyOf: #(G).
 	view chooseElementAt: 1.
-	self assert: (creator modelIn: self) equals: 7
+	self assertModelAssembledBy: picker equals: #G
 ]
 
 { #category : #tests }
-SingleModelPickerTest >> testAfterChangeOfSelectionModelPreviouslyObtainedIsUnaffected [
+SingleModelPickerTest >> testCanCreate [
 
-	| view previousModel creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: view.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 3)
-				with: (self selectableModelFor: 7)).
-	view chooseElementAt: 1.
-	previousModel := creator modelIn: self.
-	view chooseElementAt: 2.
-	self assert: previousModel equals: 3
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letter' pickingFrom: view.
+	picker allowAnyOf: #(G).
+
+	self
+		assert: (picker canCreate: #G);
+		deny: (picker canCreate: #Z)
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testChangeOfSelectionIsNotAllowedIfSelectionIsNotAnAvailableOption [
 
-	| creator |
+	| picker |
 
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: SingleSelectionViewExample new.
-	self should: [ creator changeModelTo: 4 in: self ] raise: ObjectNotFound.
-	creator allowAnyOf: (Array with: (self selectableModelFor: 1)).
-	self should: [ creator changeModelTo: 4 in: self ] raise: ObjectNotFound
+	picker := SingleModelPicker named: 'Letter' pickingFrom: self newSingleSelectionView.
+
+	self should: [ picker updateModelInViewsConsidering: #D ] raise: ObjectNotFound.
+
+	picker allowAnyOf: #(A).
+	self should: [ picker updateModelInViewsConsidering: #D ] raise: ObjectNotFound
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testCreationIsNotAllowedWhenThereIsNoSelection [
 
-	| creator |
+	| picker |
 
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: SingleSelectionViewExample new.
-	self should: [ creator modelIn: self ] raise: ModelCreationFailed
+	picker := SingleModelPicker named: 'Letter' pickingFrom: self newSingleSelectionView.
+
+	self assertModelCreationFailedFor: picker
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testModelIsTheSameAsViewSelection [
 
-	| view creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: view.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 1)
-				with: (self selectableModelFor: 3)
-				with: (self selectableModelFor: 5)).
-	creator changeModelTo: 5 in: self.
-	self assert: (creator modelIn: self) equals: 5.
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letter' pickingFrom: view.
+
+	picker allowAnyOf: #(A B C).
+	picker updateModelInViewsConsidering: #B.
+	self
+		assertModelAssembledBy: picker equals: #B;
+		assert: view chosenIndex equals: 2.
+
 	view chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 3.
-	creator changeModelTo: 5 in: self.
+	self assertModelAssembledBy: picker equals: #B.
+
+	picker updateModelInViewsConsidering: #C.
 	self assert: view chosenIndex equals: 3
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testSelectionIsKeptIfIncludedInNewOptions [
 
-	| view creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker
-		named: 'selection'
-		obtainingSelectionFrom: view.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 1)
-				with: (self selectableModelFor: 2)
-				with: (self selectableModelFor: 3)).
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letters' pickingFrom: view.
+
+	picker allowAnyOf: #(A B C).
 	view chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 2.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 2)
-				with: (self selectableModelFor: 6)
-				with: (self selectableModelFor: 9)).
-	self assert: (creator modelIn: self) equals: 2
+	self assertModelAssembledBy: picker equals: #B.
+
+	picker allowAnyOf: #(X B Z).
+	self assertModelAssembledBy: picker equals: #B
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testSelectionIsLostIfNotIncludedInNewOptions [
 
-	| view creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: view.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 1)
-				with: (self selectableModelFor: 2)
-				with: (self selectableModelFor: 3)).
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letter' pickingFrom: view.
+
+	picker allowAnyOf: #(A B C).
 	view chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 2.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 1)
-				with: (self selectableModelFor: 6)
-				with: (self selectableModelFor: 9)).
-	self should: [ creator modelIn: self ] raise: ModelCreationFailed
+
+	self assertModelAssembledBy: picker equals: #B.
+
+	picker allowAnyOf: #(D J L).
+	self assertModelCreationFailedFor: picker
 ]
 
 { #category : #tests }
 SingleModelPickerTest >> testSelectionIsLostIfOptionsAreCleared [
 
-	| view creator |
+	| view picker |
 
-	view := SingleSelectionViewExample new.
-	creator := SingleModelPicker named: 'selection' obtainingSelectionFrom: view.
-	creator
-		allowAnyOf:
-			(Array
-				with: (self selectableModelFor: 1)
-				with: (self selectableModelFor: 2)
-				with: (self selectableModelFor: 3)).
+	view := self newSingleSelectionView.
+	picker := SingleModelPicker named: 'Letter' pickingFrom: view.
+	picker allowAnyOf: #(A B C).
+
+	"Simulate the user is selecting the second option"
 	view chooseElementAt: 2.
-	self assert: (creator modelIn: self) equals: 2.
-	creator disallowAll.
-	self should: [ creator modelIn: self ] raise: ModelCreationFailed
+
+	self assertModelAssembledBy: picker equals: #B.
+
+	picker disallowAll.
+	self assertModelCreationFailedFor: picker
 ]
