@@ -13,9 +13,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-TextCodec class >> workingWith: aCreator decodingWith: aDecodingAction encodingWith: anEncodingAction [
+TextCodec class >> workingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock [
 
-	^ self new initializeWorkingWith: aCreator decodingWith: aDecodingAction encodingWith: anEncodingAction
+	^ self new initializeWorkingWith: aCreator decodingWith: aDecodingBlock encodingWith: anEncodingBlock
 ]
 
 { #category : #'instance creation' }

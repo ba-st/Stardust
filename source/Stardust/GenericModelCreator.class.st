@@ -15,42 +15,39 @@ Class {
 }
 
 { #category : #'private - asserting' }
-GenericModelCreator class >> assertSizeOf: aModelCreatorCollection equalsArgumentCountOf: aSelector [
+GenericModelCreator class >> assertSizeOf: creators equalsArgumentCountOf: instanceCreationSelector [
 
 	AssertionChecker
-		enforce: [ aModelCreatorCollection size = aSelector argumentCount ]
-		because:
-			('The amount of model creators (<1p>) should match the amount of arguments (<2p>) on the instance creation message: <3p>'
-				expandMacrosWith: aModelCreatorCollection size
-				with: aSelector argumentCount
-				with: aSelector)
+		enforce: [ creators size = instanceCreationSelector argumentCount ]
+		because: [ 'The amount of model creators (<1p>) should match the amount of arguments (<2p>) on the instance creation message: <3p>'
+				expandMacrosWith: creators size
+				with: instanceCreationSelector argumentCount
+				with: instanceCreationSelector ]
 		raising: InstanceCreationFailed
 ]
 
 { #category : #'private - asserting' }
-GenericModelCreator class >> assertSizeOf: aModelCreatorCollection equalsSizeOf: aSelectorCollection [
+GenericModelCreator class >> assertSizeOf: creators equalsSizeOf: accessors [
 
 	AssertionChecker
-		enforce: [ aModelCreatorCollection size = aSelectorCollection size ]
-		because:
-			('The amount of model creators (<1p>) should match the amount of accessors (<2p>) used to set the model.'
-				expandMacrosWith: aModelCreatorCollection size
-				with: aSelectorCollection size)
+		enforce: [ creators size = accessors size ]
+		because: [ 'The amount of model creators (<1p>) should match the amount of accessors (<2p>) used to set the model.' expandMacrosWith: creators size with: accessors size ]
 		raising: InstanceCreationFailed
 ]
 
 { #category : #'instance creation' }
-GenericModelCreator class >> named: aName creatingInstancesOf: modelClass sending: aSelector with: aModelCreatorCollection accessingModelOnlyWith: aSelectorCollection [
+GenericModelCreator class >> named: aName creatingInstancesOf: modelClass sending: instanceCreationSelector with: childCreators accessingModelOnlyWith: accessors [
 
-	self assertNotEmpty: aName.
-	self assertSizeOf: aModelCreatorCollection equalsArgumentCountOf: aSelector.
+	self
+		assertNotEmpty: aName;
+		assertSizeOf: childCreators equalsArgumentCountOf: instanceCreationSelector.
 
 	^ self new
 		initializeNamed: aName
 		creatingInstancesOf: modelClass
-		sending: aSelector
-		with: aModelCreatorCollection
-		accessingModelOnlyWith: aSelectorCollection
+		sending: instanceCreationSelector
+		with: childCreators
+		accessingModelOnlyWith: accessors
 ]
 
 { #category : #'instance creation' }
