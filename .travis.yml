@@ -1,15 +1,26 @@
 language: smalltalk
 sudo: false
-
 os:
   - linux
-
 smalltalk:
   - Pharo64-7.0
   - Pharo-7.0
   - Pharo-6.1
-
 matrix:
   allow_failures:
   - smalltalk: Pharo64-7.0
   - smalltalk: Pharo-7.0
+  fast_finish: true
+before_deploy:
+  - cp "${SMALLTALK_CI_IMAGE}" "Stardust.image"
+  - cp "${SMALLTALK_CI_CHANGES}" "Stardust.changes"
+  - zip -q "${TRAVIS_BRANCH}-${TRAVIS_SMALLTALK_VERSION}.zip" "Stardust.image" "Stardust.changes"
+deploy:
+  provider: releases
+  api_key:
+    secure: 0A8dVZIgLKvSR1EqM/U5WQtWmlpnQ1uzpPc49yhFYpbiCVcMFYW5FJfhqwQn2E0eOOhTL2gIQkakPG80+LGCqtEmzPbU6PhtqiCIOHVgPOWVbQcOnxcohiKfMkwlFE4OED3pkSWoFV5prbtsyc8phmMN6/MHjiLrvfDon8CuUKnUbQw+/8KMlZShDy2/LcQViPmn1+eRMJdMWzZd+Nw+EYg20HIII+9ZeSQREFwDusUt5Tu0wYAfSm0m2ZM/m3Vh5bW6Gzr2UgTI2ewGzxpMikyzn+3fFrLiGQfCgFuWhK96Qe2BvOqjw06Uwdjy49zQ/Ex5xSGzmLEam47FgVpHHExdb2lr3C1luBrBNGRidXluV6Ws/oFdRF5iehseT5G6Ne1ou9QVqu5vNgKcXFRAXxmoeRLkgw2chmVW5fLYITG5MH2JtagIXwc1JjLQn0m/9czf+sKXwDBpbS73dB7b5ItImbcoZXEDI5Cr2DE3QWppAjfNloyCnP25UtPrYEV5skNOF6VUbskKkxmkXhFKhS5JNAezcqclc7V/f2Ndh38RDYkjwC6Y/cG3V2PT3TKfHExdkiFhOXGj5zKGS/S3an6OasVdqFwBpgzFaCz26SsrEwf79byE3nWcuEJyPJB1QxeTTBnRk/BpkmUCnxzPQTlM0GmyZz0yci0OSod9UDA=
+  file: "${TRAVIS_BRANCH}-${TRAVIS_SMALLTALK_VERSION}.zip"
+  skip_cleanup: true
+  on:
+    repo: ba-st/Stardust
+    tags: true
