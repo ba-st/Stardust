@@ -9,7 +9,7 @@ SmalltalkCISpec {
   ],
   #testing : {
     #coverage : {
-       #packages : [  'Stardust' ]
+       #packages : [  'Stardust*' ]
     },
     #include : {
        #packages : [ 'Stardust-Tests' ]
