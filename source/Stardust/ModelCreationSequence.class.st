@@ -63,14 +63,14 @@ ModelCreationSequence >> initializeStartingAt: aTopLevelCreator notifyingUserInt
 	| graphBuilder |
 
 	errorDisplayStrategy := anErrorDisplayStrategy.
-	graphBuilder := DirectedGraphBuilder new.
+	graphBuilder := GraphBuilder new.
 	graphBuilder addVertex: aTopLevelCreator.
 	self
 		configure: graphBuilder
 		byRelatingRecursivelyDependenciesOf: aTopLevelCreator
 		keepingTrackOfProgressOn: Set new
 		whileNotifyingChangesTo: aSupervisor.
-	creationGraph := graphBuilder build.
+	creationGraph := graphBuilder buildDirected.
 	orderedCreators := creationGraph topologicalSort
 ]
 
