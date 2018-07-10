@@ -35,6 +35,6 @@ BaselineOfStardust >> setUpDependencies: spec [
 	spec
 		baseline: 'Mole'
 		with: [ spec
-				repository: 'github://ba-st/Mole:v2/source';
+				repository: 'github://ba-st/Mole:v3/source';
 				loads: #('Deployment') ].
 ]
