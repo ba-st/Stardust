@@ -9,32 +9,43 @@ BaselineOfStardust >> baseline: spec [
 
 	<baseline>
 	spec
-		for: #common
-		do: [
-			self setUpDependencies: spec.
-
+		for: #pharo
+		do: [ self
+				setUpDependencies: spec;
+				baselineStardust: spec.
 			spec
-				package: 'Stardust' with: [ spec requires: #('Buoy' 'Mole') ];
-				package: 'Stardust-Tests' with: [ spec requires: 'Stardust' ].
+				group: 'CI' with: 'Tests';
+				group: 'Tools' with: 'Buoy-Tools';
+				group: 'Development' with: #('Tests' 'Tools')
+			]
+]
 
-			spec
-				group: 'Deployment' with: #('Stardust');
-				group: 'Development' with: #('Stardust-Tests');
-				group: 'default' with: #('Deployment') ]
+{ #category : #baselines }
+BaselineOfStardust >> baselineStardust: spec [
+
+	spec
+		package: 'Stardust' with: [ spec requires: #('Buoy-Deployment' 'Mole-Deployment') ];
+		group: 'Deployment' with: 'Stardust';
+		package: 'Stardust-Tests' with: [ spec requires: #('Stardust' 'Buoy-SUnit') ];
+		group: 'Tests' with: 'Stardust-Tests'
+]
+
+{ #category : #accessing }
+BaselineOfStardust >> projectClass [
+
+	^ MetacelloCypressBaselineProject
 ]
 
 { #category : #baselines }
 BaselineOfStardust >> setUpDependencies: spec [
 
 	spec
-		baseline: 'Buoy'
-		with: [ spec
-				repository: 'github://ba-st/Buoy:v4/source';
-				loads: #('Deployment') ].
+		baseline: 'Buoy' with: [ spec repository: 'github://ba-st/Buoy:v5/source' ];
+		project: 'Buoy-Deployment' copyFrom: 'Buoy' with: [ spec loads: 'Deployment' ];
+		project: 'Buoy-SUnit' copyFrom: 'Buoy' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
+		project: 'Buoy-Tools' copyFrom: 'Buoy' with: [ spec loads: 'Tools' ].
 
 	spec
-		baseline: 'Mole'
-		with: [ spec
-				repository: 'github://ba-st/Mole:v3/source';
-				loads: #('Deployment') ].
+		baseline: 'Mole' with: [ spec repository: 'github://ba-st/Mole:v3/source' ];
+		project: 'Mole-Deployment' copyFrom: 'Mole' with: [ spec loads: 'Deployment' ]
 ]

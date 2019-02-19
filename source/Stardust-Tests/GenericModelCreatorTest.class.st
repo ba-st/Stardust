@@ -10,13 +10,24 @@ Class {
 { #category : #tests }
 GenericModelCreatorTest >> testBuilderPrintString [
 
-	self assert: (GenericModelCreatorBuilder named: 'Paper' building: StardustPaper accessedUsing: #(title authorName rating)) printString equals: 'Creation of StardustPaper using #(#title #authorName #rating)'
+	self
+		assert:
+			( GenericModelCreatorBuilder
+				named: 'Paper'
+				building: StardustPaper
+				accessedUsing: #(title authorName rating) ) printString
+		equals: 'Creation of StardustPaper using #(#title #authorName #rating)'
 ]
 
 { #category : #tests }
 GenericModelCreatorTest >> testBuilderRespondsTo [
 
-	self assert: ((GenericModelCreatorBuilder named: 'Paper' building: StardustPaper accessedUsing: #(title authorName rating)) respondsTo: #titled:authoredBy:rated:)
+	self
+		assert:
+			( ( GenericModelCreatorBuilder
+				named: 'Paper'
+				building: StardustPaper
+				accessedUsing: #(title authorName rating) ) respondsTo: #titled:authoredBy:rated: )
 ]
 
 { #category : #tests }

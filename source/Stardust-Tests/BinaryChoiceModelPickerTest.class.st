@@ -57,11 +57,16 @@ BinaryChoiceModelPickerTest >> testChangeModelToInvalidOption [
 
 	| picker |
 
-	picker := BinaryChoiceModelPicker named: 'Toggle' obtainingSelectionFrom: (DummyToggleView onModel: 'ON' offModel: 'OFF').
+	picker := BinaryChoiceModelPicker
+		named: 'Toggle'
+		obtainingSelectionFrom: ( DummyToggleView onModel: 'ON' offModel: 'OFF' ).
 
 	self assertModelAssembledBy: picker equals: 'OFF'.
 
-	self should: [ picker updateModelInViewsConsidering: 'UNKOWN' ] raise: Error
+	self
+		should: [ picker updateModelInViewsConsidering: 'UNKNOWN' ]
+		raise: ObjectNotFound
+		withMessageText: 'UNKNOWN is not a valid option'
 ]
 
 { #category : #tests }
