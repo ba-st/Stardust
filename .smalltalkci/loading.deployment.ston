@@ -2,14 +2,12 @@ SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'Stardust',
-      #directory : 'source',
-      #load : [ 'CI' ],
+      #directory : '../source',
+      #load : [ 'Deployment' ],
       #platforms : [  #pharo ]
     }
   ],
   #testing : {
-    #coverage : {
-       #packages : [ 'Stardust*' ]
-    }
+    #failOnZeroTests : false
   }
 }
