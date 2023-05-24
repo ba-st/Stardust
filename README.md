@@ -11,6 +11,7 @@ them; collecting every error found in the way.
 [![GitHub release](https://img.shields.io/github/release/ba-st/Stardust.svg)](https://github.com/ba-st/Stardust/releases/latest)
 [![Pharo 9.0](https://img.shields.io/badge/Pharo-9.0-informational)](https://pharo.org)
 [![Pharo 10](https://img.shields.io/badge/Pharo-10-informational)](https://pharo.org)
+[![Pharo 11](https://img.shields.io/badge/Pharo-11-informational)](https://pharo.org)
 
 ## Quick links
 
@@ -25,7 +26,7 @@ them; collecting every error found in the way.
 
 ## Installation
 
-To load the project in a Pharo image follow this [instructions](docs/how-to/how-to-load-in-pharo.md).
+To load the project in a Pharo image follow these [instructions](docs/how-to/how-to-load-in-pharo.md).
 
 ## Contributing
 
